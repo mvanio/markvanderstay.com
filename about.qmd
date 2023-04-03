@@ -1,5 +1,5 @@
 ---
-title: "About"
+title: "About Me"
 image: profile.jpg
 about:
   template: jolla
@@ -10,10 +10,10 @@ about:
     - icon: linkedin
       text: LinkedIn
       href: https://linkedin.com
-    - icon: github
-      text: Github
-      href: https://github.com
-
 ---
 
-About this blog
+I\'m a email marketer with a background in statistical programming and a passion for R, data visualization, Shiny and machine learning.
+
+On this blog I record what I learn so I can share it.
+
+You can find me on [Twitter](https://twitter.com/m_vanders) or [LinkedIn](https://linkedin.com/in/mark-vanderstay).

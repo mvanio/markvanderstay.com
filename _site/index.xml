@@ -1,0 +1,641 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<rss  xmlns:atom="http://www.w3.org/2005/Atom" 
+      xmlns:media="http://search.yahoo.com/mrss/" 
+      xmlns:content="http://purl.org/rss/1.0/modules/content/" 
+      xmlns:dc="http://purl.org/dc/elements/1.1/" 
+      version="2.0">
+<channel>
+<title>Mark Vanderstay</title>
+<link>markvanderstay.com/index.html</link>
+<atom:link href="markvanderstay.com/index.xml" rel="self" type="application/rss+xml"/>
+<description>Mark Vanderstay&#39;s Personal Blog</description>
+<generator>quarto-1.2.335</generator>
+<lastBuildDate>Mon, 27 Mar 2023 23:00:00 GMT</lastBuildDate>
+<item>
+  <title>Sentiment Analysis Of Twitter Data With R</title>
+  <dc:creator>Mark Vanderstay</dc:creator>
+  <link>markvanderstay.com/posts/mastering-sentiment-analysis-of-twitter-data-with-r/index.html</link>
+  <description><![CDATA[ 
+
+
+
+
+<section id="introduction" class="level2">
+<h2 class="anchored" data-anchor-id="introduction"><strong>Introduction</strong></h2>
+<p>Following on from my <a href="../using-r-for-twitter-analysis-lda/">last post</a> outlining LDA, I’ll go further to analyse the sentiment of the tweet text. The most straightforward way to approach sentiment analysis is to use one of the many sentiment dictionaries available.</p>
+<p>I’m going to use the Loughran McDonald dictionary which has several sentiments defined. I’m choosing it simply out of familiarity and there are plenty of others to choose from. In this post I’ll subset only the positive and negative sentiments.</p>
+<p>Here’s refresher of the data I’ll be using. Remember this is 2000 tweets tagged ‘#parliament’ that I extracted from Twitter. The data is… messy.</p>
+<div class="sourceCode" id="cb1" style="background: #f1f3f5;"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb1-1"><span class="sc" style="color: #5E5E5E;">&gt;</span> <span class="fu" style="color: #4758AB;">print</span>(twtr[<span class="dv" style="color: #AD0000;">1</span><span class="sc" style="color: #5E5E5E;">:</span><span class="dv" style="color: #AD0000;">10</span>, <span class="st" style="color: #20794D;">"text"</span>])</span>
+<span id="cb1-2"></span>
+<span id="cb1-3"><span class="co" style="color: #5E5E5E;"># A tibble: 10 × 1</span></span>
+<span id="cb1-4">   text                                                                                </span>
+<span id="cb1-5">   <span class="sc" style="color: #5E5E5E;">&lt;</span>chr<span class="sc" style="color: #5E5E5E;">&gt;</span>                                                                               </span>
+<span id="cb1-6"> </span>
+<span id="cb1-7"><span class="dv" style="color: #AD0000;">1</span> <span class="st" style="color: #20794D;">"Parliament records accessed by @Iyervval prove your grandfather voted FOR the Emer…</span></span>
+<span id="cb1-8"><span class="st" style="color: #20794D;">2 "</span>Shocking \nShameful \nDisgraceful \n\nPapers thrown at Speaker from Congress camp …</span>
+<span id="cb1-9"><span class="dv" style="color: #AD0000;">3</span> <span class="st" style="color: #20794D;">"To save one man, Modi ji is trampling the interests of 140 Cr people.</span><span class="sc" style="color: #5E5E5E;">\n\n</span><span class="st" style="color: #20794D;">To protec…</span></span>
+<span id="cb1-10"><span class="st" style="color: #20794D;">4 "</span><span class="sc" style="color: #5E5E5E;">@</span>QuetzalPhoenix \<span class="st" style="color: #20794D;">"vote</span><span class="sc" style="color: #5E5E5E;">\"</span><span class="st" style="color: #20794D;">?  What are the odds parliament &amp;amp; the Scottish execu…</span></span>
+<span id="cb1-11"><span class="st" style="color: #20794D;">5 "</span>RCN student members are at the Welsh Parliament today, looking forward to talking …</span>
+<span id="cb1-12"><span class="dv" style="color: #AD0000;">6</span> <span class="st" style="color: #20794D;">"She’s gradually being pushed out of parliament by her own people.Won’t be long &amp;am…</span></span>
+<span id="cb1-13"><span class="st" style="color: #20794D;">7 "</span><span class="co" style="color: #5E5E5E;">#AndrewBrigden for #PM in an English parliament #VoidTheUnion https://t.co/SNiAqQ6…</span></span>
+<span id="cb1-14"><span class="dv" style="color: #AD0000;">8</span> <span class="st" style="color: #20794D;">"Dummy parliament dummy speaker dummy pm. We not want any resolution against suprem…</span></span>
+<span id="cb1-15"><span class="st" style="color: #20794D;">9 "</span><span class="sc" style="color: #5E5E5E;">@</span>Rendel_Harris <span class="sc" style="color: #5E5E5E;">@</span>MikeyCycling <span class="sc" style="color: #5E5E5E;">@</span>markandcharlie <span class="sc" style="color: #5E5E5E;">@</span>AndyCoxDCS I think you need to ready…</span>
+<span id="cb1-16"><span class="dv" style="color: #AD0000;">10</span> <span class="st" style="color: #20794D;">"Attended Prize Distribution Ceremony of #MPs #CarRally on #RoadSafety organised by…</span></span></code></pre></div>
+<p>First off I’ll declare the <code>textdata</code> library, define the sentiments I’m interested in and create a function with the sole purpose of standardising my chosen sentiments in the extracted data. In short, negative sentiments will need to be displayed as less than zero on my plot.</p>
+<div class="sourceCode" id="cb2" style="background: #f1f3f5;"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb2-1"><span class="fu" style="color: #4758AB;">library</span>(textdata)</span>
+<span id="cb2-2"></span>
+<span id="cb2-3">required_sentiments <span class="ot" style="color: #003B4F;">&lt;-</span> <span class="fu" style="color: #4758AB;">c</span>(<span class="st" style="color: #20794D;">"positive"</span>,<span class="st" style="color: #20794D;">"negative"</span>)</span>
+<span id="cb2-4"></span>
+<span id="cb2-5">overall <span class="ot" style="color: #003B4F;">&lt;-</span> <span class="cf" style="color: #003B4F;">function</span>(in_data){</span>
+<span id="cb2-6">              mutated <span class="ot" style="color: #003B4F;">&lt;-</span> <span class="fu" style="color: #4758AB;">mutate</span>(in_data,</span>
+<span id="cb2-7">                               <span class="at" style="color: #657422;">overall =</span> (positive <span class="sc" style="color: #5E5E5E;">-</span> negative),</span>
+<span id="cb2-8">                               <span class="at" style="color: #657422;">negative =</span> (<span class="sc" style="color: #5E5E5E;">-</span><span class="dv" style="color: #AD0000;">1</span> <span class="sc" style="color: #5E5E5E;">*</span> negative)</span>
+<span id="cb2-9">                         )</span>
+<span id="cb2-10">              <span class="fu" style="color: #4758AB;">pivot_longer</span>(mutated,</span>
+<span id="cb2-11">                           <span class="at" style="color: #657422;">cols =</span> required_sentiments,</span>
+<span id="cb2-12">                           <span class="at" style="color: #657422;">names_to =</span> <span class="st" style="color: #20794D;">"sentiment"</span>,</span>
+<span id="cb2-13">                           <span class="at" style="color: #657422;">values_to =</span> <span class="st" style="color: #20794D;">"n"</span></span>
+<span id="cb2-14">           )</span>
+<span id="cb2-15">}</span></code></pre></div>
+</section>
+<section id="the-loughran-mcdonald-dictionary" class="level2">
+<h2 class="anchored" data-anchor-id="the-loughran-mcdonald-dictionary"><strong>1. The Loughran McDonald dictionary</strong></h2>
+<p>You can find documentation for the Loughran McDonald dictionary <a href="https://emilhvitfeldt.github.io/textdata/reference/lexicon_loughran.html">here</a>.</p>
+<p>Next it’s time to create the tokens, remove stop words and merge the sentiments from our dictionary with <code>inner_join</code>. Sentiment analysis depends wholly on categorising words with sentiment values.<br>
+<br>
+In this step I also filter on my chosen sentiments and summarise the frequencies of each before transposing.</p>
+<div class="sourceCode" id="cb3" style="background: #f1f3f5;"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb3-1"></span>
+<span id="cb3-2">twtr_text <span class="ot" style="color: #003B4F;">&lt;-</span> <span class="fu" style="color: #4758AB;">as.data.frame</span>(twtr) <span class="sc" style="color: #5E5E5E;">%&gt;%</span></span>
+<span id="cb3-3">  <span class="fu" style="color: #4758AB;">unnest_tokens</span>(word, text) <span class="sc" style="color: #5E5E5E;">%&gt;%</span></span>
+<span id="cb3-4">  <span class="fu" style="color: #4758AB;">anti_join</span>(stop_words) <span class="sc" style="color: #5E5E5E;">%&gt;%</span></span>
+<span id="cb3-5">  <span class="fu" style="color: #4758AB;">arrange</span>(word) <span class="sc" style="color: #5E5E5E;">%&gt;%</span></span>
+<span id="cb3-6">  <span class="fu" style="color: #4758AB;">inner_join</span>(<span class="fu" style="color: #4758AB;">get_sentiments</span>(<span class="st" style="color: #20794D;">"loughran"</span>), <span class="at" style="color: #657422;">multiple =</span> <span class="st" style="color: #20794D;">"all"</span>) <span class="sc" style="color: #5E5E5E;">%&gt;%</span></span>
+<span id="cb3-7">  <span class="fu" style="color: #4758AB;">filter</span>(sentiment <span class="sc" style="color: #5E5E5E;">%in%</span> required_sentiments)  <span class="sc" style="color: #5E5E5E;">%&gt;%</span></span>
+<span id="cb3-8">  <span class="fu" style="color: #4758AB;">count</span>(word, sentiment) <span class="sc" style="color: #5E5E5E;">%&gt;%</span></span>
+<span id="cb3-9">  <span class="fu" style="color: #4758AB;">group_by</span>(sentiment) <span class="sc" style="color: #5E5E5E;">%&gt;%</span></span>
+<span id="cb3-10">  <span class="fu" style="color: #4758AB;">summarise</span>(<span class="at" style="color: #657422;">sentiment2 =</span> <span class="fu" style="color: #4758AB;">sum</span>(n)) <span class="sc" style="color: #5E5E5E;">%&gt;%</span></span>
+<span id="cb3-11">  <span class="fu" style="color: #4758AB;">spread</span>(sentiment, sentiment2) <span class="sc" style="color: #5E5E5E;">%&gt;%</span></span>
+<span id="cb3-12"></span>
+<span id="cb3-13">  <span class="fu" style="color: #4758AB;">overall</span>() </span></code></pre></div>
+<p>The result of merging the dictionary is below. Each token/word has been assigned a sentiment value for each row it appears in. Better yet, only rows that have matching words in the dictionary remain so we’ve fewer rows of data to handle.</p>
+<div class="sourceCode" id="cb4" style="background: #f1f3f5;"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb4-1"><span class="sc" style="color: #5E5E5E;">&gt;</span> <span class="fu" style="color: #4758AB;">print</span>(twtr_text[<span class="dv" style="color: #AD0000;">1</span><span class="sc" style="color: #5E5E5E;">:</span><span class="dv" style="color: #AD0000;">10</span>, <span class="fu" style="color: #4758AB;">c</span>(<span class="st" style="color: #20794D;">"id_str"</span>,<span class="st" style="color: #20794D;">"word"</span>,<span class="st" style="color: #20794D;">"sentiment"</span>)])</span>
+<span id="cb4-2"></span>
+<span id="cb4-3">                </span>
+<span id="cb4-4">   id_str              word    sentiment</span>
+<span id="cb4-5"><span class="dv" style="color: #AD0000;">1</span>  <span class="dv" style="color: #AD0000;">1640175617973841920</span>   abide constraining</span>
+<span id="cb4-6"><span class="dv" style="color: #AD0000;">2</span>  <span class="dv" style="color: #AD0000;">1640191141839511553</span> abiding constraining</span>
+<span id="cb4-7"><span class="dv" style="color: #AD0000;">3</span>  <span class="dv" style="color: #AD0000;">1640676248849375232</span> abolish     negative</span>
+<span id="cb4-8"><span class="dv" style="color: #AD0000;">4</span>  <span class="dv" style="color: #AD0000;">1640218957368946690</span> abolish     negative</span>
+<span id="cb4-9"><span class="dv" style="color: #AD0000;">5</span>  <span class="dv" style="color: #AD0000;">1640209920950927360</span> abolish     negative</span>
+<span id="cb4-10"><span class="dv" style="color: #AD0000;">6</span>  <span class="dv" style="color: #AD0000;">1640176958930599938</span> abolish     negative</span>
+<span id="cb4-11"><span class="dv" style="color: #AD0000;">7</span>  <span class="dv" style="color: #AD0000;">1640207450778517504</span>  abrupt     negative</span>
+<span id="cb4-12"><span class="dv" style="color: #AD0000;">8</span>  <span class="dv" style="color: #AD0000;">1640231567590309889</span> absence     negative</span>
+<span id="cb4-13"><span class="dv" style="color: #AD0000;">9</span>  <span class="dv" style="color: #AD0000;">1640219874650906625</span> absence     negative</span>
+<span id="cb4-14"><span class="dv" style="color: #AD0000;">10</span> <span class="dv" style="color: #AD0000;">1640209883617263616</span> absence     negative</span></code></pre></div>
+</section>
+<section id="plotting-the-sentiment-values" class="level2">
+<h2 class="anchored" data-anchor-id="plotting-the-sentiment-values"><strong>2. Plotting the sentiment values</strong></h2>
+<p>After the frequency count and filtering the data looks much better. I have the sentiments I’m interested in and a frequency count of each so that this data is ready to be plotted.</p>
+<div class="sourceCode" id="cb5" style="background: #f1f3f5;"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb5-1"><span class="sc" style="color: #5E5E5E;">&gt;</span> <span class="fu" style="color: #4758AB;">print</span>(twtr_text)</span>
+<span id="cb5-2"></span>
+<span id="cb5-3"><span class="co" style="color: #5E5E5E;"># A tibble: 2 × 3</span></span>
+<span id="cb5-4">  </span>
+<span id="cb5-5">overall sentiment     n</span>
+<span id="cb5-6">    <span class="sc" style="color: #5E5E5E;">&lt;</span>int<span class="sc" style="color: #5E5E5E;">&gt;</span> <span class="er" style="color: #AD0000;">&lt;</span>chr<span class="sc" style="color: #5E5E5E;">&gt;</span>     <span class="er" style="color: #AD0000;">&lt;</span>dbl<span class="sc" style="color: #5E5E5E;">&gt;</span></span>
+<span id="cb5-7"><span class="dv" style="color: #AD0000;">1</span>   <span class="sc" style="color: #5E5E5E;">-</span><span class="dv" style="color: #AD0000;">1398</span> positive    <span class="dv" style="color: #AD0000;">205</span></span>
+<span id="cb5-8"><span class="dv" style="color: #AD0000;">2</span>   <span class="sc" style="color: #5E5E5E;">-</span><span class="dv" style="color: #AD0000;">1398</span> negative  <span class="sc" style="color: #5E5E5E;">-</span><span class="dv" style="color: #AD0000;">1603</span></span></code></pre></div>
+<p>And that’s next…</p>
+<div class="sourceCode" id="cb6" style="background: #f1f3f5;"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb6-1"><span class="fu" style="color: #4758AB;">ggplot</span>(twtr_text,</span>
+<span id="cb6-2"> <span class="fu" style="color: #4758AB;">aes</span>(<span class="at" style="color: #657422;">x =</span> sentiment, <span class="at" style="color: #657422;">y =</span> n, <span class="at" style="color: #657422;">fill =</span> sentiment)) <span class="sc" style="color: #5E5E5E;">+</span></span>
+<span id="cb6-3">     <span class="fu" style="color: #4758AB;">geom_col</span>(<span class="at" style="color: #657422;">show.legend =</span> <span class="cn" style="color: #8f5902;">TRUE</span>) <span class="sc" style="color: #5E5E5E;">+</span></span>
+<span id="cb6-4">     <span class="co" style="color: #5E5E5E;"># facet_wrap(~ sentiment, scales = "free") +</span></span>
+<span id="cb6-5">     <span class="fu" style="color: #4758AB;">coord_flip</span>() <span class="sc" style="color: #5E5E5E;">+</span></span>
+<span id="cb6-6">     <span class="fu" style="color: #4758AB;">labs</span>(</span>
+<span id="cb6-7">          <span class="at" style="color: #657422;">title =</span> <span class="st" style="color: #20794D;">"Sentiment Analysis (Word Count)"</span>,</span>
+<span id="cb6-8">          <span class="at" style="color: #657422;">x =</span> <span class="st" style="color: #20794D;">"Sentiment"</span>,</span>
+<span id="cb6-9">          <span class="at" style="color: #657422;">y =</span> <span class="st" style="color: #20794D;">"Frequency"</span></span>
+<span id="cb6-10">  )</span></code></pre></div>
+<div class="quarto-figure quarto-figure-center">
+<figure class="figure">
+<p><img src="markvanderstay.com/posts/mastering-sentiment-analysis-of-twitter-data-with-r/sentiment_analysis_parliament-768x445.png" class="img-fluid figure-img"></p>
+<p></p><figcaption class="figure-caption">Unsurprisingly, overwhelmingly negative.</figcaption><p></p>
+</figure>
+</div>
+<p>Oh dear. Parliaments of the world, Twitter users say you need to step up.</p>
+</section>
+<section id="conclusion" class="level2">
+<h2 class="anchored" data-anchor-id="conclusion"><strong>3. Conclusion</strong></h2>
+<p>Sentiment analysis of Twitter data using R is so simple and yet so few brands use this as a technique for measuring their customer’s attitude. Perhaps brands don’t care or don’t have a big enough Twitter following to think this is worthwhile. However, it is a useful tool to help with growing Twitter influence and seeing the results can inspire change in attitude. For these two points alone it is one tool I always recommend clients use on a regular basis where appropriate.</p>
+<div class="callout-tip callout callout-style-default callout-captioned">
+<div class="callout-header d-flex align-content-center">
+<div class="callout-icon-container">
+<i class="callout-icon"></i>
+</div>
+<div class="callout-caption-container flex-fill">
+Tip
+</div>
+</div>
+<div class="callout-body-container callout-body">
+<p>If you’ve been affected by any of the topics mentioned in this article and would like a detailed sentiment analysis of your brand:- <a href="mailto:hello@markvanderstay.com">contact me</a>.</p>
+</div>
+</div>
+
+
+</section>
+
+ ]]></description>
+  <category>Twitter</category>
+  <category>R</category>
+  <category>RStudio</category>
+  <guid>markvanderstay.com/posts/mastering-sentiment-analysis-of-twitter-data-with-r/index.html</guid>
+  <pubDate>Mon, 27 Mar 2023 23:00:00 GMT</pubDate>
+  <media:content url="markvanderstay.com/posts/mastering-sentiment-analysis-of-twitter-data-with-r/sentiment_analysis_parliament-768x445.png" medium="image" type="image/png" height="83" width="144"/>
+</item>
+<item>
+  <title>LDA With R Makes Twitter Data Insights Easy</title>
+  <dc:creator>Mark Vanderstay</dc:creator>
+  <link>markvanderstay.com/posts/using-r-for-twitter-analysis-lda/index.html</link>
+  <description><![CDATA[ 
+
+
+
+
+<section id="topic-modelling-with-twitter-text" class="level1">
+<h1><strong>Topic modelling with Twitter text</strong></h1>
+<p>Topic modeling is a statistical technique utilised to identify themes or topics within a vast collection of texts. One of the most popular algorithms used for topic modeling is Latent Dirichlet Allocation (LDA) which is used to uncover the underlying topics present in a ‘<a href="../using-r-for-twitter-analysis/">corpus</a>’ of documents.</p>
+<p>LDA helps analysts to understand which subjects are being discussed in text and to group similar documents together. This makes it easier to see patterns and trends in your data, understand the main themes of textual data, and make better decisions based on the information available.</p>
+<p>In this post I’ll provide a demonstration of Latent Dirichlet Allocation on Twitter data. I’ll focus on three main reasons for using LDA;</p>
+<ol type="1">
+<li><p><strong>Data reduction</strong>. LDA can group related documents into topics By reducing the complexity of the data by it can be easier to analyse and identify patterns.</p></li>
+<li><p><strong>Topic identification</strong>. LDA can be used to identify the most important topics within a large corpus of documents. This can provide insight into the topics that are most frequently discussed.</p></li>
+<li><p><strong>Improved understanding</strong>. LDA can help to gain a deeper understanding of the content within your data.</p></li>
+</ol>
+<section id="create-a-corpus-of-tweets" class="level2">
+<h2 class="anchored" data-anchor-id="create-a-corpus-of-tweets"><strong>1. Create a corpus of tweets</strong></h2>
+<p>I begin as <a href="../using-r-for-twitter-analysis/">before</a> with extracting a sample of tweets…</p>
+<div class="sourceCode" id="cb1" style="background: #f1f3f5;"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb1-1"><span class="fu" style="color: #4758AB;">library</span>(rtweet)</span>
+<span id="cb1-2"><span class="fu" style="color: #4758AB;">library</span>(httr)</span>
+<span id="cb1-3"><span class="fu" style="color: #4758AB;">library</span>(dplyr)</span>
+<span id="cb1-4"><span class="fu" style="color: #4758AB;">library</span>(qdap)</span>
+<span id="cb1-5"><span class="fu" style="color: #4758AB;">library</span>(qdapRegex)</span>
+<span id="cb1-6"><span class="fu" style="color: #4758AB;">library</span>(tm)</span>
+<span id="cb1-7"></span>
+<span id="cb1-8"></span>
+<span id="cb1-9"><span class="co" style="color: #5E5E5E;"># authorise</span></span>
+<span id="cb1-10"><span class="fu" style="color: #4758AB;">auth_setup_default</span>()</span>
+<span id="cb1-11"></span>
+<span id="cb1-12"></span>
+<span id="cb1-13"><span class="co" style="color: #5E5E5E;"># get 2000 tweets with our required hashtag</span></span>
+<span id="cb1-14">twtr <span class="ot" style="color: #003B4F;">&lt;-</span> <span class="fu" style="color: #4758AB;">search_tweets</span>(<span class="st" style="color: #20794D;">"parliament"</span>,</span>
+<span id="cb1-15">                       <span class="at" style="color: #657422;">n =</span> <span class="dv" style="color: #AD0000;">2000</span>,</span>
+<span id="cb1-16">                       <span class="at" style="color: #657422;">include_rts =</span> <span class="cn" style="color: #8f5902;">FALSE</span>,</span>
+<span id="cb1-17">                       <span class="at" style="color: #657422;">lang =</span> <span class="st" style="color: #20794D;">"en"</span>)</span></code></pre></div>
+<p>… then keep only the text data before tidying. Removing special characters and URLs will remove some tweets altogether but that’s partly the point.</p>
+<div class="sourceCode" id="cb2" style="background: #f1f3f5;"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb2-1"><span class="co" style="color: #5E5E5E;"># create data frame of tweet text</span></span>
+<span id="cb2-2">tweet_text <span class="ot" style="color: #003B4F;">&lt;-</span> twtr<span class="sc" style="color: #5E5E5E;">$</span>text</span>
+<span id="cb2-3"></span>
+<span id="cb2-4"><span class="co" style="color: #5E5E5E;"># remove special characters</span></span>
+<span id="cb2-5">tweet_text_no_url <span class="ot" style="color: #003B4F;">&lt;-</span> <span class="fu" style="color: #4758AB;">rm_twitter_url</span>(tweet_text)</span>
+<span id="cb2-6">tweet_text_az <span class="ot" style="color: #003B4F;">&lt;-</span> <span class="fu" style="color: #4758AB;">gsub</span>(<span class="st" style="color: #20794D;">"[^A-Za-z]"</span>, <span class="st" style="color: #20794D;">" "</span>, tweet_text_no_url)</span>
+<span id="cb2-7"><span class="fu" style="color: #4758AB;">head</span>(tweet_text_az)</span></code></pre></div>
+<p>Then it’s time to make the corpus (where tweets become documents) and tidy some more with the <code>tm</code> package.</p>
+<div class="sourceCode" id="cb3" style="background: #f1f3f5;"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb3-1"><span class="co" style="color: #5E5E5E;"># create a corpus (transform tweets into documents)</span></span>
+<span id="cb3-2">tweet_corpus <span class="ot" style="color: #003B4F;">&lt;-</span> tweet_text_az <span class="sc" style="color: #5E5E5E;">%&gt;%</span></span>
+<span id="cb3-3">                <span class="fu" style="color: #4758AB;">VectorSource</span>() <span class="sc" style="color: #5E5E5E;">%&gt;%</span></span>
+<span id="cb3-4">                <span class="fu" style="color: #4758AB;">Corpus</span>()</span>
+<span id="cb3-5"></span>
+<span id="cb3-6"><span class="co" style="color: #5E5E5E;"># remove stop words, extra whitespace and transform to lower case</span></span>
+<span id="cb3-7">tweet_corpus_no_stop <span class="ot" style="color: #003B4F;">&lt;-</span> <span class="fu" style="color: #4758AB;">tm_map</span>(tweet_corpus, removeWords, <span class="fu" style="color: #4758AB;">stopwords</span>(<span class="st" style="color: #20794D;">"english"</span>))</span>
+<span id="cb3-8">tweet_corpus_lower <span class="ot" style="color: #003B4F;">&lt;-</span> <span class="fu" style="color: #4758AB;">tm_map</span>(tweet_corpus_no_stop, tolower)</span>
+<span id="cb3-9">tweet_corpus_docs <span class="ot" style="color: #003B4F;">&lt;-</span> <span class="fu" style="color: #4758AB;">tm_map</span>(tweet_corpus_lower, stripWhitespace)</span></code></pre></div>
+<p>Before beginning my analysis I’ll have to create the Document Term Matrix from the corpus.</p>
+<div class="sourceCode" id="cb4" style="background: #f1f3f5;"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb4-1"><span class="co" style="color: #5E5E5E;"># create a DTM</span></span>
+<span id="cb4-2">dtm <span class="ot" style="color: #003B4F;">&lt;-</span> <span class="fu" style="color: #4758AB;">DocumentTermMatrix</span>(tweet_corpus_docs)</span></code></pre></div>
+<p>Checking out the details of the DTM I see that I have 2000 documents with &gt;8800 terms. Several rows of the documents are shown below with the terms that appear in each document. Note there’s a lot of zeros because some terms are found only rarely. This is also why ‘sparcity’ is 100%.</p>
+<div class="sourceCode" id="cb5" style="background: #f1f3f5;"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb5-1"><span class="sc" style="color: #5E5E5E;">&lt;</span><span class="er" style="color: #AD0000;">&lt;</span><span class="fu" style="color: #4758AB;">DocumentTermMatrix</span> (documents<span class="sc" style="color: #5E5E5E;">:</span> <span class="dv" style="color: #AD0000;">2000</span>, terms<span class="sc" style="color: #5E5E5E;">:</span> <span class="dv" style="color: #AD0000;">8825</span>)<span class="sc" style="color: #5E5E5E;">&gt;</span><span class="er" style="color: #AD0000;">&gt;</span></span>
+<span id="cb5-2">Non<span class="sc" style="color: #5E5E5E;">-</span><span class="er" style="color: #AD0000;">/</span>sparse entries<span class="sc" style="color: #5E5E5E;">:</span> <span class="dv" style="color: #AD0000;">33734</span><span class="sc" style="color: #5E5E5E;">/</span><span class="dv" style="color: #AD0000;">17616266</span></span>
+<span id="cb5-3">Sparsity           <span class="sc" style="color: #5E5E5E;">:</span> <span class="dv" style="color: #AD0000;">100</span>%</span>
+<span id="cb5-4">Maximal term length<span class="sc" style="color: #5E5E5E;">:</span> <span class="dv" style="color: #AD0000;">38</span></span>
+<span id="cb5-5">Weighting          <span class="sc" style="color: #5E5E5E;">:</span> term <span class="fu" style="color: #4758AB;">frequency</span> (tf)</span>
+<span id="cb5-6">Sample             <span class="sc" style="color: #5E5E5E;">:</span></span>
+<span id="cb5-7"> </span>
+<span id="cb5-8">     Terms</span>
+<span id="cb5-9">Docs   amp boris can ireland johnson northern parliament people the will</span>
+<span id="cb5-10"><span class="dv" style="color: #AD0000;">1063</span>   <span class="dv" style="color: #AD0000;">0</span>     <span class="dv" style="color: #AD0000;">0</span>   <span class="dv" style="color: #AD0000;">0</span>       <span class="dv" style="color: #AD0000;">0</span>       <span class="dv" style="color: #AD0000;">0</span>        <span class="dv" style="color: #AD0000;">0</span>          <span class="dv" style="color: #AD0000;">2</span>      <span class="dv" style="color: #AD0000;">0</span>   <span class="dv" style="color: #AD0000;">1</span>    <span class="dv" style="color: #AD0000;">0</span></span>
+<span id="cb5-11"><span class="dv" style="color: #AD0000;">1119</span>   <span class="dv" style="color: #AD0000;">0</span>     <span class="dv" style="color: #AD0000;">0</span>   <span class="dv" style="color: #AD0000;">0</span>       <span class="dv" style="color: #AD0000;">0</span>       <span class="dv" style="color: #AD0000;">1</span>        <span class="dv" style="color: #AD0000;">0</span>          <span class="dv" style="color: #AD0000;">1</span>      <span class="dv" style="color: #AD0000;">0</span>   <span class="dv" style="color: #AD0000;">2</span>    <span class="dv" style="color: #AD0000;">0</span></span>
+<span id="cb5-12"><span class="dv" style="color: #AD0000;">1169</span>   <span class="dv" style="color: #AD0000;">0</span>     <span class="dv" style="color: #AD0000;">1</span>   <span class="dv" style="color: #AD0000;">0</span>       <span class="dv" style="color: #AD0000;">0</span>       <span class="dv" style="color: #AD0000;">0</span>        <span class="dv" style="color: #AD0000;">0</span>          <span class="dv" style="color: #AD0000;">2</span>      <span class="dv" style="color: #AD0000;">0</span>   <span class="dv" style="color: #AD0000;">1</span>    <span class="dv" style="color: #AD0000;">0</span></span>
+<span id="cb5-13"><span class="dv" style="color: #AD0000;">1223</span>   <span class="dv" style="color: #AD0000;">0</span>     <span class="dv" style="color: #AD0000;">0</span>   <span class="dv" style="color: #AD0000;">0</span>       <span class="dv" style="color: #AD0000;">0</span>       <span class="dv" style="color: #AD0000;">0</span>        <span class="dv" style="color: #AD0000;">0</span>          <span class="dv" style="color: #AD0000;">1</span>      <span class="dv" style="color: #AD0000;">0</span>   <span class="dv" style="color: #AD0000;">1</span>    <span class="dv" style="color: #AD0000;">0</span></span>
+<span id="cb5-14"><span class="dv" style="color: #AD0000;">1471</span>   <span class="dv" style="color: #AD0000;">0</span>     <span class="dv" style="color: #AD0000;">0</span>   <span class="dv" style="color: #AD0000;">0</span>       <span class="dv" style="color: #AD0000;">0</span>       <span class="dv" style="color: #AD0000;">0</span>        <span class="dv" style="color: #AD0000;">0</span>          <span class="dv" style="color: #AD0000;">1</span>      <span class="dv" style="color: #AD0000;">0</span>   <span class="dv" style="color: #AD0000;">1</span>    <span class="dv" style="color: #AD0000;">0</span></span>
+<span id="cb5-15"><span class="dv" style="color: #AD0000;">1550</span>   <span class="dv" style="color: #AD0000;">0</span>     <span class="dv" style="color: #AD0000;">0</span>   <span class="dv" style="color: #AD0000;">0</span>       <span class="dv" style="color: #AD0000;">0</span>       <span class="dv" style="color: #AD0000;">0</span>        <span class="dv" style="color: #AD0000;">0</span>          <span class="dv" style="color: #AD0000;">1</span>      <span class="dv" style="color: #AD0000;">0</span>   <span class="dv" style="color: #AD0000;">0</span>    <span class="dv" style="color: #AD0000;">0</span></span>
+<span id="cb5-16"><span class="dv" style="color: #AD0000;">1769</span>   <span class="dv" style="color: #AD0000;">0</span>     <span class="dv" style="color: #AD0000;">0</span>   <span class="dv" style="color: #AD0000;">0</span>       <span class="dv" style="color: #AD0000;">0</span>       <span class="dv" style="color: #AD0000;">0</span>        <span class="dv" style="color: #AD0000;">0</span>          <span class="dv" style="color: #AD0000;">1</span>      <span class="dv" style="color: #AD0000;">1</span>   <span class="dv" style="color: #AD0000;">1</span>    <span class="dv" style="color: #AD0000;">0</span></span>
+<span id="cb5-17"><span class="dv" style="color: #AD0000;">533</span>    <span class="dv" style="color: #AD0000;">0</span>     <span class="dv" style="color: #AD0000;">0</span>   <span class="dv" style="color: #AD0000;">1</span>       <span class="dv" style="color: #AD0000;">0</span>       <span class="dv" style="color: #AD0000;">0</span>        <span class="dv" style="color: #AD0000;">0</span>          <span class="dv" style="color: #AD0000;">1</span>      <span class="dv" style="color: #AD0000;">0</span>   <span class="dv" style="color: #AD0000;">1</span>    <span class="dv" style="color: #AD0000;">0</span></span>
+<span id="cb5-18"><span class="dv" style="color: #AD0000;">917</span>    <span class="dv" style="color: #AD0000;">0</span>     <span class="dv" style="color: #AD0000;">0</span>   <span class="dv" style="color: #AD0000;">0</span>       <span class="dv" style="color: #AD0000;">0</span>       <span class="dv" style="color: #AD0000;">2</span>        <span class="dv" style="color: #AD0000;">0</span>          <span class="dv" style="color: #AD0000;">1</span>      <span class="dv" style="color: #AD0000;">1</span>   <span class="dv" style="color: #AD0000;">1</span>    <span class="dv" style="color: #AD0000;">0</span></span>
+<span id="cb5-19"><span class="dv" style="color: #AD0000;">978</span>    <span class="dv" style="color: #AD0000;">1</span>     <span class="dv" style="color: #AD0000;">0</span>   <span class="dv" style="color: #AD0000;">0</span>       <span class="dv" style="color: #AD0000;">0</span>       <span class="dv" style="color: #AD0000;">0</span>        <span class="dv" style="color: #AD0000;">0</span>          <span class="dv" style="color: #AD0000;">1</span>      <span class="dv" style="color: #AD0000;">1</span>   <span class="dv" style="color: #AD0000;">1</span>    <span class="dv" style="color: #AD0000;">0</span> ...</span></code></pre></div>
+<p>Rows (documents) that don’t have any terms – where the terms columns are all zeros – can be removed. Those documents won’t tell us anything anyway.</p>
+<p>Summing the word counts in each row is straighforward with <code>apply</code>.</p>
+<div class="sourceCode" id="cb6" style="background: #f1f3f5;"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb6-1"><span class="co" style="color: #5E5E5E;"># sum word counts in each document</span></span>
+<span id="cb6-2">row_terms <span class="ot" style="color: #003B4F;">&lt;-</span> <span class="fu" style="color: #4758AB;">apply</span>(dtm , <span class="dv" style="color: #AD0000;">1</span>, sum)</span>
+<span id="cb6-3"></span>
+<span id="cb6-4"><span class="co" style="color: #5E5E5E;"># keep rows where sum is &gt; 0</span></span>
+<span id="cb6-5">tweet_dtm <span class="ot" style="color: #003B4F;">&lt;-</span> dtm[row_terms <span class="sc" style="color: #5E5E5E;">&gt;</span> <span class="dv" style="color: #AD0000;">0</span>, ]</span></code></pre></div>
+</section>
+<section id="create-a-topic-model-with-lda" class="level2">
+<h2 class="anchored" data-anchor-id="create-a-topic-model-with-lda"><strong>2. Create a topic model with LDA()</strong></h2>
+<p>Here’s the fun part. Running the LDA is simple. I just need to decide how many topics I want to start with. Usually I choose an odd number. I’ve no idea why I do it this way. I’ll start with five.</p>
+<div class="sourceCode" id="cb7" style="background: #f1f3f5;"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb7-1"><span class="co" style="color: #5E5E5E;"># the lda function is within the topicmodels package</span></span>
+<span id="cb7-2"><span class="fu" style="color: #4758AB;">library</span>(topicmodels)</span>
+<span id="cb7-3"></span>
+<span id="cb7-4">tweet_lda5 <span class="ot" style="color: #003B4F;">&lt;-</span> <span class="fu" style="color: #4758AB;">LDA</span>(tweet_dtm, <span class="dv" style="color: #AD0000;">5</span>)</span></code></pre></div>
+<p>And inspect the results. I should have five topics and be able to view the top terms under each of them using the <code>terms()</code> function.</p>
+<div class="sourceCode" id="cb8" style="background: #f1f3f5;"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb8-1"></span>
+<span id="cb8-2"><span class="co" style="color: #5E5E5E;"># and check the results</span></span>
+<span id="cb8-3">terms_lda5 <span class="ot" style="color: #003B4F;">&lt;-</span> <span class="fu" style="color: #4758AB;">terms</span>(tweet_lda5, <span class="dv" style="color: #AD0000;">15</span>)</span>
+<span id="cb8-4">terms_lda5</span></code></pre></div>
+<div class="sourceCode" id="cb9" style="background: #f1f3f5;"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb9-1">       Topic <span class="dv" style="color: #AD0000;">1</span>         Topic <span class="dv" style="color: #AD0000;">2</span>      Topic <span class="dv" style="color: #AD0000;">3</span>      Topic <span class="dv" style="color: #AD0000;">4</span>      Topic <span class="dv" style="color: #AD0000;">5</span>     </span>
+<span id="cb9-2">[<span class="dv" style="color: #AD0000;">1</span>,] <span class="st" style="color: #20794D;">"parliament"</span>    <span class="st" style="color: #20794D;">"parliament"</span> <span class="st" style="color: #20794D;">"parliament"</span> <span class="st" style="color: #20794D;">"parliament"</span> <span class="st" style="color: #20794D;">"parliament"</span></span>
+<span id="cb9-3">[<span class="dv" style="color: #AD0000;">2</span>,] <span class="st" style="color: #20794D;">"the"</span>           <span class="st" style="color: #20794D;">"the"</span>        <span class="st" style="color: #20794D;">"party"</span>      <span class="st" style="color: #20794D;">"johnson"</span>    <span class="st" style="color: #20794D;">"northern"</span>  </span>
+<span id="cb9-4">[<span class="dv" style="color: #AD0000;">3</span>,] <span class="st" style="color: #20794D;">"opposition"</span>    <span class="st" style="color: #20794D;">"right"</span>      <span class="st" style="color: #20794D;">"amp"</span>        <span class="st" style="color: #20794D;">"boris"</span>      <span class="st" style="color: #20794D;">"ireland"</span>   </span>
+<span id="cb9-5">[<span class="dv" style="color: #AD0000;">4</span>,] <span class="st" style="color: #20794D;">"government"</span>    <span class="st" style="color: #20794D;">"people"</span>     <span class="st" style="color: #20794D;">"will"</span>       <span class="st" style="color: #20794D;">"the"</span>        <span class="st" style="color: #20794D;">"that"</span>      </span>
+<span id="cb9-6">[<span class="dv" style="color: #AD0000;">5</span>,] <span class="st" style="color: #20794D;">"can"</span>           <span class="st" style="color: #20794D;">"can"</span>        <span class="st" style="color: #20794D;">"people"</span>     <span class="st" style="color: #20794D;">"misled"</span>     <span class="st" style="color: #20794D;">"will"</span>      </span>
+<span id="cb9-7">[<span class="dv" style="color: #AD0000;">6</span>,] <span class="st" style="color: #20794D;">"amp"</span>           <span class="st" style="color: #20794D;">"will"</span>       <span class="st" style="color: #20794D;">"boris"</span>      <span class="st" style="color: #20794D;">"committee"</span>  <span class="st" style="color: #20794D;">"like"</span>      </span>
+<span id="cb9-8">[<span class="dv" style="color: #AD0000;">7</span>,] <span class="st" style="color: #20794D;">"get"</span>           <span class="st" style="color: #20794D;">"now"</span>        <span class="st" style="color: #20794D;">"gave"</span>       <span class="st" style="color: #20794D;">"lied"</span>       <span class="st" style="color: #20794D;">"the"</span>       </span>
+<span id="cb9-9">[<span class="dv" style="color: #AD0000;">8</span>,] <span class="st" style="color: #20794D;">"bill"</span>          <span class="st" style="color: #20794D;">"just"</span>       <span class="st" style="color: #20794D;">"get"</span>        <span class="st" style="color: #20794D;">"rules"</span>      <span class="st" style="color: #20794D;">"there"</span>     </span>
+<span id="cb9-10">[<span class="dv" style="color: #AD0000;">9</span>,] <span class="st" style="color: #20794D;">"mps"</span>           <span class="st" style="color: #20794D;">"rahul"</span>      <span class="st" style="color: #20794D;">"vote"</span>       <span class="st" style="color: #20794D;">"misleading"</span> <span class="st" style="color: #20794D;">"great"</span>     </span>
+<span id="cb9-11">[<span class="dv" style="color: #AD0000;">10</span>,] <span class="st" style="color: #20794D;">"petition"</span>      <span class="st" style="color: #20794D;">"act"</span>        <span class="st" style="color: #20794D;">"gbnews"</span>     <span class="st" style="color: #20794D;">"mislead"</span>    <span class="st" style="color: #20794D;">"yes"</span>       </span>
+<span id="cb9-12">[<span class="dv" style="color: #AD0000;">11</span>,] <span class="st" style="color: #20794D;">"anti"</span>          <span class="st" style="color: #20794D;">"member"</span>     <span class="st" style="color: #20794D;">"not"</span>        <span class="st" style="color: #20794D;">"partygate"</span>  <span class="st" style="color: #20794D;">"democracy"</span> </span>
+<span id="cb9-13">[<span class="dv" style="color: #AD0000;">12</span>,] <span class="st" style="color: #20794D;">"people"</span>        <span class="st" style="color: #20794D;">"amp"</span>        <span class="st" style="color: #20794D;">"blair"</span>      <span class="st" style="color: #20794D;">"defence"</span>    <span class="st" style="color: #20794D;">"say"</span>       </span>
+<span id="cb9-14">[<span class="dv" style="color: #AD0000;">13</span>,] <span class="st" style="color: #20794D;">"will"</span>          <span class="st" style="color: #20794D;">"european"</span>   <span class="st" style="color: #20794D;">"job"</span>        <span class="st" style="color: #20794D;">"didn"</span>       <span class="st" style="color: #20794D;">"always"</span>    </span>
+<span id="cb9-15">[<span class="dv" style="color: #AD0000;">14</span>,] <span class="st" style="color: #20794D;">"they"</span>          <span class="st" style="color: #20794D;">"crisis"</span>     <span class="st" style="color: #20794D;">"you"</span>        <span class="st" style="color: #20794D;">"evidence"</span>   <span class="st" style="color: #20794D;">"majority"</span>  </span>
+<span id="cb9-16">[<span class="dv" style="color: #AD0000;">15</span>,] <span class="st" style="color: #20794D;">"homosexuality"</span> <span class="st" style="color: #20794D;">"session"</span>    <span class="st" style="color: #20794D;">"make"</span>       <span class="st" style="color: #20794D;">"lying"</span>      <span class="st" style="color: #20794D;">"says"</span> </span></code></pre></div>
+</section>
+<section id="topic-naming-for-lda-data" class="level2">
+<h2 class="anchored" data-anchor-id="topic-naming-for-lda-data"><strong>3. Topic naming for LDA data</strong></h2>
+<p>It’s possible to see that there’s overlap between the topics but there are five<sup>1</sup> as requested. Let me take a stab at naming each;</p>
+<ul>
+<li><p>1: Parliament’s latest discussion of a bill related to homosexuality.</p></li>
+<li><p>2: A more general topic. Possibly a mix of topics involving Europe &amp; Rahul Gandhi.</p></li>
+<li><p>3: Discussion on GBNews about Tony Blair’s latest comments regarding Boris Johnson.</p></li>
+<li><p>4: Partygate. Without a doubt this topic centres on BoJo, his actions and the resulting enquiry.</p></li>
+<li><p>5: Northern Ireland, possibly discussing issues surrounding the region, such as its relationship with the UK and Brexit.</p></li>
+</ul>
+<p>LDA is a fairly standard method of topic modelling and as shown above it’s not perfect. It is up to the analyst to decide how many topics to create, then to decide how much the topics overlap. Finding topics that do not overlap or repeat can be difficult.</p>
+<p>At this point one might take a moment to wonder if it’s worthwhile creating a visualisation like a cluster plot or dendogram. I advise against it. Topic modelling is based on word counts and some words will appear in multiple documents as seen above. Clustering on the other hand is based on the distance between objects and each object belongs in a single cluster.</p>
+</section>
+<section id="plotting-word-probabilities" class="level2">
+<h2 class="anchored" data-anchor-id="plotting-word-probabilities"><strong>4. Plotting word probabilities</strong></h2>
+<p>Remember, LDA assumes that each document in the corpus is a mixture of a number of topics and that each word in a document is related to one of those topics. With Bayesian inference, LDA identifies the most probable set of topics for each document and the most probable set of words for each topic.</p>
+<p>The resulting output is a set of topics represented by a group of words with associated probabilities and a topic distribution for each document represented by a probability distribution over the set of topics. OK?</p>
+<p>I’ll plot those probabilities next.</p>
+<p>I’ll use the same data above but this time demonstrate a few more options available in <code>LDA()</code>. The output can then be passed to <code>tidy()</code> and finally to <code>ggplot</code>.</p>
+<div class="sourceCode" id="cb10" style="background: #f1f3f5;"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb10-1"><span class="fu" style="color: #4758AB;">library</span>(tidytext)</span>
+<span id="cb10-2"></span>
+<span id="cb10-3">tweet_lda_gibbs <span class="ot" style="color: #003B4F;">&lt;-</span> <span class="fu" style="color: #4758AB;">LDA</span>(tweet_dtm,</span>
+<span id="cb10-4">                       <span class="at" style="color: #657422;">k =</span> <span class="dv" style="color: #AD0000;">5</span>,</span>
+<span id="cb10-5">                       <span class="at" style="color: #657422;">method =</span> <span class="st" style="color: #20794D;">"Gibbs"</span>,</span>
+<span id="cb10-6">                       <span class="at" style="color: #657422;">control =</span> <span class="fu" style="color: #4758AB;">list</span>(<span class="at" style="color: #657422;">seed =</span> <span class="dv" style="color: #AD0000;">33</span>)</span>
+<span id="cb10-7">                   ) <span class="sc" style="color: #5E5E5E;">%&gt;%</span></span>
+<span id="cb10-8">                   tidytext<span class="sc" style="color: #5E5E5E;">::</span><span class="fu" style="color: #4758AB;">tidy</span>(<span class="at" style="color: #657422;">matrix =</span> <span class="st" style="color: #20794D;">"beta"</span>)</span></code></pre></div>
+<p>Note: In the snippet above it’s necessary to use <code>tidytext::tidy</code> in full possibly due to a bug in the <code>topicmodels</code> library.</p>
+<p>Now I’ll arrange the word probabilities by topic and transform the terms into factors. Factors are necessary because one single word can appear in many topics. For example, the word ‘parliament’ can be used in each of the topics shown above and have a different context in each.</p>
+<div class="sourceCode" id="cb11" style="background: #f1f3f5;"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb11-1"><span class="fu" style="color: #4758AB;">library</span>(tidyverse)</span>
+<span id="cb11-2"></span>
+<span id="cb11-3">tweet_word_probs <span class="ot" style="color: #003B4F;">&lt;-</span> tweet_lda_gibbs <span class="sc" style="color: #5E5E5E;">%&gt;%</span></span>
+<span id="cb11-4">                    <span class="fu" style="color: #4758AB;">group_by</span>(topic) <span class="sc" style="color: #5E5E5E;">%&gt;%</span></span>
+<span id="cb11-5">                    <span class="fu" style="color: #4758AB;">top_n</span>(<span class="dv" style="color: #AD0000;">15</span>, beta) <span class="sc" style="color: #5E5E5E;">%&gt;%</span></span>
+<span id="cb11-6">                    <span class="fu" style="color: #4758AB;">ungroup</span>() <span class="sc" style="color: #5E5E5E;">%&gt;%</span></span>
+<span id="cb11-7">                    <span class="fu" style="color: #4758AB;">mutate</span>(<span class="at" style="color: #657422;">term_n =</span> <span class="fu" style="color: #4758AB;">fct_reorder</span>(term, beta))  </span></code></pre></div>
+<p>And finally…</p>
+<div class="sourceCode" id="cb12" style="background: #f1f3f5;"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb12-1"></span>
+<span id="cb12-2"><span class="co" style="color: #5E5E5E;">#plot word probabilities</span></span>
+<span id="cb12-3"><span class="fu" style="color: #4758AB;">ggplot</span>(tweet_word_probs,</span>
+<span id="cb12-4">       <span class="fu" style="color: #4758AB;">aes</span>(term_n,</span>
+<span id="cb12-5">           beta,</span>
+<span id="cb12-6">           <span class="at" style="color: #657422;">fill =</span> <span class="fu" style="color: #4758AB;">as.factor</span>(topic)</span>
+<span id="cb12-7">       )</span>
+<span id="cb12-8">) <span class="sc" style="color: #5E5E5E;">+</span></span>
+<span id="cb12-9"><span class="fu" style="color: #4758AB;">geom_col</span>(<span class="at" style="color: #657422;">show.legend =</span> <span class="cn" style="color: #8f5902;">FALSE</span>) <span class="sc" style="color: #5E5E5E;">+</span></span>
+<span id="cb12-10">         <span class="fu" style="color: #4758AB;">coord_flip</span>() <span class="sc" style="color: #5E5E5E;">+</span></span>
+<span id="cb12-11">         <span class="fu" style="color: #4758AB;">facet_wrap</span>(<span class="sc" style="color: #5E5E5E;">~</span> topic, <span class="at" style="color: #657422;">scales =</span> <span class="st" style="color: #20794D;">"free"</span>)</span></code></pre></div>
+<p>The resulting image shows much more clearly that the topics involve not just the UK parliament and BoJo’s (alleged) breach of the rules but also the Ugandan parliament. Topics 3 and 5 are possibly the same topic as they concern Kasha Jacqueline Nabagesera and the Ugandan government’s criminalisation of LGBT rights. Creating a visualisation of word probabilities has helped to determine the quantity of topics. It’d be a good idea now to go back and refine the model.</p>
+<p><img src="markvanderstay.com/posts/using-r-for-twitter-analysis-lda/parliament-1-1024x561.png" class="img-fluid"></p>
+</section>
+<section id="conclusion" class="level2">
+<h2 class="anchored" data-anchor-id="conclusion"><strong>5. Conclusion</strong></h2>
+<p>As the world becomes increasingly data-driven, tools like Latent Dirichlet Allocation (LDA) have emerged as powerful instruments for extracting insights from large datasets. However, as with any tool, there are risks of misuse and misinterpretation. The similar topics in this post are a prime example.</p>
+<p>The problem of similar topics in LDA analysis is not uncommon and it can be attributed to a variety of factors. In some cases it may be due to poor quality data with noise and irrelevant content obscuring the underlying patterns. Alternatively, an insufficient number of topics or homogeneity in the content being analysed can also cause LDA to group together different topics into one. Additionally, overfitting and slack pre-processing techniques can also lead to similar topics.</p>
+<p>The consequences of similar topics in LDA analysis can be severe. If the results are used for decision-making purposes, the similarity can lead to incorrect conclusions and actions. It is crucial that data analysts exercise caution and thoroughly investigate the causes of similar topics.</p>
+<p>Furthermore, the LDA algorithm must not be used in isolation. It is imperative that researchers combine it with other techniques and knowledge to identify the underlying patterns that LDA cannot detect on its own.</p>
+<p>In conclusion, LDA is a powerful tool, but its results are not infallible. A comprehensive approach to data analysis that includes multiple techniques and expert knowledge is necessary to ensure accurate and reliable results.</p>
+
+
+</section>
+</section>
+
+
+<div id="quarto-appendix" class="default"><section id="footnotes" class="footnotes footnotes-end-of-document"><h2 class="anchored quarto-appendix-heading">Footnotes</h2>
+
+<ol>
+<li id="fn1"><p><strong><em>One quick thought at this point is that our data seems to be politically divisive. It would be interesting to attempt a sentiment analysis of our corpus and see what arises. I’ll do that in my next post.</em></strong>↩︎</p></li>
+</ol>
+</section></div> ]]></description>
+  <category>Twitter</category>
+  <category>R</category>
+  <category>RStudio</category>
+  <guid>markvanderstay.com/posts/using-r-for-twitter-analysis-lda/index.html</guid>
+  <pubDate>Sat, 25 Mar 2023 00:00:00 GMT</pubDate>
+  <media:content url="markvanderstay.com/posts/using-r-for-twitter-analysis-lda/parliament-1-1024x561.png" medium="image" type="image/png" height="79" width="144"/>
+</item>
+<item>
+  <title>Using R for Twitter Analysis</title>
+  <dc:creator>Mark Vanderstay</dc:creator>
+  <link>markvanderstay.com/posts/using-r-for-twitter-analysis/index.html</link>
+  <description><![CDATA[ 
+
+
+
+
+<section id="extracting-tweets-with-r" class="level2">
+<h2 class="anchored" data-anchor-id="extracting-tweets-with-r"><strong>Extracting tweets with R</strong></h2>
+<p>Social media has emerged as a prominent tool for expressing opinions, sharing news, and engaging in discussions. Twitter, with over 330 million active users worldwide, has become an indispensable tool for businesses, governments, and individuals to promote their messages and campaigns.</p>
+<p>Data analysis of Twitter data is becoming increasingly important, as it provides valuable insights into the patterns and trends of Twitter users. Using the R programming language, it is possible to clean and analyze tweet data, and then create visualizations that help to illustrate the patterns and trends that emerge.</p>
+<p>In this blog post, I will demonstrate how to use R to extract and clean tweets, create a corpus, and plot the results. By the end you will have a better understanding of how Twitter data analysis can be used for advertising or awareness campaigns on any topic.</p>
+<p>The R programming language is a powerful tool for data analysis and visualization and it is especially useful for analyzing Twitter data. Whether you are interested in analysing Twitter data for personal or professional purposes, the techniques I’ll demonstrate here and in the following posts will provide you with a solid foundation for getting started with Twitter data analysis using R.</p>
+</section>
+<section id="setup-authorise-rtweet" class="level2">
+<h2 class="anchored" data-anchor-id="setup-authorise-rtweet"><strong>1. Setup &amp; authorise rtweet</strong></h2>
+<p>Let’s begin with the usual library statements. We’ll need a few for this post so may as well get them all at once.</p>
+<div class="sourceCode" id="cb1" style="background: #f1f3f5;"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb1-1"><span class="fu" style="color: #4758AB;">library</span>(rtweet)</span>
+<span id="cb1-2"><span class="fu" style="color: #4758AB;">library</span>(httr)</span>
+<span id="cb1-3"><span class="fu" style="color: #4758AB;">library</span>(dplyr)</span>
+<span id="cb1-4"><span class="fu" style="color: #4758AB;">library</span>(qdap)</span>
+<span id="cb1-5"><span class="fu" style="color: #4758AB;">library</span>(qdapRegex)</span>
+<span id="cb1-6"><span class="fu" style="color: #4758AB;">library</span>(tm)</span>
+<span id="cb1-7"><span class="fu" style="color: #4758AB;">library</span>(ggplot2)</span></code></pre></div>
+<p>Next up, authorise the <code>rtwee</code>t package to use your Twitter account. It gets your details from the browser and you should only need to do this once. The authors provide a useful vignette. Check it out by running <code>vignette("auth", "rtweet")</code> in the console.</p>
+<div class="sourceCode" id="cb2" style="background: #f1f3f5;"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb2-1"><span class="co" style="color: #5E5E5E;">#authorise</span></span>
+<span id="cb2-2"><span class="fu" style="color: #4758AB;">auth_setup_default</span>()</span></code></pre></div>
+</section>
+<section id="extract-tweets" class="level2">
+<h2 class="anchored" data-anchor-id="extract-tweets"><strong>2. Extract tweets</strong></h2>
+<p>First off, I’ll use <code>search_tweets</code> to extract a sample of Twitter data. In this example I’ll use tweets containing the hashtag ‘#mentalhealth’. Mental health is becoming an increasingly important issue and there will be lots of tweets with this tag.</p>
+<p>I’ll exclude retweets and filter for those in English only.</p>
+<div class="sourceCode" id="cb3" style="background: #f1f3f5;"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb3-1"><span class="co" style="color: #5E5E5E;">#get 2000 tweets with the #mentalhealth hashtag</span></span>
+<span id="cb3-2">twtr <span class="ot" style="color: #003B4F;">&lt;-</span> <span class="fu" style="color: #4758AB;">search_tweets</span>(<span class="st" style="color: #20794D;">"#mentalhealth"</span>,</span>
+<span id="cb3-3">                       <span class="at" style="color: #657422;">n =</span> <span class="dv" style="color: #AD0000;">1000</span>,</span>
+<span id="cb3-4">                       <span class="at" style="color: #657422;">include_rts =</span> <span class="cn" style="color: #8f5902;">FALSE</span>,</span>
+<span id="cb3-5">                       <span class="at" style="color: #657422;">lang =</span> <span class="st" style="color: #20794D;">"en"</span>)</span></code></pre></div>
+</section>
+<section id="clean-data-and-creating-a-corpus." class="level2">
+<h2 class="anchored" data-anchor-id="clean-data-and-creating-a-corpus."><strong>3. Clean data and creating a corpus.</strong></h2>
+<p>Checking the text of the tweets inside our shiny, new data frame reveals that we need to do some tidying of the data.</p>
+<div class="sourceCode" id="cb4" style="background: #f1f3f5;"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb4-1"><span class="co" style="color: #5E5E5E;">#check tweet text</span></span>
+<span id="cb4-2">tweet_text <span class="ot" style="color: #003B4F;">&lt;-</span> twtr<span class="sc" style="color: #5E5E5E;">$</span>text</span>
+<span id="cb4-3"><span class="fu" style="color: #4758AB;">head</span>(tweet_text)</span></code></pre></div>
+<p>There’s a lot of emojis, URLs, punctuation and other stuff going on here.</p>
+<div class="sourceCode" id="cb5" style="background: #f1f3f5;"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb5-1">[<span class="dv" style="color: #AD0000;">1</span>] <span class="st" style="color: #20794D;">"Start your day right with a quote from SUGA of BTS </span><span class="sc" style="color: #5E5E5E;">\n\n</span><span class="st" style="color: #20794D;">#MindsetApp #Quotes #Motivation #Wellness #Positivity #SelfCare #MentalHealth #Kpop #BTS #SUGA https://t.co/GXglBR7rrk"</span></span>
+<span id="cb5-2">[<span class="dv" style="color: #AD0000;">2</span>] <span class="st" style="color: #20794D;">"Remember: There is no health without mental health! #MentalHealth is just as important as physical health, and asking for help is a normal part of life. You should never feel like you have to take on the world  alone. #NationalFlowerDay #FlowerDay https://t.co/4SEVDf4c4J"</span></span>
+<span id="cb5-3">[<span class="dv" style="color: #AD0000;">3</span>] <span class="st" style="color: #20794D;">"Everyone either knows someone struggling with their #MentalHealth or they do themselves. </span><span class="sc" style="color: #5E5E5E;">\n\n</span><span class="st" style="color: #20794D;">Some things should transcend politics, that’s what @TedLasso is trying to tell us.</span><span class="sc" style="color: #5E5E5E;">\n\n</span><span class="st" style="color: #20794D;">I admire anyone who can ask for help. </span><span class="sc" style="color: #5E5E5E;">\n</span><span class="st" style="color: #20794D;"> https://t.co/Iz32fcP3xa"</span></span>
+<span id="cb5-4">[<span class="dv" style="color: #AD0000;">4</span>] <span class="st" style="color: #20794D;">"@Iamdepr47974144 Have you talked to anyone about how you feel? #mentalhealth #depression"</span></span>
+<span id="cb5-5">[<span class="dv" style="color: #AD0000;">5</span>] <span class="st" style="color: #20794D;">"#postivevibes #quotes #peace #innerchild #mentalhealth #love #motto #inspiration #health </span><span class="sc" style="color: #5E5E5E;">\n\n</span><span class="st" style="color: #20794D;"> Blissful Cleaning LLC https://t.co/VyfA8yE8IU"</span> </span></code></pre></div>
+<p>I’ll use the <code>tm</code> package to help with this but first I can use a simple regular expression. I’ll remove URLs and special characters such as emojis by simply keeping only letters.</p>
+<div class="sourceCode" id="cb6" style="background: #f1f3f5;"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb6-1"><span class="co" style="color: #5E5E5E;"># Remove special characters</span></span>
+<span id="cb6-2">tweet_text_az <span class="ot" style="color: #003B4F;">&lt;-</span> <span class="fu" style="color: #4758AB;">gsub</span>(<span class="st" style="color: #20794D;">"[^A-Za-z]"</span>, <span class="st" style="color: #20794D;">" "</span>, tweet_text)</span></code></pre></div>
+<p>Before I proceed I’ll convert the text I extracted into a corpus so that I can use the <code>tm</code> package for text mining. Creating a corpus is important because it provides a structured way to work with text data and enables more efficient analysis.</p>
+<p>And look how easy it is…</p>
+<div class="sourceCode" id="cb7" style="background: #f1f3f5;"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb7-1"><span class="co" style="color: #5E5E5E;"># Create a corpus (transform tweets into documents)</span></span>
+<span id="cb7-2">tweet_corpus <span class="ot" style="color: #003B4F;">&lt;-</span> tweet_text_az <span class="sc" style="color: #5E5E5E;">%&gt;%</span></span>
+<span id="cb7-3">                <span class="fu" style="color: #4758AB;">VectorSource</span>() <span class="sc" style="color: #5E5E5E;">%&gt;%</span></span>
+<span id="cb7-4">                <span class="fu" style="color: #4758AB;">Corpus</span>()</span></code></pre></div>
+</section>
+<section id="usage-of-the-tm-package-for-text-mining" class="level2">
+<h2 class="anchored" data-anchor-id="usage-of-the-tm-package-for-text-mining"><strong>4. Usage of the tm package for text mining</strong></h2>
+<p>Now that’s done I’ll use a few <code>tm</code> package functions to do a bit more cleaning.</p>
+<div class="sourceCode" id="cb8" style="background: #f1f3f5;"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb8-1"><span class="co" style="color: #5E5E5E;"># Remove stop words, extra whitespace and transform to lower case</span></span>
+<span id="cb8-2">tweet_corpus_no_stop <span class="ot" style="color: #003B4F;">&lt;-</span> <span class="fu" style="color: #4758AB;">tm_map</span>(tweet_corpus, removeWords, <span class="fu" style="color: #4758AB;">stopwords</span>(<span class="st" style="color: #20794D;">"english"</span>))</span>
+<span id="cb8-3">tweet_corpus_lower <span class="ot" style="color: #003B4F;">&lt;-</span> <span class="fu" style="color: #4758AB;">tm_map</span>(tweet_corpus_no_stop, tolower)</span>
+<span id="cb8-4">tweet_corpus_docs <span class="ot" style="color: #003B4F;">&lt;-</span> <span class="fu" style="color: #4758AB;">tm_map</span>(tweet_corpus_lower, stripWhitespace)</span></code></pre></div>
+<p>After a quick check of word frequency I’ll remove words that don’t serve a purpose.</p>
+<div class="sourceCode" id="cb9" style="background: #f1f3f5;"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb9-1"><span class="co" style="color: #5E5E5E;"># remove custom stops and check frequency again</span></span>
+<span id="cb9-2"><span class="co" style="color: #5E5E5E;"># 1. remove custom stops</span></span>
+<span id="cb9-3">custom_stop <span class="ot" style="color: #003B4F;">&lt;-</span> <span class="fu" style="color: #4758AB;">c</span>(<span class="st" style="color: #20794D;">'mentalhealth'</span>, <span class="st" style="color: #20794D;">'health'</span>, <span class="st" style="color: #20794D;">'mental'</span>, <span class="st" style="color: #20794D;">'s'</span>, <span class="st" style="color: #20794D;">'i'</span>, <span class="st" style="color: #20794D;">'can'</span>, <span class="st" style="color: #20794D;">'amp'</span>,</span>
+<span id="cb9-4">                <span class="st" style="color: #20794D;">'day'</span>, <span class="st" style="color: #20794D;">'the'</span>, <span class="st" style="color: #20794D;">'mentalhealthawareness'</span>, <span class="st" style="color: #20794D;">'t'</span>, <span class="st" style="color: #20794D;">'it'</span>,</span>
+<span id="cb9-5">                <span class="st" style="color: #20794D;">'internationaldayofhappiness'</span>, <span class="st" style="color: #20794D;">'will'</span>, <span class="st" style="color: #20794D;">'a'</span>, <span class="st" style="color: #20794D;">'get'</span>, <span class="st" style="color: #20794D;">'you'</span>,</span>
+<span id="cb9-6">                <span class="st" style="color: #20794D;">'need'</span>, <span class="st" style="color: #20794D;">'take'</span>, <span class="st" style="color: #20794D;">'new'</span>, <span class="st" style="color: #20794D;">'one'</span>, <span class="st" style="color: #20794D;">'make'</span>, <span class="st" style="color: #20794D;">'re'</span>, <span class="st" style="color: #20794D;">'for'</span>, <span class="st" style="color: #20794D;">'march'</span>,</span>
+<span id="cb9-7">                <span class="st" style="color: #20794D;">'m'</span>, <span class="st" style="color: #20794D;">'if'</span>, <span class="st" style="color: #20794D;">'to'</span>, <span class="st" style="color: #20794D;">'via'</span>, <span class="st" style="color: #20794D;">'don'</span>, <span class="st" style="color: #20794D;">'just'</span>, <span class="st" style="color: #20794D;">'th'</span>, <span class="st" style="color: #20794D;">'may'</span>, <span class="st" style="color: #20794D;">'way'</span>)</span>
+<span id="cb9-8"></span>
+<span id="cb9-9">tweet_corpus_cust <span class="ot" style="color: #003B4F;">&lt;-</span> <span class="fu" style="color: #4758AB;">tm_map</span>(tweet_corpus_docs, removeWords, custom_stop)</span>
+<span id="cb9-10"></span>
+<span id="cb9-11"><span class="co" style="color: #5E5E5E;"># 2. check frequency</span></span>
+<span id="cb9-12">word_freq_cust <span class="ot" style="color: #003B4F;">&lt;-</span> <span class="fu" style="color: #4758AB;">freq_terms</span>(tweet_corpus_cust, <span class="dv" style="color: #AD0000;">25</span>) </span>
+<span id="cb9-13">word_freq_cust</span></code></pre></div>
+<p>What I’m left with is a list of words I can use to help promote mental health awareness. The end result is not particularly suprising given the subject matter but it serves as a good example of the possibilities of using Twitter data for other campaigns such as brand management.</p>
+<p>I’ll quickly put together a bar chart showing word vs freq in <code>ggplot</code>.</p>
+<div class="sourceCode" id="cb10" style="background: #f1f3f5;"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb10-1"></span>
+<span id="cb10-2"><span class="co" style="color: #5E5E5E;"># visualise the most popular terms (those with a frequency&gt;100)</span></span>
+<span id="cb10-3">word_freq_100 <span class="ot" style="color: #003B4F;">&lt;-</span> <span class="fu" style="color: #4758AB;">subset</span>(word_freq_cust, FREQ <span class="sc" style="color: #5E5E5E;">&gt;=</span> <span class="dv" style="color: #AD0000;">100</span>)</span>
+<span id="cb10-4"></span>
+<span id="cb10-5"><span class="fu" style="color: #4758AB;">ggplot</span>(word_freq_100, <span class="fu" style="color: #4758AB;">aes</span>(<span class="at" style="color: #657422;">x =</span> <span class="fu" style="color: #4758AB;">reorder</span>(WORD, <span class="sc" style="color: #5E5E5E;">-</span>FREQ), <span class="at" style="color: #657422;">y =</span> FREQ)) <span class="sc" style="color: #5E5E5E;">+</span></span>
+<span id="cb10-6">       <span class="fu" style="color: #4758AB;">geom_bar</span>(<span class="at" style="color: #657422;">stat=</span> <span class="st" style="color: #20794D;">'identity'</span>, <span class="at" style="color: #657422;">fill =</span> <span class="st" style="color: #20794D;">'midnightblue'</span>) <span class="sc" style="color: #5E5E5E;">+</span></span>
+<span id="cb10-7">       <span class="fu" style="color: #4758AB;">xlab</span>(<span class="st" style="color: #20794D;">'Word'</span>) <span class="sc" style="color: #5E5E5E;">+</span></span>
+<span id="cb10-8">       <span class="fu" style="color: #4758AB;">ylab</span>(<span class="st" style="color: #20794D;">'Frequency'</span>) <span class="sc" style="color: #5E5E5E;">+</span></span>
+<span id="cb10-9">       <span class="fu" style="color: #4758AB;">ggtitle</span>(<span class="st" style="color: #20794D;">'Word Frequency'</span>, <span class="at" style="color: #657422;">subtitle =</span> <span class="st" style="color: #20794D;">'#mentalhealth'</span>) <span class="sc" style="color: #5E5E5E;">+</span></span>
+<span id="cb10-10">       <span class="fu" style="color: #4758AB;">theme</span>(</span>
+<span id="cb10-11">         <span class="at" style="color: #657422;">axis.text.x =</span> <span class="fu" style="color: #4758AB;">element_text</span>(<span class="at" style="color: #657422;">angle =</span> <span class="dv" style="color: #AD0000;">90</span>, <span class="at" style="color: #657422;">hjust =</span> <span class="dv" style="color: #AD0000;">1</span>)</span>
+<span id="cb10-12">       )</span></code></pre></div>
+<div class="quarto-figure quarto-figure-center">
+<figure class="figure">
+<p><img src="markvanderstay.com/posts/using-r-for-twitter-analysis/twitter-analysis-mental-health.png" class="img-fluid figure-img"></p>
+<p></p><figcaption class="figure-caption">After cleaning Twitter data: Terms with frequency &gt; 100 visualised.</figcaption><p></p>
+</figure>
+</div>
+</section>
+<section id="conclusion" class="level2">
+<h2 class="anchored" data-anchor-id="conclusion"><strong>5. Conclusion</strong></h2>
+<p>In this blog post, I demonstrated how R can be used to extract and clean tweets, create a corpus and analyze Twitter data which potentially offers valuable insights into the behaviour and trends of Twitter users. These insights could prove beneficial for personal or professional purposes, such as advertising or awareness campaigns.</p>
+<p>In following posts I’ll take this process further. What awaits is topic modelling, sentiment analysis and social graph visualisations.</p>
+
+
+</section>
+
+ ]]></description>
+  <category>Twitter</category>
+  <category>R</category>
+  <category>RStudio</category>
+  <guid>markvanderstay.com/posts/using-r-for-twitter-analysis/index.html</guid>
+  <pubDate>Tue, 21 Mar 2023 00:00:00 GMT</pubDate>
+  <media:content url="markvanderstay.com/posts/using-r-for-twitter-analysis/filter.png" medium="image" type="image/png"/>
+</item>
+<item>
+  <title>Analysing GA4 Data With R</title>
+  <dc:creator>Mark Vanderstay</dc:creator>
+  <link>markvanderstay.com/posts/using-google-analytics-ga4-data-in-r/index.html</link>
+  <description><![CDATA[ 
+
+
+
+
+<section id="the-analysis-gap" class="level1">
+<h1>The Analysis Gap</h1>
+<p>In marketing there’s often a gap between the collection and reporting of data. That gap is Analysis.</p>
+<p>For small businesses without in-house expertise the analysis of marketing data is a giant void. GA4 makes it easy to collect marketing data but it’s much harder –&nbsp;<strong><em>and more expensive</em></strong>&nbsp;– to report it thoroughly and check for meaning.</p>
+<p>Searching out meaning in data inevitably falls by the wayside in small businesses. Know why?</p>
+<p>‘Too busy’ you say?</p>
+<p>Well yes business owners face myriad tasks day-to-day. But how about this…</p>
+<p>There’s a steep learning curve. Yep, the clicks and sales keep coming so why bother trying to understand all that data?</p>
+<p>Just keep going and hand over the collection and analysis to someone else. Right?</p>
+<p>WRONG!</p>
+<p>If you don’t know what you’re looking at you can’t tell if you’re being sold a dud.</p>
+<p>That ‘someone else’ you’re paying for is a bit of a lottery.</p>
+<p>Hiring a third party doesn’t mean the task of analysing your data will be done correctly. I’m going to tell you a story.<br>
+It’s a simple one and it demonstrates this issue nicely.</p>
+<p>Our central character is Phil (and no, that’s not his real name).</p>
+<p>Phil showed me the report he’d received from his outsourced SEO expert. In it the word ‘improvement’ featured in nearly every paragraph.</p>
+<p>Improvement this, improvement that. Poor Phil.</p>
+<p>He thought he was doing great. Was he?</p>
+<p>It was impossible to tell if the expert’s language used was simply to hide the truth. Nevertheless, Phil never stopped to consider if improvement really meant that.</p>
+<p>You know why?</p>
+<p>Yes, yes, he was busy. Sure.</p>
+<p>But worse than that.</p>
+<p>OK, I’ll tell you.</p>
+<p>There was not the slightest consideration of business objectives in Phil’s entire strategy. So the whole report really could have been showing improvements.</p>
+<p>But we’d never know what had improved.</p>
+<p>I took a look at Phil’s stats and I’ll tell you about that later.</p>
+<p>A month on month increase in page views is not an improvement unless your business objective is page views.</p>
+<p>An increase in site bounces is not an improvement. Plain as day. It’s an increase. Bounces going up? Poor Phil.</p>
+<p>The saddest part though…</p>
+<p>Phil is no exception.</p>
+<p>Most clients seem stumped when I ask them what the goal of analysing their data is.</p>
+<p>Ask that question to a new client. See the look of surprise and bewilderment? No-one has asked them before. Why would they? Isn’t it obvious?&nbsp;<strong>Higher revenues! More clicks!</strong>&nbsp;</p>
+<p>It depends.</p>
+<section id="why-r-is-a-powerful-tool-for-ga4-reporting" class="level2">
+<h2 class="anchored" data-anchor-id="why-r-is-a-powerful-tool-for-ga4-reporting"><strong>Why R is a Powerful Tool for GA4 Reporting</strong></h2>
+<p>You know the saying ‘if you only have a hammer everything looks like a nail’ ?</p>
+<p>Sometimes progress is better examined by looking at metrics <em>not</em> reported in the standard GA4 interface.</p>
+<p>Even those owners who can state their objectives will not have considered that.</p>
+<p>Here’s an example.</p>
+<p>Perhaps it would be more useful to check what <strong>itemsets</strong> customers put in their basket. Then we can ask new questions:</p>
+<ul>
+<li><p>Was there something driving their choices?</p></li>
+<li><p>Can we predict what items they’re likely to choose next?</p></li>
+<li><p>Should we look at social data to examine sentiment?</p></li>
+</ul>
+<p>There are many factors at play so why limit ourselves to what we’re served by Google?</p>
+<p>I’ll demonstrate below how to retrieve Google Analytics (GA) data using the GA4 API directly in R. We’ll be using the excellent&nbsp;<a href="https://cloud.r-project.org/web/packages/googleAnalyticsR/index.html">googleAnalyticsR</a>&nbsp;library by&nbsp;<a href="https://www.linkedin.com/in/markpeteredmondson?miniProfileUrn=urn%3Ali%3Afs_miniProfile%3AACoAAADUS2kBcb5cDoV01tl5LEvPQ--szQ45RiY">Mark Edmondson</a>&nbsp;and in future articles I’ll go further with some analysis techniques but all will flow from this initial, fundamental step.</p>
+<p>Before we begin plugging away with R there’s some setup necessary in Google Cloud.</p>
+</section>
+</section>
+<section id="connecting-r-to-your-ga4-data" class="level1">
+<h1><strong>Connecting R to Your GA4 Data</strong></h1>
+<section id="get-credentials-in-google-cloud-console" class="level2">
+<h2 class="anchored" data-anchor-id="get-credentials-in-google-cloud-console">Get Credentials in Google Cloud Console</h2>
+<p>We’ll need to enable some APIs so first head on over to&nbsp;<a href="https://console.cloud.google.com/">Google Cloud Console</a>&nbsp;and create a new project.</p>
+<p>In this new project enable the Analytics Reporting API, Google Analytics API and the Google Analytics Data API. Yep, all three. Not all of these will be necessary straight away but you’ll need them soon enough so may as well do this now.</p>
+<p>Still in the cloud console, create a new OAuth client ID in order to allow login and retrieval of the data while in R. This will be a desktop app so ;</p>
+<ul>
+<li><p>Click Credentials</p></li>
+<li><p>Create Credentials</p></li>
+<li><p>Choose OAuth client ID</p></li>
+<li><p>Select ‘Desktop app’ and give it a nice name. Something catchy.</p></li>
+<li><p>Click Create</p></li>
+</ul>
+<p>Now, back at the credentials page, download your credentials as a .json file.</p>
+<ul>
+<li><p>Click the credentials you just created</p></li>
+<li><p>Click ‘Download JSON’</p>
+<div class="quarto-figure quarto-figure-center" style="border: #000000 2px solid;">
+<figure class="figure">
+<p><img src="markvanderstay.com/posts/using-google-analytics-ga4-data-in-r/credentials.png" class="img-fluid figure-img" alt="Once you’ve setup your credentials, download them as JSON"></p>
+<p></p><figcaption class="figure-caption">Once you’ve setup your credentials, download them as JSON</figcaption><p></p>
+</figure>
+</div></li>
+</ul>
+<p>Once that’s all setup we’re done with Google. Fire up RStudio if you haven’t already.</p>
+</section>
+<section id="setup-a-new-project-in-rstudio" class="level2">
+<h2 class="anchored" data-anchor-id="setup-a-new-project-in-rstudio">Setup A New Project in RStudio</h2>
+<p>Now there’s obviously many ways to set up a project but I’m fastidious when it comes to keeping everything atomic, preferring to keep each project in its own directory. This way, I can keep my .Renviron file unique to a project and should I need to move the project somewhere, I can just move the folder and it’s done. Enough about me.</p>
+<p>Create a new folder for this project and set it the working directory and create a .Renviron file with the following contents…</p>
+<div class="sourceCode" id="cb1" style="background: #f1f3f5;"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb1-1">GAR_CLIENT_JSON<span class="ot" style="color: #003B4F;">=</span>.<span class="sc" style="color: #5E5E5E;">/</span>client.json</span></code></pre></div>
+<p>…and move the `client.json` file downloaded from Google into your project folder.</p>
+<p>Obligatory package install. We’ll be using the excellent <strong>`<em>googleAnalyticsR</em>`</strong>.</p>
+<div class="sourceCode" id="cb2" style="background: #f1f3f5;"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb2-1"><span class="fu" style="color: #4758AB;">install.packages</span>(<span class="st" style="color: #20794D;">"googleAnalyticsR"</span>)</span></code></pre></div>
+<p>Create a new R script file and load the library we just installed.</p>
+<div class="sourceCode" id="cb3" style="background: #f1f3f5;"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb3-1"><span class="fu" style="color: #4758AB;">library</span>(googleAnalyticsR)</span></code></pre></div>
+<p>You’ll notice a message in the console similar to the following…</p>
+<div class="sourceCode" id="cb4" style="background: #f1f3f5;"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb4-1"> Setting client.id from .<span class="sc" style="color: #5E5E5E;">/</span>client.jso</span>
+<span id="cb4-2"> No consent file found</span></code></pre></div>
+<p>No bother, we’ll then authorise with…</p>
+<div class="sourceCode" id="cb5" style="background: #f1f3f5;"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb5-1"><span class="fu" style="color: #4758AB;">ga_auth</span>()</span></code></pre></div>
+<p>You’ll be prompted to choose with identity to login with and you simply select an option in the console window. So far, so good.</p>
+<p>If you wish to see the list of accounts you have access to you’ll have to use the following to return a character array fo account names;</p>
+<div class="sourceCode" id="cb6" style="background: #f1f3f5;"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb6-1">account_list <span class="ot" style="color: #003B4F;">&lt;-</span> <span class="fu" style="color: #4758AB;">ga_account_list</span>()</span></code></pre></div>
+<p>Remember, GA4 doesn’t use views like Universal Analytics does. Just stick with using propertyID and you’ll be fine.</p>
+</section>
+<section id="reading-ga4-data-with-r" class="level2">
+<h2 class="anchored" data-anchor-id="reading-ga4-data-with-r">Reading GA4 Data With R</h2>
+<p>Let’s see some data, shall we? With the property ID you’re interested in you simply use;</p>
+<div class="sourceCode" id="cb7" style="background: #f1f3f5;"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb7-1">metadata <span class="ot" style="color: #003B4F;">&lt;-</span> <span class="fu" style="color: #4758AB;">ga_meta</span>(<span class="st" style="color: #20794D;">"data"</span>, <span class="at" style="color: #657422;">propertyId =</span> XXXXXXXXX)</span></code></pre></div>
+<section id="dimensions-metrics-and-filters" class="level3">
+<h3 class="anchored" data-anchor-id="dimensions-metrics-and-filters">Dimensions, Metrics and Filters</h3>
+<p>Let’s check out a few GA4 dimensions and see what happens.</p>
+<div class="sourceCode" id="cb8" style="background: #f1f3f5;"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb8-1">&nbsp;dimensions <span class="ot" style="color: #003B4F;">&lt;-</span> <span class="fu" style="color: #4758AB;">ga_data</span>(</span>
+<span id="cb8-2">  &nbsp;&nbsp;XXXXXXXXX,</span>
+<span id="cb8-3">  &nbsp;&nbsp;<span class="at" style="color: #657422;">metrics =</span> <span class="fu" style="color: #4758AB;">c</span>(<span class="st" style="color: #20794D;">"activeUsers"</span>,<span class="st" style="color: #20794D;">"sessions"</span>),</span>
+<span id="cb8-4">  &nbsp;&nbsp;<span class="at" style="color: #657422;">dimensions =</span> <span class="fu" style="color: #4758AB;">c</span>(<span class="st" style="color: #20794D;">"date"</span>,<span class="st" style="color: #20794D;">"city"</span>,<span class="st" style="color: #20794D;">"dayOfWeek"</span>),</span>
+<span id="cb8-5">  &nbsp;&nbsp;<span class="at" style="color: #657422;">date_range =</span> <span class="fu" style="color: #4758AB;">c</span>(<span class="st" style="color: #20794D;">"2023-01-01"</span>, <span class="st" style="color: #20794D;">"2023-01-31"</span>)</span>
+<span id="cb8-6">&nbsp;)</span></code></pre></div>
+<p>You’ll notice that GA4 is returning a maximum of 100 rows. Should you wish to see all rows you can use the `limit` parameter as follows;</p>
+<div class="sourceCode" id="cb9" style="background: #f1f3f5;"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb9-1">&nbsp;dimensions <span class="ot" style="color: #003B4F;">&lt;-</span> <span class="fu" style="color: #4758AB;">ga_data</span>(</span>
+<span id="cb9-2">  &nbsp;&nbsp;XXXXXXXXX,</span>
+<span id="cb9-3">  &nbsp;&nbsp;<span class="at" style="color: #657422;">metrics =</span> <span class="fu" style="color: #4758AB;">c</span>(<span class="st" style="color: #20794D;">"activeUsers"</span>,<span class="st" style="color: #20794D;">"sessions"</span>),</span>
+<span id="cb9-4">  &nbsp;&nbsp;<span class="at" style="color: #657422;">dimensions =</span> <span class="fu" style="color: #4758AB;">c</span>(<span class="st" style="color: #20794D;">"date"</span>,<span class="st" style="color: #20794D;">"city"</span>,<span class="st" style="color: #20794D;">"dayOfWeek"</span>),</span>
+<span id="cb9-5">  &nbsp;&nbsp;<span class="at" style="color: #657422;">date_range =</span> <span class="fu" style="color: #4758AB;">c</span>(<span class="st" style="color: #20794D;">"2023-01-01"</span>, <span class="st" style="color: #20794D;">"2023-01-31"</span>),</span>
+<span id="cb9-6">  &nbsp;&nbsp;<span class="at" style="color: #657422;">limit =</span> <span class="sc" style="color: #5E5E5E;">-</span><span class="dv" style="color: #AD0000;">1</span></span>
+<span id="cb9-7">&nbsp;)</span></code></pre></div>
+<p>eventNames are used as they appear when using the GA4 web interface. But if you’re in any doubt you can always check…</p>
+<div class="sourceCode" id="cb10" style="background: #f1f3f5;"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb10-1">&nbsp;events <span class="ot" style="color: #003B4F;">&lt;-</span> <span class="fu" style="color: #4758AB;">ga_data</span>(</span>
+<span id="cb10-2">  &nbsp;&nbsp;XXXXXXXXX,</span>
+<span id="cb10-3">  &nbsp;&nbsp;<span class="at" style="color: #657422;">metrics =</span> <span class="cn" style="color: #8f5902;">NULL</span>,</span>
+<span id="cb10-4">  &nbsp;&nbsp;<span class="at" style="color: #657422;">dimensions =</span> <span class="st" style="color: #20794D;">"eventName"</span>,</span>
+<span id="cb10-5">  &nbsp;&nbsp;<span class="at" style="color: #657422;">date_range =</span><span class="fu" style="color: #4758AB;">c</span>(<span class="st" style="color: #20794D;">"2023-01-01"</span>, <span class="st" style="color: #20794D;">"2023-01-31"</span>)</span>
+<span id="cb10-6">&nbsp;)</span></code></pre></div>
+<p>Taking this further, we can filter events to just see those of interest. For example, I’ve setup a custom event that is fired when a Klaviyo form is submitted. We’ll use the `ga_data_filter` function like so;</p>
+<div class="sourceCode" id="cb11" style="background: #f1f3f5;"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb11-1">klaviyo <span class="ot" style="color: #003B4F;">&lt;-</span> <span class="fu" style="color: #4758AB;">ga_data_filter</span>(eventName<span class="sc" style="color: #5E5E5E;">==</span><span class="st" style="color: #20794D;">"klaviyo_form_submission"</span>)</span></code></pre></div>
+<p>And then use the filter it creates in a query;</p>
+<div class="sourceCode" id="cb12" style="background: #f1f3f5;"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb12-1">&nbsp;filteredKlaviyo <span class="ot" style="color: #003B4F;">&lt;-</span> <span class="fu" style="color: #4758AB;">ga_data</span>(</span>
+<span id="cb12-2">  &nbsp;&nbsp;XXXXXXXXX,</span>
+<span id="cb12-3">  &nbsp;&nbsp;<span class="at" style="color: #657422;">metrics =</span> <span class="st" style="color: #20794D;">"eventCount"</span>,</span>
+<span id="cb12-4">  &nbsp;&nbsp;<span class="at" style="color: #657422;">dimensions =</span> <span class="st" style="color: #20794D;">"eventName"</span>,</span>
+<span id="cb12-5">  &nbsp;&nbsp;<span class="at" style="color: #657422;">dim_filters =</span> klaviyo,</span>
+<span id="cb12-6">  &nbsp;&nbsp;<span class="at" style="color: #657422;">date_range =</span><span class="fu" style="color: #4758AB;">c</span>(<span class="st" style="color: #20794D;">"2023-01-01"</span>, <span class="st" style="color: #20794D;">"2023-01-31"</span>)</span>
+<span id="cb12-7">&nbsp;)</span></code></pre></div>
+<p>The results of this query are basic because this filter isn’t particularly useful, it’s just a demo.</p>
+<div class="quarto-figure quarto-figure-center">
+<figure class="figure">
+<p><img src="markvanderstay.com/posts/using-google-analytics-ga4-data-in-r/filter.png" class="img-fluid figure-img" alt="GA4 data with filtering for custom event named 'klaviyo_form_submission'."></p>
+<p></p><figcaption class="figure-caption">GA4 data with filtering for custom event named ‘klaviyo_form_submission’.</figcaption><p></p>
+</figure>
+</div>
+<p>Lastly, let’s check out the realtime data. Handy for taking snapshots of running campaigns…</p>
+<div class="sourceCode" id="cb13" style="background: #f1f3f5;"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb13-1">&nbsp;<span class="fu" style="color: #4758AB;">ga_data</span>(</span>
+<span id="cb13-2">  &nbsp;&nbsp;<span class="at" style="color: #657422;">propertyId =</span> XXXXXXXXX,&nbsp;</span>
+<span id="cb13-3">  &nbsp;&nbsp;<span class="at" style="color: #657422;">raw_json =</span> <span class="st" style="color: #20794D;">'{"metrics":[{"name":"activeUsers"}],"limit":100,"returnPropertyQuota":true}'</span>,</span>
+<span id="cb13-4">  &nbsp;&nbsp;<span class="at" style="color: #657422;">realtime =</span> <span class="cn" style="color: #8f5902;">TRUE</span>)</span></code></pre></div>
+<p>There you have it. All of the above is enough to get you started examining marketing data in R. You can then cut and slice it however you prefer. Maybe you’ll use ggplot2 for some funky dataviz or merge with offline data ready for import back into GA4.</p>
+<p>Enjoy!</p>
+
+
+</section>
+</section>
+</section>
+
+ ]]></description>
+  <category>GA4</category>
+  <category>R</category>
+  <category>RStudio</category>
+  <guid>markvanderstay.com/posts/using-google-analytics-ga4-data-in-r/index.html</guid>
+  <pubDate>Tue, 14 Mar 2023 00:00:00 GMT</pubDate>
+  <media:content url="markvanderstay.com/posts/using-google-analytics-ga4-data-in-r/filter.png" medium="image" type="image/png" height="42" width="144"/>
+</item>
+</channel>
+</rss>

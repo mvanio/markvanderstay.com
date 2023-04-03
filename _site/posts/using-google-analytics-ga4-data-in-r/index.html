@@ -1,0 +1,542 @@
+<!DOCTYPE html>
+<html xmlns="http://www.w3.org/1999/xhtml" lang="en" xml:lang="en"><head>
+
+<meta charset="utf-8">
+<meta name="generator" content="quarto-1.2.335">
+
+<meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=yes">
+
+<meta name="author" content="Mark Vanderstay">
+<meta name="dcterms.date" content="2023-03-14">
+
+<title>Mark Vanderstay - Analysing GA4 Data With R</title>
+<style>
+code{white-space: pre-wrap;}
+span.smallcaps{font-variant: small-caps;}
+div.columns{display: flex; gap: min(4vw, 1.5em);}
+div.column{flex: auto; overflow-x: auto;}
+div.hanging-indent{margin-left: 1.5em; text-indent: -1.5em;}
+ul.task-list{list-style: none;}
+ul.task-list li input[type="checkbox"] {
+  width: 0.8em;
+  margin: 0 0.8em 0.2em -1.6em;
+  vertical-align: middle;
+}
+pre > code.sourceCode { white-space: pre; position: relative; }
+pre > code.sourceCode > span { display: inline-block; line-height: 1.25; }
+pre > code.sourceCode > span:empty { height: 1.2em; }
+.sourceCode { overflow: visible; }
+code.sourceCode > span { color: inherit; text-decoration: inherit; }
+div.sourceCode { margin: 1em 0; }
+pre.sourceCode { margin: 0; }
+@media screen {
+div.sourceCode { overflow: auto; }
+}
+@media print {
+pre > code.sourceCode { white-space: pre-wrap; }
+pre > code.sourceCode > span { text-indent: -5em; padding-left: 5em; }
+}
+pre.numberSource code
+  { counter-reset: source-line 0; }
+pre.numberSource code > span
+  { position: relative; left: -4em; counter-increment: source-line; }
+pre.numberSource code > span > a:first-child::before
+  { content: counter(source-line);
+    position: relative; left: -1em; text-align: right; vertical-align: baseline;
+    border: none; display: inline-block;
+    -webkit-touch-callout: none; -webkit-user-select: none;
+    -khtml-user-select: none; -moz-user-select: none;
+    -ms-user-select: none; user-select: none;
+    padding: 0 4px; width: 4em;
+    color: #aaaaaa;
+  }
+pre.numberSource { margin-left: 3em; border-left: 1px solid #aaaaaa;  padding-left: 4px; }
+div.sourceCode
+  {   }
+@media screen {
+pre > code.sourceCode > span > a:first-child::before { text-decoration: underline; }
+}
+code span.al { color: #ff0000; font-weight: bold; } /* Alert */
+code span.an { color: #60a0b0; font-weight: bold; font-style: italic; } /* Annotation */
+code span.at { color: #7d9029; } /* Attribute */
+code span.bn { color: #40a070; } /* BaseN */
+code span.bu { color: #008000; } /* BuiltIn */
+code span.cf { color: #007020; font-weight: bold; } /* ControlFlow */
+code span.ch { color: #4070a0; } /* Char */
+code span.cn { color: #880000; } /* Constant */
+code span.co { color: #60a0b0; font-style: italic; } /* Comment */
+code span.cv { color: #60a0b0; font-weight: bold; font-style: italic; } /* CommentVar */
+code span.do { color: #ba2121; font-style: italic; } /* Documentation */
+code span.dt { color: #902000; } /* DataType */
+code span.dv { color: #40a070; } /* DecVal */
+code span.er { color: #ff0000; font-weight: bold; } /* Error */
+code span.ex { } /* Extension */
+code span.fl { color: #40a070; } /* Float */
+code span.fu { color: #06287e; } /* Function */
+code span.im { color: #008000; font-weight: bold; } /* Import */
+code span.in { color: #60a0b0; font-weight: bold; font-style: italic; } /* Information */
+code span.kw { color: #007020; font-weight: bold; } /* Keyword */
+code span.op { color: #666666; } /* Operator */
+code span.ot { color: #007020; } /* Other */
+code span.pp { color: #bc7a00; } /* Preprocessor */
+code span.sc { color: #4070a0; } /* SpecialChar */
+code span.ss { color: #bb6688; } /* SpecialString */
+code span.st { color: #4070a0; } /* String */
+code span.va { color: #19177c; } /* Variable */
+code span.vs { color: #4070a0; } /* VerbatimString */
+code span.wa { color: #60a0b0; font-weight: bold; font-style: italic; } /* Warning */
+</style>
+
+
+<script src="../../site_libs/quarto-nav/quarto-nav.js"></script>
+<script src="../../site_libs/quarto-nav/headroom.min.js"></script>
+<script src="../../site_libs/clipboard/clipboard.min.js"></script>
+<script src="../../site_libs/quarto-search/autocomplete.umd.js"></script>
+<script src="../../site_libs/quarto-search/fuse.min.js"></script>
+<script src="../../site_libs/quarto-search/quarto-search.js"></script>
+<meta name="quarto:offset" content="../../">
+<script src="../../site_libs/quarto-html/quarto.js"></script>
+<script src="../../site_libs/quarto-html/popper.min.js"></script>
+<script src="../../site_libs/quarto-html/tippy.umd.min.js"></script>
+<script src="../../site_libs/quarto-html/anchor.min.js"></script>
+<link href="../../site_libs/quarto-html/tippy.css" rel="stylesheet">
+<link href="../../site_libs/quarto-html/quarto-syntax-highlighting.css" rel="stylesheet" id="quarto-text-highlighting-styles">
+<script src="../../site_libs/bootstrap/bootstrap.min.js"></script>
+<link href="../../site_libs/bootstrap/bootstrap-icons.css" rel="stylesheet">
+<link href="../../site_libs/bootstrap/bootstrap.min.css" rel="stylesheet" id="quarto-bootstrap" data-mode="light">
+<script id="quarto-search-options" type="application/json">{
+  "location": "navbar",
+  "copy-button": false,
+  "collapse-after": 3,
+  "panel-placement": "end",
+  "type": "overlay",
+  "limit": 20,
+  "language": {
+    "search-no-results-text": "No results",
+    "search-matching-documents-text": "matching documents",
+    "search-copy-link-title": "Copy link to search",
+    "search-hide-matches-text": "Hide additional matches",
+    "search-more-match-text": "more match in this document",
+    "search-more-matches-text": "more matches in this document",
+    "search-clear-button-title": "Clear",
+    "search-detached-cancel-button-title": "Cancel",
+    "search-submit-button-title": "Submit"
+  }
+}</script>
+
+
+<link rel="stylesheet" href="../../styles.css">
+<meta property="og:title" content="Mark Vanderstay - Analysing GA4 Data With R">
+<meta property="og:description" content="In marketing there’s often a gap between the collection and reporting of data. That gap is Analysis.">
+<meta property="og:image" content="markvanderstay.com/posts/using-google-analytics-ga4-data-in-r/filter.png">
+<meta property="og:site-name" content="Mark Vanderstay">
+<meta property="og:image:height" content="80">
+<meta property="og:image:width" content="272">
+</head>
+
+<body class="nav-fixed">
+
+<div id="quarto-search-results"></div>
+  <header id="quarto-header" class="headroom fixed-top">
+    <nav class="navbar navbar-expand-lg navbar-dark ">
+      <div class="navbar-container container-fluid">
+      <div class="navbar-brand-container">
+    <a class="navbar-brand" href="../../index.html">
+    <span class="navbar-title">Mark Vanderstay</span>
+    </a>
+  </div>
+          <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarCollapse" aria-controls="navbarCollapse" aria-expanded="false" aria-label="Toggle navigation" onclick="if (window.quartoToggleHeadroom) { window.quartoToggleHeadroom(); }">
+  <span class="navbar-toggler-icon"></span>
+</button>
+          <div class="collapse navbar-collapse" id="navbarCollapse">
+            <ul class="navbar-nav navbar-nav-scroll ms-auto">
+  <li class="nav-item">
+    <a class="nav-link" href="../../about.html">
+ <span class="menu-text">About Me</span></a>
+  </li>  
+  <li class="nav-item compact">
+    <a class="nav-link" href="https://linkedin.com/in/mark-vanderstay"><i class="bi bi-linkedin" role="img">
+</i> 
+ <span class="menu-text"></span></a>
+  </li>  
+  <li class="nav-item compact">
+    <a class="nav-link" href="https://twitter.com/m_vanders"><i class="bi bi-twitter" role="img">
+</i> 
+ <span class="menu-text"></span></a>
+  </li>  
+  <li class="nav-item compact">
+    <a class="nav-link" href="../../index.xml"><i class="bi bi-rss" role="img">
+</i> 
+ <span class="menu-text"></span></a>
+  </li>  
+</ul>
+              <div id="quarto-search" class="" title="Search"></div>
+          </div> <!-- /navcollapse -->
+      </div> <!-- /container-fluid -->
+    </nav>
+</header>
+<!-- content -->
+<header id="title-block-header" class="quarto-title-block default page-columns page-full">
+  <div class="quarto-title-banner page-columns page-full">
+    <div class="quarto-title column-body">
+      <h1 class="title">Analysing GA4 Data With R</h1>
+                                <div class="quarto-categories">
+                <div class="quarto-category">GA4</div>
+                <div class="quarto-category">R</div>
+                <div class="quarto-category">RStudio</div>
+              </div>
+                  </div>
+  </div>
+    
+  
+  <div class="quarto-title-meta">
+
+      <div>
+      <div class="quarto-title-meta-heading">Author</div>
+      <div class="quarto-title-meta-contents">
+               <p>Mark Vanderstay </p>
+            </div>
+    </div>
+      
+      <div>
+      <div class="quarto-title-meta-heading">Published</div>
+      <div class="quarto-title-meta-contents">
+        <p class="date">March 14, 2023</p>
+      </div>
+    </div>
+    
+      
+    </div>
+    
+  
+  </header><div id="quarto-content" class="quarto-container page-columns page-rows-contents page-layout-article page-navbar">
+<!-- sidebar -->
+<!-- margin-sidebar -->
+    <div id="quarto-margin-sidebar" class="sidebar margin-sidebar">
+    </div>
+<!-- main -->
+<main class="content quarto-banner-title-block" id="quarto-document-content">
+
+
+
+<nav id="TOC" role="doc-toc">
+    <h2 id="toc-title">On this page</h2>
+   
+  <ul>
+  <li><a href="#the-analysis-gap" id="toc-the-analysis-gap">The Analysis Gap</a>
+  <ul>
+  <li><a href="#why-r-is-a-powerful-tool-for-ga4-reporting" id="toc-why-r-is-a-powerful-tool-for-ga4-reporting"><strong>Why R is a Powerful Tool for GA4 Reporting</strong></a></li>
+  </ul></li>
+  <li><a href="#connecting-r-to-your-ga4-data" id="toc-connecting-r-to-your-ga4-data"><strong>Connecting R to Your GA4 Data</strong></a>
+  <ul>
+  <li><a href="#get-credentials-in-google-cloud-console" id="toc-get-credentials-in-google-cloud-console">Get Credentials in Google Cloud Console</a></li>
+  <li><a href="#setup-a-new-project-in-rstudio" id="toc-setup-a-new-project-in-rstudio">Setup A New Project in RStudio</a></li>
+  <li><a href="#reading-ga4-data-with-r" id="toc-reading-ga4-data-with-r">Reading GA4 Data With R</a>
+  <ul>
+  <li><a href="#dimensions-metrics-and-filters" id="toc-dimensions-metrics-and-filters">Dimensions, Metrics and Filters</a></li>
+  </ul></li>
+  </ul></li>
+  </ul>
+</nav>
+<section id="the-analysis-gap" class="level1">
+<h1>The Analysis Gap</h1>
+<p>In marketing there’s often a gap between the collection and reporting of data. That gap is Analysis.</p>
+<p>For small businesses without in-house expertise the analysis of marketing data is a giant void. GA4 makes it easy to collect marketing data but it’s much harder –&nbsp;<strong><em>and more expensive</em></strong>&nbsp;– to report it thoroughly and check for meaning.</p>
+<p>Searching out meaning in data inevitably falls by the wayside in small businesses. Know why?</p>
+<p>‘Too busy’ you say?</p>
+<p>Well yes business owners face myriad tasks day-to-day. But how about this…</p>
+<p>There’s a steep learning curve. Yep, the clicks and sales keep coming so why bother trying to understand all that data?</p>
+<p>Just keep going and hand over the collection and analysis to someone else. Right?</p>
+<p>WRONG!</p>
+<p>If you don’t know what you’re looking at you can’t tell if you’re being sold a dud.</p>
+<p>That ‘someone else’ you’re paying for is a bit of a lottery.</p>
+<p>Hiring a third party doesn’t mean the task of analysing your data will be done correctly. I’m going to tell you a story.<br>
+It’s a simple one and it demonstrates this issue nicely.</p>
+<p>Our central character is Phil (and no, that’s not his real name).</p>
+<p>Phil showed me the report he’d received from his outsourced SEO expert. In it the word ‘improvement’ featured in nearly every paragraph.</p>
+<p>Improvement this, improvement that. Poor Phil.</p>
+<p>He thought he was doing great. Was he?</p>
+<p>It was impossible to tell if the expert’s language used was simply to hide the truth. Nevertheless, Phil never stopped to consider if improvement really meant that.</p>
+<p>You know why?</p>
+<p>Yes, yes, he was busy. Sure.</p>
+<p>But worse than that.</p>
+<p>OK, I’ll tell you.</p>
+<p>There was not the slightest consideration of business objectives in Phil’s entire strategy. So the whole report really could have been showing improvements.</p>
+<p>But we’d never know what had improved.</p>
+<p>I took a look at Phil’s stats and I’ll tell you about that later.</p>
+<p>A month on month increase in page views is not an improvement unless your business objective is page views.</p>
+<p>An increase in site bounces is not an improvement. Plain as day. It’s an increase. Bounces going up? Poor Phil.</p>
+<p>The saddest part though…</p>
+<p>Phil is no exception.</p>
+<p>Most clients seem stumped when I ask them what the goal of analysing their data is.</p>
+<p>Ask that question to a new client. See the look of surprise and bewilderment? No-one has asked them before. Why would they? Isn’t it obvious?&nbsp;<strong>Higher revenues! More clicks!</strong>&nbsp;</p>
+<p>It depends.</p>
+<section id="why-r-is-a-powerful-tool-for-ga4-reporting" class="level2">
+<h2 class="anchored" data-anchor-id="why-r-is-a-powerful-tool-for-ga4-reporting"><strong>Why R is a Powerful Tool for GA4 Reporting</strong></h2>
+<p>You know the saying ‘if you only have a hammer everything looks like a nail’ ?</p>
+<p>Sometimes progress is better examined by looking at metrics <em>not</em> reported in the standard GA4 interface.</p>
+<p>Even those owners who can state their objectives will not have considered that.</p>
+<p>Here’s an example.</p>
+<p>Perhaps it would be more useful to check what <strong>itemsets</strong> customers put in their basket. Then we can ask new questions:</p>
+<ul>
+<li><p>Was there something driving their choices?</p></li>
+<li><p>Can we predict what items they’re likely to choose next?</p></li>
+<li><p>Should we look at social data to examine sentiment?</p></li>
+</ul>
+<p>There are many factors at play so why limit ourselves to what we’re served by Google?</p>
+<p>I’ll demonstrate below how to retrieve Google Analytics (GA) data using the GA4 API directly in R. We’ll be using the excellent&nbsp;<a href="https://cloud.r-project.org/web/packages/googleAnalyticsR/index.html">googleAnalyticsR</a>&nbsp;library by&nbsp;<a href="https://www.linkedin.com/in/markpeteredmondson?miniProfileUrn=urn%3Ali%3Afs_miniProfile%3AACoAAADUS2kBcb5cDoV01tl5LEvPQ--szQ45RiY">Mark Edmondson</a>&nbsp;and in future articles I’ll go further with some analysis techniques but all will flow from this initial, fundamental step.</p>
+<p>Before we begin plugging away with R there’s some setup necessary in Google Cloud.</p>
+</section>
+</section>
+<section id="connecting-r-to-your-ga4-data" class="level1">
+<h1><strong>Connecting R to Your GA4 Data</strong></h1>
+<section id="get-credentials-in-google-cloud-console" class="level2">
+<h2 class="anchored" data-anchor-id="get-credentials-in-google-cloud-console">Get Credentials in Google Cloud Console</h2>
+<p>We’ll need to enable some APIs so first head on over to&nbsp;<a href="https://console.cloud.google.com/">Google Cloud Console</a>&nbsp;and create a new project.</p>
+<p>In this new project enable the Analytics Reporting API, Google Analytics API and the Google Analytics Data API. Yep, all three. Not all of these will be necessary straight away but you’ll need them soon enough so may as well do this now.</p>
+<p>Still in the cloud console, create a new OAuth client ID in order to allow login and retrieval of the data while in R. This will be a desktop app so ;</p>
+<ul>
+<li><p>Click Credentials</p></li>
+<li><p>Create Credentials</p></li>
+<li><p>Choose OAuth client ID</p></li>
+<li><p>Select ‘Desktop app’ and give it a nice name. Something catchy.</p></li>
+<li><p>Click Create</p></li>
+</ul>
+<p>Now, back at the credentials page, download your credentials as a .json file.</p>
+<ul>
+<li><p>Click the credentials you just created</p></li>
+<li><p>Click ‘Download JSON’</p>
+<div class="quarto-figure quarto-figure-center" style="border: #000000 2px solid;">
+<figure class="figure">
+<p><img src="credentials.png" class="img-fluid figure-img" alt="Once you’ve setup your credentials, download them as JSON"></p>
+<p></p><figcaption class="figure-caption">Once you’ve setup your credentials, download them as JSON</figcaption><p></p>
+</figure>
+</div></li>
+</ul>
+<p>Once that’s all setup we’re done with Google. Fire up RStudio if you haven’t already.</p>
+</section>
+<section id="setup-a-new-project-in-rstudio" class="level2">
+<h2 class="anchored" data-anchor-id="setup-a-new-project-in-rstudio">Setup A New Project in RStudio</h2>
+<p>Now there’s obviously many ways to set up a project but I’m fastidious when it comes to keeping everything atomic, preferring to keep each project in its own directory. This way, I can keep my .Renviron file unique to a project and should I need to move the project somewhere, I can just move the folder and it’s done. Enough about me.</p>
+<p>Create a new folder for this project and set it the working directory and create a .Renviron file with the following contents…</p>
+<div class="sourceCode" id="cb1"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb1-1"><a href="#cb1-1" aria-hidden="true" tabindex="-1"></a>GAR_CLIENT_JSON<span class="ot">=</span>.<span class="sc">/</span>client.json</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<p>…and move the `client.json` file downloaded from Google into your project folder.</p>
+<p>Obligatory package install. We’ll be using the excellent <strong>`<em>googleAnalyticsR</em>`</strong>.</p>
+<div class="sourceCode" id="cb2"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb2-1"><a href="#cb2-1" aria-hidden="true" tabindex="-1"></a><span class="fu">install.packages</span>(<span class="st">"googleAnalyticsR"</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<p>Create a new R script file and load the library we just installed.</p>
+<div class="sourceCode" id="cb3"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb3-1"><a href="#cb3-1" aria-hidden="true" tabindex="-1"></a><span class="fu">library</span>(googleAnalyticsR)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<p>You’ll notice a message in the console similar to the following…</p>
+<div class="sourceCode" id="cb4"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb4-1"><a href="#cb4-1" aria-hidden="true" tabindex="-1"></a> Setting client.id from .<span class="sc">/</span>client.jso</span>
+<span id="cb4-2"><a href="#cb4-2" aria-hidden="true" tabindex="-1"></a> No consent file found</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<p>No bother, we’ll then authorise with…</p>
+<div class="sourceCode" id="cb5"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb5-1"><a href="#cb5-1" aria-hidden="true" tabindex="-1"></a><span class="fu">ga_auth</span>()</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<p>You’ll be prompted to choose with identity to login with and you simply select an option in the console window. So far, so good.</p>
+<p>If you wish to see the list of accounts you have access to you’ll have to use the following to return a character array fo account names;</p>
+<div class="sourceCode" id="cb6"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb6-1"><a href="#cb6-1" aria-hidden="true" tabindex="-1"></a>account_list <span class="ot">&lt;-</span> <span class="fu">ga_account_list</span>()</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<p>Remember, GA4 doesn’t use views like Universal Analytics does. Just stick with using propertyID and you’ll be fine.</p>
+</section>
+<section id="reading-ga4-data-with-r" class="level2">
+<h2 class="anchored" data-anchor-id="reading-ga4-data-with-r">Reading GA4 Data With R</h2>
+<p>Let’s see some data, shall we? With the property ID you’re interested in you simply use;</p>
+<div class="sourceCode" id="cb7"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb7-1"><a href="#cb7-1" aria-hidden="true" tabindex="-1"></a>metadata <span class="ot">&lt;-</span> <span class="fu">ga_meta</span>(<span class="st">"data"</span>, <span class="at">propertyId =</span> XXXXXXXXX)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<section id="dimensions-metrics-and-filters" class="level3">
+<h3 class="anchored" data-anchor-id="dimensions-metrics-and-filters">Dimensions, Metrics and Filters</h3>
+<p>Let’s check out a few GA4 dimensions and see what happens.</p>
+<div class="sourceCode" id="cb8"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb8-1"><a href="#cb8-1" aria-hidden="true" tabindex="-1"></a>&nbsp;dimensions <span class="ot">&lt;-</span> <span class="fu">ga_data</span>(</span>
+<span id="cb8-2"><a href="#cb8-2" aria-hidden="true" tabindex="-1"></a>  &nbsp;&nbsp;XXXXXXXXX,</span>
+<span id="cb8-3"><a href="#cb8-3" aria-hidden="true" tabindex="-1"></a>  &nbsp;&nbsp;<span class="at">metrics =</span> <span class="fu">c</span>(<span class="st">"activeUsers"</span>,<span class="st">"sessions"</span>),</span>
+<span id="cb8-4"><a href="#cb8-4" aria-hidden="true" tabindex="-1"></a>  &nbsp;&nbsp;<span class="at">dimensions =</span> <span class="fu">c</span>(<span class="st">"date"</span>,<span class="st">"city"</span>,<span class="st">"dayOfWeek"</span>),</span>
+<span id="cb8-5"><a href="#cb8-5" aria-hidden="true" tabindex="-1"></a>  &nbsp;&nbsp;<span class="at">date_range =</span> <span class="fu">c</span>(<span class="st">"2023-01-01"</span>, <span class="st">"2023-01-31"</span>)</span>
+<span id="cb8-6"><a href="#cb8-6" aria-hidden="true" tabindex="-1"></a>&nbsp;)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<p>You’ll notice that GA4 is returning a maximum of 100 rows. Should you wish to see all rows you can use the `limit` parameter as follows;</p>
+<div class="sourceCode" id="cb9"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb9-1"><a href="#cb9-1" aria-hidden="true" tabindex="-1"></a>&nbsp;dimensions <span class="ot">&lt;-</span> <span class="fu">ga_data</span>(</span>
+<span id="cb9-2"><a href="#cb9-2" aria-hidden="true" tabindex="-1"></a>  &nbsp;&nbsp;XXXXXXXXX,</span>
+<span id="cb9-3"><a href="#cb9-3" aria-hidden="true" tabindex="-1"></a>  &nbsp;&nbsp;<span class="at">metrics =</span> <span class="fu">c</span>(<span class="st">"activeUsers"</span>,<span class="st">"sessions"</span>),</span>
+<span id="cb9-4"><a href="#cb9-4" aria-hidden="true" tabindex="-1"></a>  &nbsp;&nbsp;<span class="at">dimensions =</span> <span class="fu">c</span>(<span class="st">"date"</span>,<span class="st">"city"</span>,<span class="st">"dayOfWeek"</span>),</span>
+<span id="cb9-5"><a href="#cb9-5" aria-hidden="true" tabindex="-1"></a>  &nbsp;&nbsp;<span class="at">date_range =</span> <span class="fu">c</span>(<span class="st">"2023-01-01"</span>, <span class="st">"2023-01-31"</span>),</span>
+<span id="cb9-6"><a href="#cb9-6" aria-hidden="true" tabindex="-1"></a>  &nbsp;&nbsp;<span class="at">limit =</span> <span class="sc">-</span><span class="dv">1</span></span>
+<span id="cb9-7"><a href="#cb9-7" aria-hidden="true" tabindex="-1"></a>&nbsp;)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<p>eventNames are used as they appear when using the GA4 web interface. But if you’re in any doubt you can always check…</p>
+<div class="sourceCode" id="cb10"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb10-1"><a href="#cb10-1" aria-hidden="true" tabindex="-1"></a>&nbsp;events <span class="ot">&lt;-</span> <span class="fu">ga_data</span>(</span>
+<span id="cb10-2"><a href="#cb10-2" aria-hidden="true" tabindex="-1"></a>  &nbsp;&nbsp;XXXXXXXXX,</span>
+<span id="cb10-3"><a href="#cb10-3" aria-hidden="true" tabindex="-1"></a>  &nbsp;&nbsp;<span class="at">metrics =</span> <span class="cn">NULL</span>,</span>
+<span id="cb10-4"><a href="#cb10-4" aria-hidden="true" tabindex="-1"></a>  &nbsp;&nbsp;<span class="at">dimensions =</span> <span class="st">"eventName"</span>,</span>
+<span id="cb10-5"><a href="#cb10-5" aria-hidden="true" tabindex="-1"></a>  &nbsp;&nbsp;<span class="at">date_range =</span><span class="fu">c</span>(<span class="st">"2023-01-01"</span>, <span class="st">"2023-01-31"</span>)</span>
+<span id="cb10-6"><a href="#cb10-6" aria-hidden="true" tabindex="-1"></a>&nbsp;)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<p>Taking this further, we can filter events to just see those of interest. For example, I’ve setup a custom event that is fired when a Klaviyo form is submitted. We’ll use the `ga_data_filter` function like so;</p>
+<div class="sourceCode" id="cb11"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb11-1"><a href="#cb11-1" aria-hidden="true" tabindex="-1"></a>klaviyo <span class="ot">&lt;-</span> <span class="fu">ga_data_filter</span>(eventName<span class="sc">==</span><span class="st">"klaviyo_form_submission"</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<p>And then use the filter it creates in a query;</p>
+<div class="sourceCode" id="cb12"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb12-1"><a href="#cb12-1" aria-hidden="true" tabindex="-1"></a>&nbsp;filteredKlaviyo <span class="ot">&lt;-</span> <span class="fu">ga_data</span>(</span>
+<span id="cb12-2"><a href="#cb12-2" aria-hidden="true" tabindex="-1"></a>  &nbsp;&nbsp;XXXXXXXXX,</span>
+<span id="cb12-3"><a href="#cb12-3" aria-hidden="true" tabindex="-1"></a>  &nbsp;&nbsp;<span class="at">metrics =</span> <span class="st">"eventCount"</span>,</span>
+<span id="cb12-4"><a href="#cb12-4" aria-hidden="true" tabindex="-1"></a>  &nbsp;&nbsp;<span class="at">dimensions =</span> <span class="st">"eventName"</span>,</span>
+<span id="cb12-5"><a href="#cb12-5" aria-hidden="true" tabindex="-1"></a>  &nbsp;&nbsp;<span class="at">dim_filters =</span> klaviyo,</span>
+<span id="cb12-6"><a href="#cb12-6" aria-hidden="true" tabindex="-1"></a>  &nbsp;&nbsp;<span class="at">date_range =</span><span class="fu">c</span>(<span class="st">"2023-01-01"</span>, <span class="st">"2023-01-31"</span>)</span>
+<span id="cb12-7"><a href="#cb12-7" aria-hidden="true" tabindex="-1"></a>&nbsp;)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<p>The results of this query are basic because this filter isn’t particularly useful, it’s just a demo.</p>
+<div class="quarto-figure quarto-figure-center">
+<figure class="figure">
+<p><img src="filter.png" class="img-fluid figure-img" alt="GA4 data with filtering for custom event named 'klaviyo_form_submission'."></p>
+<p></p><figcaption class="figure-caption">GA4 data with filtering for custom event named ‘klaviyo_form_submission’.</figcaption><p></p>
+</figure>
+</div>
+<p>Lastly, let’s check out the realtime data. Handy for taking snapshots of running campaigns…</p>
+<div class="sourceCode" id="cb13"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb13-1"><a href="#cb13-1" aria-hidden="true" tabindex="-1"></a>&nbsp;<span class="fu">ga_data</span>(</span>
+<span id="cb13-2"><a href="#cb13-2" aria-hidden="true" tabindex="-1"></a>  &nbsp;&nbsp;<span class="at">propertyId =</span> XXXXXXXXX,&nbsp;</span>
+<span id="cb13-3"><a href="#cb13-3" aria-hidden="true" tabindex="-1"></a>  &nbsp;&nbsp;<span class="at">raw_json =</span> <span class="st">'{"metrics":[{"name":"activeUsers"}],"limit":100,"returnPropertyQuota":true}'</span>,</span>
+<span id="cb13-4"><a href="#cb13-4" aria-hidden="true" tabindex="-1"></a>  &nbsp;&nbsp;<span class="at">realtime =</span> <span class="cn">TRUE</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<p>There you have it. All of the above is enough to get you started examining marketing data in R. You can then cut and slice it however you prefer. Maybe you’ll use ggplot2 for some funky dataviz or merge with offline data ready for import back into GA4.</p>
+<p>Enjoy!</p>
+
+
+</section>
+</section>
+</section>
+
+</main> <!-- /main -->
+<div>
+<hr>
+<h3> Share </h3>
+<a href="https://twitter.com/share?ref_src=twsrc%5Etfw" class="twitter-share-button" data-size="large" data-hashtags="#rstats" data-show-count="false">Tweet</a><script async="" src="https://platform.twitter.com/widgets.js" charset="utf-8"></script>
+<hr>
+</div>
+<script id="quarto-html-after-body" type="application/javascript">
+window.document.addEventListener("DOMContentLoaded", function (event) {
+  const toggleBodyColorMode = (bsSheetEl) => {
+    const mode = bsSheetEl.getAttribute("data-mode");
+    const bodyEl = window.document.querySelector("body");
+    if (mode === "dark") {
+      bodyEl.classList.add("quarto-dark");
+      bodyEl.classList.remove("quarto-light");
+    } else {
+      bodyEl.classList.add("quarto-light");
+      bodyEl.classList.remove("quarto-dark");
+    }
+  }
+  const toggleBodyColorPrimary = () => {
+    const bsSheetEl = window.document.querySelector("link#quarto-bootstrap");
+    if (bsSheetEl) {
+      toggleBodyColorMode(bsSheetEl);
+    }
+  }
+  toggleBodyColorPrimary();  
+  const icon = "";
+  const anchorJS = new window.AnchorJS();
+  anchorJS.options = {
+    placement: 'right',
+    icon: icon
+  };
+  anchorJS.add('.anchored');
+  const clipboard = new window.ClipboardJS('.code-copy-button', {
+    target: function(trigger) {
+      return trigger.previousElementSibling;
+    }
+  });
+  clipboard.on('success', function(e) {
+    // button target
+    const button = e.trigger;
+    // don't keep focus
+    button.blur();
+    // flash "checked"
+    button.classList.add('code-copy-button-checked');
+    var currentTitle = button.getAttribute("title");
+    button.setAttribute("title", "Copied!");
+    let tooltip;
+    if (window.bootstrap) {
+      button.setAttribute("data-bs-toggle", "tooltip");
+      button.setAttribute("data-bs-placement", "left");
+      button.setAttribute("data-bs-title", "Copied!");
+      tooltip = new bootstrap.Tooltip(button, 
+        { trigger: "manual", 
+          customClass: "code-copy-button-tooltip",
+          offset: [0, -8]});
+      tooltip.show();    
+    }
+    setTimeout(function() {
+      if (tooltip) {
+        tooltip.hide();
+        button.removeAttribute("data-bs-title");
+        button.removeAttribute("data-bs-toggle");
+        button.removeAttribute("data-bs-placement");
+      }
+      button.setAttribute("title", currentTitle);
+      button.classList.remove('code-copy-button-checked');
+    }, 1000);
+    // clear code selection
+    e.clearSelection();
+  });
+  function tippyHover(el, contentFn) {
+    const config = {
+      allowHTML: true,
+      content: contentFn,
+      maxWidth: 500,
+      delay: 100,
+      arrow: false,
+      appendTo: function(el) {
+          return el.parentElement;
+      },
+      interactive: true,
+      interactiveBorder: 10,
+      theme: 'quarto',
+      placement: 'bottom-start'
+    };
+    window.tippy(el, config); 
+  }
+  const noterefs = window.document.querySelectorAll('a[role="doc-noteref"]');
+  for (var i=0; i<noterefs.length; i++) {
+    const ref = noterefs[i];
+    tippyHover(ref, function() {
+      // use id or data attribute instead here
+      let href = ref.getAttribute('data-footnote-href') || ref.getAttribute('href');
+      try { href = new URL(href).hash; } catch {}
+      const id = href.replace(/^#\/?/, "");
+      const note = window.document.getElementById(id);
+      return note.innerHTML;
+    });
+  }
+  const findCites = (el) => {
+    const parentEl = el.parentElement;
+    if (parentEl) {
+      const cites = parentEl.dataset.cites;
+      if (cites) {
+        return {
+          el,
+          cites: cites.split(' ')
+        };
+      } else {
+        return findCites(el.parentElement)
+      }
+    } else {
+      return undefined;
+    }
+  };
+  var bibliorefs = window.document.querySelectorAll('a[role="doc-biblioref"]');
+  for (var i=0; i<bibliorefs.length; i++) {
+    const ref = bibliorefs[i];
+    const citeInfo = findCites(ref);
+    if (citeInfo) {
+      tippyHover(citeInfo.el, function() {
+        var popup = window.document.createElement('div');
+        citeInfo.cites.forEach(function(cite) {
+          var citeDiv = window.document.createElement('div');
+          citeDiv.classList.add('hanging-indent');
+          citeDiv.classList.add('csl-entry');
+          var biblioDiv = window.document.getElementById('ref-' + cite);
+          if (biblioDiv) {
+            citeDiv.innerHTML = biblioDiv.innerHTML;
+          }
+          popup.appendChild(citeDiv);
+        });
+        return popup.innerHTML;
+      });
+    }
+  }
+});
+</script>
+<script src="https://utteranc.es/client.js" repo="mvanio/fantastic-enigma" issue-term="pathname" theme="github-light" crossorigin="anonymous" async="">
+</script>
+</div> <!-- /content -->
+
+
+
+</body></html>

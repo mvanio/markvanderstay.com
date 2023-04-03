@@ -6,3 +6,21 @@ freeze: true
 
 # Enable banner style title blocks
 title-block-banner: true
+
+# Author name of all blog posts
+author: 'Mark Vanderstay'
+
+# Table of content settings
+toc: true
+toc-depth: 3
+toc-location: body
+
+page-layout: article
+
+comments: 
+  utterances: 
+    repo: mvanio/fantastic-enigma
+    
+format: 
+  html:
+    include-after-body: ../footer.html

@@ -1,1 +1,8 @@
 /* css styles */
+img{
+  border:#000000 1px solid;
+}
+
+h1.title{
+  color: #FFFFFF;
+}
