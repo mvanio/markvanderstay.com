@@ -1,18 +1,27 @@
 ---
 title: "About Me"
-image: profile.jpg
+image: ""
 about:
   template: jolla
   links:
     - icon: twitter
       text: Twitter
-      href: https://twitter.com
+      href: https://twitter.com/m_vanders
     - icon: linkedin
       text: LinkedIn
-      href: https://linkedin.com
+      href: https://linkedin.com/in/mark-vanderstay
 ---
 
-I\'m a email marketer with a background in statistical programming and a passion for R, data visualization, Shiny and machine learning.
+## Mark Vanderstay
+
+\
+I'm a email marketer with a background in statistical programming and a passion for R, data visualization, Shiny and machine learning.\
+
+## Education & Experience
+
+MSc in Psychology Research Methods and many years experience in biostatistics. SAS programming, R programming, Python, C#, Ruby.
+
+Klaviyo Partner and MailChimp Certified.
 
 On this blog I record what I learn so I can share it.
 

@@ -14,6 +14,10 @@ website:
       - icon: rss
         href: index.xml
   open-graph: true
+  google-analytics: "G-CELTXHBN60"
+  twitter-card: 
+    creator: "@m_vanders"
+    site: "@m_vanders"
 format:
   html:
     theme: 
