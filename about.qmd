@@ -14,16 +14,19 @@ about:
 
 ## Mark Vanderstay
 
-\
-I'm a email marketer with a background in statistical programming and a passion for R, data visualization, Shiny and machine learning.\
+I'm an email marketer with a background in statistical programming and a passion for R, data visualization, Shiny and machine learning.
 
 ## Education & Experience
 
-MSc in Psychology Research Methods and many years experience in biostatistics. SAS programming, R programming, Python, C#, Ruby.
+MSc in Psychology Research Methods and many years experience in biostatistics. 
 
-Klaviyo Partner and MailChimp Certified.
+- Klaviyo Partner 
+- MailChimp Certified
+- GA4 Certified
 
-On this blog I record what I learn so I can share it.
+- SAS, R, Python, C#, Ruby
+
+## Contact
 
 You can find me on [Twitter](https://twitter.com/m_vanders) and [LinkedIn](https://linkedin.com/in/mark-vanderstay).
 
