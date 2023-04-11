@@ -5,6 +5,8 @@ format:
     fig-width: 8
     fig-height: 6
 editor: visual
+execute: 
+  eval: false
 website:
   open-graph: true
   image: "https://markvanderstay.com/posts/twitter-analysis-of-retweets-with-r/main.jpeg"
@@ -50,8 +52,8 @@ Before I visualise a network I consider the context and requirements. For exampl
 
 Deciding these answers early on saves time later.
 
-I'm going to demonstrate creating a network graph using the Twitter hashtag `#MushroomMonday`. It's a fine tag to follow. One of the finest. Lots of photos of fungi in all their splendour. And yes, fungi can be very varied just like the Twitter accounts that post mushroom content.\
-\
+I'm going to demonstrate creating a network graph using the Twitter hashtag `#MushroomMonday`. It's a fine tag to follow. One of the finest. Lots of photos of fungi in all their splendour. And yes, fungi can be very varied just like the Twitter accounts that post mushroom content.
+
 I'll show that early on in the visualising process my graphs are usually messy. I think that's normal because it's normal for me. And because I've already decided I will eliminate some vertices then colour and resize the remainder, it's a fairly straightforward approach.
 
 My method here is not the most straightforward. I use it to get a grasp on the network and the data in it. As ever, there's more than one way to achieve a goal.
@@ -61,11 +63,12 @@ My method here is not the most straightforward. I use it to get a grasp on the n
 Obligatory libraries...
 
 ```{r}
+
 library(rtweet)
 library(igraph)
 ```
 
-The very first thing to do is authorise `rtweet` to fetch tweets for you. The Twitter API is now available at a cost, even if you only wish to read tweets. I know, I know, but what can we do?
+The very first thing to do is authorise `rtweet` to fetch tweets for you. The Twitter API is now available at a cost even if you only wish to read tweets. I know, I know, but what can we do?
 
 Luckily for me I saved the data for this particular graph earlier[^1]. I load it here.
 
@@ -129,8 +132,7 @@ It doesn't convey any information at all.
 
 It's useless.
 
-The connections between the vertices are barely visible. These faint lines are the edges.\
-They have only one attribute, `type`, which shows if the tweet was a mention, reply or retweet.
+The connections between the vertices are barely visible. These faint lines are the edges. They have only one attribute, `type`, which shows if the tweet was a mention, reply or retweet.
 
 I'll change all that now.
 
@@ -255,7 +257,7 @@ plot(gmls,
 
 ![](Rplot04.jpeg)
 
-OK, so it more 'fairy princess' than Turkey Tail but it tells a story. The users who are retweeted more than most are are the darkest purple, while the weakest nodes - those with lower values of \`strength\` are smaller, pinker and unlabelled.
+OK, so it's more 'fairy princess' than Turkey Tail but it tells a story. The users who are retweeted more than most are are the darkest purple, while the weakest nodes - those with lower values of \`strength\` are smaller, pinker and unlabelled.
 
 If I wanted my tweets to be noticed by others I'd hope that they were retweeted by one of the stronger accounts.
 
@@ -267,7 +269,7 @@ So how can you increase your chances of being noticed? You could follow all of t
 
 Let's look at the communities.
 
-Users in the same cluster, or clique, are more connected with one another that users outside of the cluster. This will tell me if there are divisions due to different types of account. Put another way in our fungi example, there may be accounts that prefer scientific data and accounts that prefer photographic content. This info show up in separate clusters.
+Users in the same cluster, or clique, are more connected with one another that users outside of the cluster. This will tell me if there are divisions due to different types of account. Put another way in our fungi example, there may be accounts that prefer scientific data and accounts that prefer photographic content. This info shows up in separate clusters.
 
 A small tweak to my graph and I notice that there is a split between the interesting accounts.
 
@@ -279,7 +281,7 @@ Take a look for yourself below. The nodes are now coloured according to the clus
 
 #### a. What improvements would I make to the code?
 
-This is such a simple example I probably won't make any adjustments of note. Graphs that are more cluttered often benefit from an interactive visualisation or application. This isn't one of them.
+Graphs that are more cluttered often benefit from an interactive visualisation or application. This isn't one of them. This is such a simple example I probably won't make any adjustments of note.
 
 In order to demonstrate the most basic concepts of network graphs I've steered clear of using `coreness` and plotting `k-core`. I'd normally use those myself instead of summing vertex strength but either approach works.
 

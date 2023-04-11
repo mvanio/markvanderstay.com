@@ -2097,9 +2097,8 @@ font-style: inherit;">TRUE</span>)</span></code></pre></div>
 <li><p>Show all vertices?</p></li>
 </ul>
 <p>Deciding these answers early on saves time later.</p>
-<p>I’m going to demonstrate creating a network graph using the Twitter hashtag <code>#MushroomMonday</code>. It’s a fine tag to follow. One of the finest. Lots of photos of fungi in all their splendour. And yes, fungi can be very varied just like the Twitter accounts that post mushroom content.<br>
-<br>
-I’ll show that early on in the visualising process my graphs are usually messy. I think that’s normal because it’s normal for me. And because I’ve already decided I will eliminate some vertices then colour and resize the remainder, it’s a fairly straightforward approach.</p>
+<p>I’m going to demonstrate creating a network graph using the Twitter hashtag <code>#MushroomMonday</code>. It’s a fine tag to follow. One of the finest. Lots of photos of fungi in all their splendour. And yes, fungi can be very varied just like the Twitter accounts that post mushroom content.</p>
+<p>I’ll show that early on in the visualising process my graphs are usually messy. I think that’s normal because it’s normal for me. And because I’ve already decided I will eliminate some vertices then colour and resize the remainder, it’s a fairly straightforward approach.</p>
 <p>My method here is not the most straightforward. I use it to get a grasp on the network and the data in it. As ever, there’s more than one way to achieve a goal.</p>
 <section id="the-setup" class="level3">
 <h3 class="anchored" data-anchor-id="the-setup">1. The setup</h3>
@@ -2111,47 +2110,33 @@ font-style: inherit;">library</span>(rtweet)</span>
 <span id="cb1-2"><span class="fu" style="color: #4758AB;
 background-color: null;
 font-style: inherit;">library</span>(igraph)</span></code></pre></div>
-<div class="cell-output cell-output-stderr">
-<pre><code>
-Attaching package: 'igraph'</code></pre>
 </div>
-<div class="cell-output cell-output-stderr">
-<pre><code>The following objects are masked from 'package:stats':
-
-    decompose, spectrum</code></pre>
-</div>
-<div class="cell-output cell-output-stderr">
-<pre><code>The following object is masked from 'package:base':
-
-    union</code></pre>
-</div>
-</div>
-<p>The very first thing to do is authorise <code>rtweet</code> to fetch tweets for you. The Twitter API is now available at a cost, even if you only wish to read tweets. I know, I know, but what can we do?</p>
+<p>The very first thing to do is authorise <code>rtweet</code> to fetch tweets for you. The Twitter API is now available at a cost even if you only wish to read tweets. I know, I know, but what can we do?</p>
 <p>Luckily for me I saved the data for this particular graph earlier<sup>1</sup>. I load it here.</p>
 <div class="cell">
-<div class="sourceCode cell-code" id="cb5" style="background: #f1f3f5;"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb5-1"><span class="co" style="color: #5E5E5E;
+<div class="sourceCode cell-code" id="cb2" style="background: #f1f3f5;"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb2-1"><span class="co" style="color: #5E5E5E;
 background-color: null;
 font-style: inherit;"># The Twitter API is no longer allowing free access to read tweets. </span></span>
-<span id="cb5-2"><span class="co" style="color: #5E5E5E;
+<span id="cb2-2"><span class="co" style="color: #5E5E5E;
 background-color: null;
 font-style: inherit;"># If you've a paid up developer account you can use the search_tweets function like so...</span></span>
-<span id="cb5-3"><span class="co" style="color: #5E5E5E;
+<span id="cb2-3"><span class="co" style="color: #5E5E5E;
 background-color: null;
 font-style: inherit;">#</span></span>
-<span id="cb5-4"><span class="co" style="color: #5E5E5E;
+<span id="cb2-4"><span class="co" style="color: #5E5E5E;
 background-color: null;
 font-style: inherit;"># twts &lt;- search_tweets("#MushroomMonday", n = 1000, include_rts = TRUE)</span></span>
-<span id="cb5-5"><span class="co" style="color: #5E5E5E;
+<span id="cb2-5"><span class="co" style="color: #5E5E5E;
 background-color: null;
 font-style: inherit;">#</span></span>
-<span id="cb5-6"><span class="co" style="color: #5E5E5E;
+<span id="cb2-6"><span class="co" style="color: #5E5E5E;
 background-color: null;
 font-style: inherit;"># Otherwise you'll need to count on a file of graph you've saved previously.</span></span>
-<span id="cb5-7"><span class="co" style="color: #5E5E5E;
+<span id="cb2-7"><span class="co" style="color: #5E5E5E;
 background-color: null;
 font-style: inherit;"># Like I did.</span></span>
-<span id="cb5-8"></span>
-<span id="cb5-9">gml <span class="ot" style="color: #003B4F;
+<span id="cb2-8"></span>
+<span id="cb2-9">gml <span class="ot" style="color: #003B4F;
 background-color: null;
 font-style: inherit;">&lt;-</span> <span class="fu" style="color: #4758AB;
 background-color: null;
@@ -2165,15 +2150,15 @@ font-style: inherit;">"graphml"</span>)</span></code></pre></div>
 </div>
 <p>Let’s check the output.</p>
 <p>A quick look at the edges…</p>
-<div class="sourceCode" id="cb6" style="background: #f1f3f5;"><pre class="sourceCode r R code-with-copy"><code class="sourceCode r"><span id="cb6-1"><span class="sc" style="color: #5E5E5E;
+<div class="sourceCode" id="cb3" style="background: #f1f3f5;"><pre class="sourceCode r R code-with-copy"><code class="sourceCode r"><span id="cb3-1"><span class="sc" style="color: #5E5E5E;
 background-color: null;
 font-style: inherit;">&gt;</span> <span class="fu" style="color: #4758AB;
 background-color: null;
 font-style: inherit;">edge_attr</span>(gml)</span>
-<span id="cb6-2"><span class="sc" style="color: #5E5E5E;
+<span id="cb3-2"><span class="sc" style="color: #5E5E5E;
 background-color: null;
 font-style: inherit;">$</span>type</span>
-<span id="cb6-3">  [<span class="dv" style="color: #AD0000;
+<span id="cb3-3">  [<span class="dv" style="color: #AD0000;
 background-color: null;
 font-style: inherit;">1</span>] <span class="st" style="color: #20794D;
 background-color: null;
@@ -2200,7 +2185,7 @@ background-color: null;
 font-style: inherit;">"mention"</span> <span class="st" style="color: #20794D;
 background-color: null;
 font-style: inherit;">"mention"</span></span>
-<span id="cb6-4"> [<span class="dv" style="color: #AD0000;
+<span id="cb3-4"> [<span class="dv" style="color: #AD0000;
 background-color: null;
 font-style: inherit;">13</span>] <span class="st" style="color: #20794D;
 background-color: null;
@@ -2222,15 +2207,15 @@ font-style: inherit;">"mention"</span> <span class="st" style="color: #20794D;
 background-color: null;
 font-style: inherit;">"mention"</span> </span></code></pre></div>
 <p>and vertices…</p>
-<div class="sourceCode" id="cb7" style="background: #f1f3f5;"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb7-1"><span class="sc" style="color: #5E5E5E;
+<div class="sourceCode" id="cb4" style="background: #f1f3f5;"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb4-1"><span class="sc" style="color: #5E5E5E;
 background-color: null;
 font-style: inherit;">&gt;</span> <span class="fu" style="color: #4758AB;
 background-color: null;
 font-style: inherit;">vertex_attr</span>(gml)</span>
-<span id="cb7-2"><span class="sc" style="color: #5E5E5E;
+<span id="cb4-2"><span class="sc" style="color: #5E5E5E;
 background-color: null;
 font-style: inherit;">$</span>id</span>
-<span id="cb7-3">  [<span class="dv" style="color: #AD0000;
+<span id="cb4-3">  [<span class="dv" style="color: #AD0000;
 background-color: null;
 font-style: inherit;">1</span>] <span class="st" style="color: #20794D;
 background-color: null;
@@ -2243,7 +2228,7 @@ background-color: null;
 font-style: inherit;">"36879139"</span>            <span class="st" style="color: #20794D;
 background-color: null;
 font-style: inherit;">"1506195335579938818"</span></span>
-<span id="cb7-4">  [<span class="dv" style="color: #AD0000;
+<span id="cb4-4">  [<span class="dv" style="color: #AD0000;
 background-color: null;
 font-style: inherit;">6</span>] <span class="st" style="color: #20794D;
 background-color: null;
@@ -2256,11 +2241,11 @@ background-color: null;
 font-style: inherit;">"1450456500418367490"</span> <span class="st" style="color: #20794D;
 background-color: null;
 font-style: inherit;">"16872011"</span>           </span>
-<span id="cb7-5"></span>
-<span id="cb7-6"><span class="sc" style="color: #5E5E5E;
+<span id="cb4-5"></span>
+<span id="cb4-6"><span class="sc" style="color: #5E5E5E;
 background-color: null;
 font-style: inherit;">$</span>name</span>
-<span id="cb7-7">  [<span class="dv" style="color: #AD0000;
+<span id="cb4-7">  [<span class="dv" style="color: #AD0000;
 background-color: null;
 font-style: inherit;">1</span>] <span class="st" style="color: #20794D;
 background-color: null;
@@ -2275,7 +2260,7 @@ background-color: null;
 font-style: inherit;">"Cottage_C_Craft"</span>  <span class="st" style="color: #20794D;
 background-color: null;
 font-style: inherit;">"LizLouise12"</span>    </span>
-<span id="cb7-8">  [<span class="dv" style="color: #AD0000;
+<span id="cb4-8">  [<span class="dv" style="color: #AD0000;
 background-color: null;
 font-style: inherit;">7</span>] <span class="st" style="color: #20794D;
 background-color: null;
@@ -2290,7 +2275,7 @@ background-color: null;
 font-style: inherit;">"fun_g4l"</span>         <span class="st" style="color: #20794D;
 background-color: null;
 font-style: inherit;">"Whatknotsartist"</span></span>
-<span id="cb7-9"> [<span class="dv" style="color: #AD0000;
+<span id="cb4-9"> [<span class="dv" style="color: #AD0000;
 background-color: null;
 font-style: inherit;">13</span>] <span class="st" style="color: #20794D;
 background-color: null;
@@ -2305,7 +2290,7 @@ background-color: null;
 font-style: inherit;">"muscariamadge"</span>   <span class="st" style="color: #20794D;
 background-color: null;
 font-style: inherit;">"ray_rambling"</span>   </span>
-<span id="cb7-10"> [<span class="dv" style="color: #AD0000;
+<span id="cb4-10"> [<span class="dv" style="color: #AD0000;
 background-color: null;
 font-style: inherit;">19</span>] <span class="st" style="color: #20794D;
 background-color: null;
@@ -2318,19 +2303,19 @@ background-color: null;
 font-style: inherit;">"TheWitchersOne"</span>  <span class="st" style="color: #20794D;
 background-color: null;
 font-style: inherit;">"</span></span>
-<span id="cb7-11"><span class="st" style="color: #20794D;
+<span id="cb4-11"><span class="st" style="color: #20794D;
 background-color: null;
 font-style: inherit;"> </span></span></code></pre></div>
 <p>Not a lot to see so I’ll try a quick plot.</p>
 </section>
 <section id="first-plot-is-the-messiest.-always." class="level3">
 <h3 class="anchored" data-anchor-id="first-plot-is-the-messiest.-always.">2. First plot is the messiest. Always.</h3>
-<div class="sourceCode" id="cb8" style="background: #f1f3f5;"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb8-1"><span class="fu" style="color: #4758AB;
+<div class="sourceCode" id="cb5" style="background: #f1f3f5;"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb5-1"><span class="fu" style="color: #4758AB;
 background-color: null;
 font-style: inherit;">set.seed</span>(<span class="dv" style="color: #AD0000;
 background-color: null;
 font-style: inherit;">127926</span>)</span>
-<span id="cb8-2"><span class="fu" style="color: #4758AB;
+<span id="cb5-2"><span class="fu" style="color: #4758AB;
 background-color: null;
 font-style: inherit;">plot</span>(gml,  <span class="at" style="color: #657422;
 background-color: null;
@@ -2345,14 +2330,13 @@ font-style: inherit;">layout =</span> layout.fruchterman.reingold)</span></code>
 <p>The plot is crowded and I can’t read the labels. The vertices have a <code>name</code> attribute which is the user’s Twitter handle. Every vertex is the same size and colour.</p>
 <p>It doesn’t convey any information at all.</p>
 <p>It’s useless.</p>
-<p>The connections between the vertices are barely visible. These faint lines are the edges.<br>
-They have only one attribute, <code>type</code>, which shows if the tweet was a mention, reply or retweet.</p>
+<p>The connections between the vertices are barely visible. These faint lines are the edges. They have only one attribute, <code>type</code>, which shows if the tweet was a mention, reply or retweet.</p>
 <p>I’ll change all that now.</p>
 <p>I’ll start by filtering out the replies and mentions. Retweets only beyond this point.</p>
-<div class="sourceCode" id="cb9" style="background: #f1f3f5;"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb9-1"><span class="co" style="color: #5E5E5E;
+<div class="sourceCode" id="cb6" style="background: #f1f3f5;"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb6-1"><span class="co" style="color: #5E5E5E;
 background-color: null;
 font-style: inherit;"># Keep only retweets</span></span>
-<span id="cb9-2">gml <span class="ot" style="color: #003B4F;
+<span id="cb6-2">gml <span class="ot" style="color: #003B4F;
 background-color: null;
 font-style: inherit;">&lt;-</span> gml <span class="sc" style="color: #5E5E5E;
 background-color: null;
@@ -2368,13 +2352,13 @@ font-style: inherit;">==</span> <span class="st" style="color: #20794D;
 background-color: null;
 font-style: inherit;">"retweet"</span>]</span></code></pre></div>
 <p>And locate the vertices with the most edges by assigning each edge a <code>weight</code> and summing the weights for each vertex.</p>
-<div class="sourceCode" id="cb10" style="background: #f1f3f5;"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb10-1"><span class="co" style="color: #5E5E5E;
+<div class="sourceCode" id="cb7" style="background: #f1f3f5;"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb7-1"><span class="co" style="color: #5E5E5E;
 background-color: null;
 font-style: inherit;"># Find out who has the most edges</span></span>
-<span id="cb10-2"><span class="do" style="color: #5E5E5E;
+<span id="cb7-2"><span class="do" style="color: #5E5E5E;
 background-color: null;
 font-style: italic;">## Set a default edge weight</span></span>
-<span id="cb10-3"><span class="fu" style="color: #4758AB;
+<span id="cb7-3"><span class="fu" style="color: #4758AB;
 background-color: null;
 font-style: inherit;">E</span>(gml)<span class="sc" style="color: #5E5E5E;
 background-color: null;
@@ -2383,11 +2367,11 @@ background-color: null;
 font-style: inherit;">&lt;-</span> <span class="dv" style="color: #AD0000;
 background-color: null;
 font-style: inherit;">1</span></span>
-<span id="cb10-4"></span>
-<span id="cb10-5"><span class="do" style="color: #5E5E5E;
+<span id="cb7-4"></span>
+<span id="cb7-5"><span class="do" style="color: #5E5E5E;
 background-color: null;
 font-style: italic;">## Calculate the strength of each vertex</span></span>
-<span id="cb10-6"><span class="fu" style="color: #4758AB;
+<span id="cb7-6"><span class="fu" style="color: #4758AB;
 background-color: null;
 font-style: inherit;">V</span>(gml)<span class="sc" style="color: #5E5E5E;
 background-color: null;
@@ -2396,36 +2380,36 @@ background-color: null;
 font-style: inherit;">&lt;-</span> <span class="fu" style="color: #4758AB;
 background-color: null;
 font-style: inherit;">strength</span>(</span>
-<span id="cb10-7">  gml,</span>
-<span id="cb10-8">  <span class="at" style="color: #657422;
+<span id="cb7-7">  gml,</span>
+<span id="cb7-8">  <span class="at" style="color: #657422;
 background-color: null;
 font-style: inherit;">vids =</span> <span class="fu" style="color: #4758AB;
 background-color: null;
 font-style: inherit;">V</span>(gml),</span>
-<span id="cb10-9">  <span class="at" style="color: #657422;
+<span id="cb7-9">  <span class="at" style="color: #657422;
 background-color: null;
 font-style: inherit;">mode =</span> <span class="st" style="color: #20794D;
 background-color: null;
 font-style: inherit;">"total"</span>,</span>
-<span id="cb10-10">  <span class="at" style="color: #657422;
+<span id="cb7-10">  <span class="at" style="color: #657422;
 background-color: null;
 font-style: inherit;">loops =</span> <span class="cn" style="color: #8f5902;
 background-color: null;
 font-style: inherit;">TRUE</span>,</span>
-<span id="cb10-11">  <span class="at" style="color: #657422;
+<span id="cb7-11">  <span class="at" style="color: #657422;
 background-color: null;
 font-style: inherit;">weights =</span> <span class="cn" style="color: #8f5902;
 background-color: null;
 font-style: inherit;">NULL</span></span>
-<span id="cb10-12">)</span></code></pre></div>
+<span id="cb7-12">)</span></code></pre></div>
 <p>Users that have had tweets retweeted the most have the highest values for <code>strength</code>.</p>
-<div class="sourceCode" id="cb11" style="background: #f1f3f5;"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb11-1"><span class="co" style="color: #5E5E5E;
+<div class="sourceCode" id="cb8" style="background: #f1f3f5;"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb8-1"><span class="co" style="color: #5E5E5E;
 background-color: null;
 font-style: inherit;"># &gt; V(gml)$strength</span></span>
-<span id="cb11-2"><span class="co" style="color: #5E5E5E;
+<span id="cb8-2"><span class="co" style="color: #5E5E5E;
 background-color: null;
 font-style: inherit;"># [1] 54  9 10 36  2  2  3  2  8  2 83  2  6  2 63 46 16 18 49 34  1  2  8  2  1 12  2  2  6  2 22  2  6  3  2 21  2 12 12 58  4 20 12 16 10  4  7</span></span></code></pre></div>
-<div class="sourceCode" id="cb12" style="background: #f1f3f5;"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb12-1"><span class="sc" style="color: #5E5E5E;
+<div class="sourceCode" id="cb9" style="background: #f1f3f5;"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb9-1"><span class="sc" style="color: #5E5E5E;
 background-color: null;
 font-style: inherit;">&gt;</span> <span class="fu" style="color: #4758AB;
 background-color: null;
@@ -2440,13 +2424,13 @@ font-style: inherit;">$</span>strength)</span></code></pre></div>
 </figure>
 </div>
 <p>There’s quite a mixture of strength values here and I’m only interested in the strongest nodes.</p>
-<div class="sourceCode" id="cb13" style="background: #f1f3f5;"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb13-1"><span class="co" style="color: #5E5E5E;
+<div class="sourceCode" id="cb10" style="background: #f1f3f5;"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb10-1"><span class="co" style="color: #5E5E5E;
 background-color: null;
 font-style: inherit;"># Remove vertices that do not meet the mean strength value</span></span>
-<span id="cb13-2"><span class="co" style="color: #5E5E5E;
+<span id="cb10-2"><span class="co" style="color: #5E5E5E;
 background-color: null;
 font-style: inherit;">#  - Create a subgraph of vertices that don't meet threshold strength</span></span>
-<span id="cb13-3">gmls <span class="ot" style="color: #003B4F;
+<span id="cb10-3">gmls <span class="ot" style="color: #003B4F;
 background-color: null;
 font-style: inherit;">&lt;-</span> <span class="fu" style="color: #4758AB;
 background-color: null;
@@ -2465,11 +2449,11 @@ background-color: null;
 font-style: inherit;">V</span>(gml)<span class="sc" style="color: #5E5E5E;
 background-color: null;
 font-style: inherit;">$</span>strength)))</span>
-<span id="cb13-4"></span>
-<span id="cb13-5"><span class="co" style="color: #5E5E5E;
+<span id="cb10-4"></span>
+<span id="cb10-5"><span class="co" style="color: #5E5E5E;
 background-color: null;
 font-style: inherit;"># remove isolated vertices (with no edges)</span></span>
-<span id="cb13-6">isolated <span class="ot" style="color: #003B4F;
+<span id="cb10-6">isolated <span class="ot" style="color: #003B4F;
 background-color: null;
 font-style: inherit;">=</span> <span class="fu" style="color: #4758AB;
 background-color: null;
@@ -2484,16 +2468,16 @@ background-color: null;
 font-style: inherit;">==</span><span class="dv" style="color: #AD0000;
 background-color: null;
 font-style: inherit;">0</span>)</span>
-<span id="cb13-7">gmls <span class="ot" style="color: #003B4F;
+<span id="cb10-7">gmls <span class="ot" style="color: #003B4F;
 background-color: null;
 font-style: inherit;">=</span> <span class="fu" style="color: #4758AB;
 background-color: null;
 font-style: inherit;">delete.vertices</span>(gmls, isolated)</span></code></pre></div>
 <p>And I can keep labels only for those who are the highest performing vertices. It may mean that there are some unlabelled nodes but that shouldn’t be a problem because they’re not important.</p>
-<div class="sourceCode" id="cb14" style="background: #f1f3f5;"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb14-1"><span class="co" style="color: #5E5E5E;
+<div class="sourceCode" id="cb11" style="background: #f1f3f5;"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb11-1"><span class="co" style="color: #5E5E5E;
 background-color: null;
 font-style: inherit;"># Keep labels only for vertices with the highest strength</span></span>
-<span id="cb14-2"><span class="fu" style="color: #4758AB;
+<span id="cb11-2"><span class="fu" style="color: #4758AB;
 background-color: null;
 font-style: inherit;">V</span>(gmls)<span class="sc" style="color: #5E5E5E;
 background-color: null;
@@ -2517,10 +2501,10 @@ font-style: inherit;">$</span>name, <span class="cn" style="color: #8f5902;
 background-color: null;
 font-style: inherit;">NA</span>)</span></code></pre></div>
 <p>It would be useful to sneak a quick peek at what I’m left with. I’m using a force-directed layout and I’d like to have some space between vertices. First things first, I’ll reset the edge weights to a very small value. Since the edge weights are the force responsible for holding the vertices together, a smaller weight should give me what I’m after.</p>
-<div class="sourceCode" id="cb15" style="background: #f1f3f5;"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb15-1"><span class="co" style="color: #5E5E5E;
+<div class="sourceCode" id="cb12" style="background: #f1f3f5;"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb12-1"><span class="co" style="color: #5E5E5E;
 background-color: null;
 font-style: inherit;"># Reset edge weights to spread out the graph</span></span>
-<span id="cb15-2"><span class="fu" style="color: #4758AB;
+<span id="cb12-2"><span class="fu" style="color: #4758AB;
 background-color: null;
 font-style: inherit;">E</span>(gmls)<span class="sc" style="color: #5E5E5E;
 background-color: null;
@@ -2535,27 +2519,27 @@ background-color: null;
 font-style: inherit;">/</span><span class="dv" style="color: #AD0000;
 background-color: null;
 font-style: inherit;">100000</span></span>
-<span id="cb15-3"></span>
-<span id="cb15-4"><span class="co" style="color: #5E5E5E;
+<span id="cb12-3"></span>
+<span id="cb12-4"><span class="co" style="color: #5E5E5E;
 background-color: null;
 font-style: inherit;"># Plot for another look-see</span></span>
-<span id="cb15-5"><span class="fu" style="color: #4758AB;
+<span id="cb12-5"><span class="fu" style="color: #4758AB;
 background-color: null;
 font-style: inherit;">set.seed</span>(<span class="dv" style="color: #AD0000;
 background-color: null;
 font-style: inherit;">127926</span>)</span>
-<span id="cb15-6"><span class="fu" style="color: #4758AB;
+<span id="cb12-6"><span class="fu" style="color: #4758AB;
 background-color: null;
 font-style: inherit;">plot</span>(gmls,</span>
-<span id="cb15-7">     <span class="at" style="color: #657422;
+<span id="cb12-7">     <span class="at" style="color: #657422;
 background-color: null;
 font-style: inherit;">layout =</span> layout.fruchterman.reingold, </span>
-<span id="cb15-8">     <span class="at" style="color: #657422;
+<span id="cb12-8">     <span class="at" style="color: #657422;
 background-color: null;
 font-style: inherit;">vertex.size =</span> <span class="dv" style="color: #AD0000;
 background-color: null;
 font-style: inherit;">5</span>,  </span>
-<span id="cb15-9">     <span class="at" style="color: #657422;
+<span id="cb12-9">     <span class="at" style="color: #657422;
 background-color: null;
 font-style: inherit;">edge.arrow.size =</span> <span class="fl" style="color: #AD0000;
 background-color: null;
@@ -2572,18 +2556,18 @@ font-style: inherit;">0.25</span>)</span></code></pre></div>
 <p>I can work with the graph above. It’s time to start making the plot presentable.</p>
 <p>I’ll change the vertex size as a function of <code>strength</code>. The higher the vertex’s strength, the larger it will be.</p>
 <p>Colour is also vital now. I pick a palette using the RColorBrewer library and choose one that I think is close to the colours of Turkey Tail mushrooms. I think the folks in #MushroomMonday would like it.</p>
-<div class="sourceCode" id="cb16" style="background: #f1f3f5;"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb16-1"><span class="co" style="color: #5E5E5E;
+<div class="sourceCode" id="cb13" style="background: #f1f3f5;"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb13-1"><span class="co" style="color: #5E5E5E;
 background-color: null;
 font-style: inherit;"># Now we're close. Let's change the vertex size depending on strength and add colour.</span></span>
-<span id="cb16-2"><span class="co" style="color: #5E5E5E;
+<span id="cb13-2"><span class="co" style="color: #5E5E5E;
 background-color: null;
 font-style: inherit;"># Vertex size will indicate the amount of retweets by other users, it will be a function of strength.</span></span>
-<span id="cb16-3"></span>
-<span id="cb16-4"><span class="fu" style="color: #4758AB;
+<span id="cb13-3"></span>
+<span id="cb13-4"><span class="fu" style="color: #4758AB;
 background-color: null;
 font-style: inherit;">library</span>(RColorBrewer)</span>
-<span id="cb16-5"></span>
-<span id="cb16-6">col <span class="ot" style="color: #003B4F;
+<span id="cb13-5"></span>
+<span id="cb13-6">col <span class="ot" style="color: #003B4F;
 background-color: null;
 font-style: inherit;">&lt;-</span> <span class="fu" style="color: #4758AB;
 background-color: null;
@@ -2592,17 +2576,17 @@ background-color: null;
 font-style: inherit;">5</span>, <span class="st" style="color: #20794D;
 background-color: null;
 font-style: inherit;">"RdPu"</span>)</span></code></pre></div>
-<div class="sourceCode" id="cb17" style="background: #f1f3f5;"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb17-1"><span class="cf" style="color: #003B4F;
+<div class="sourceCode" id="cb14" style="background: #f1f3f5;"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb14-1"><span class="cf" style="color: #003B4F;
 background-color: null;
 font-style: inherit;">for</span>(v <span class="cf" style="color: #003B4F;
 background-color: null;
 font-style: inherit;">in</span> <span class="fu" style="color: #4758AB;
 background-color: null;
 font-style: inherit;">V</span>(gmls)){</span>
-<span id="cb17-2">  <span class="co" style="color: #5E5E5E;
+<span id="cb14-2">  <span class="co" style="color: #5E5E5E;
 background-color: null;
 font-style: inherit;"># Colour from light to dark</span></span>
-<span id="cb17-3">  <span class="cf" style="color: #003B4F;
+<span id="cb14-3">  <span class="cf" style="color: #003B4F;
 background-color: null;
 font-style: inherit;">if</span> (<span class="fu" style="color: #4758AB;
 background-color: null;
@@ -2613,7 +2597,7 @@ background-color: null;
 font-style: inherit;">&lt;</span> <span class="dv" style="color: #AD0000;
 background-color: null;
 font-style: inherit;">15</span>){</span>
-<span id="cb17-4">    <span class="fu" style="color: #4758AB;
+<span id="cb14-4">    <span class="fu" style="color: #4758AB;
 background-color: null;
 font-style: inherit;">V</span>(gmls)<span class="sc" style="color: #5E5E5E;
 background-color: null;
@@ -2622,7 +2606,7 @@ background-color: null;
 font-style: inherit;">&lt;-</span> <span class="dv" style="color: #AD0000;
 background-color: null;
 font-style: inherit;">3</span></span>
-<span id="cb17-5">  } <span class="cf" style="color: #003B4F;
+<span id="cb14-5">  } <span class="cf" style="color: #003B4F;
 background-color: null;
 font-style: inherit;">else</span> <span class="cf" style="color: #003B4F;
 background-color: null;
@@ -2635,7 +2619,7 @@ background-color: null;
 font-style: inherit;">&lt;</span> <span class="dv" style="color: #AD0000;
 background-color: null;
 font-style: inherit;">30</span>){</span>
-<span id="cb17-6">    <span class="fu" style="color: #4758AB;
+<span id="cb14-6">    <span class="fu" style="color: #4758AB;
 background-color: null;
 font-style: inherit;">V</span>(gmls)<span class="sc" style="color: #5E5E5E;
 background-color: null;
@@ -2644,10 +2628,10 @@ background-color: null;
 font-style: inherit;">&lt;-</span> <span class="dv" style="color: #AD0000;
 background-color: null;
 font-style: inherit;">4</span></span>
-<span id="cb17-7">  } <span class="cf" style="color: #003B4F;
+<span id="cb14-7">  } <span class="cf" style="color: #003B4F;
 background-color: null;
 font-style: inherit;">else</span></span>
-<span id="cb17-8">    <span class="fu" style="color: #4758AB;
+<span id="cb14-8">    <span class="fu" style="color: #4758AB;
 background-color: null;
 font-style: inherit;">V</span>(gmls)<span class="sc" style="color: #5E5E5E;
 background-color: null;
@@ -2656,46 +2640,46 @@ background-color: null;
 font-style: inherit;">&lt;-</span> <span class="dv" style="color: #AD0000;
 background-color: null;
 font-style: inherit;">5</span></span>
-<span id="cb17-9">}</span></code></pre></div>
-<div class="sourceCode" id="cb18" style="background: #f1f3f5;"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb18-1"><span class="fu" style="color: #4758AB;
+<span id="cb14-9">}</span></code></pre></div>
+<div class="sourceCode" id="cb15" style="background: #f1f3f5;"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb15-1"><span class="fu" style="color: #4758AB;
 background-color: null;
 font-style: inherit;">set.seed</span>(<span class="dv" style="color: #AD0000;
 background-color: null;
 font-style: inherit;">127926</span>)</span>
-<span id="cb18-2"></span>
-<span id="cb18-3"><span class="fu" style="color: #4758AB;
+<span id="cb15-2"></span>
+<span id="cb15-3"><span class="fu" style="color: #4758AB;
 background-color: null;
 font-style: inherit;">plot</span>(gmls,</span>
-<span id="cb18-4">     <span class="at" style="color: #657422;
+<span id="cb15-4">     <span class="at" style="color: #657422;
 background-color: null;
 font-style: inherit;">layout =</span> layout.fruchterman.reingold, </span>
-<span id="cb18-5">     <span class="at" style="color: #657422;
+<span id="cb15-5">     <span class="at" style="color: #657422;
 background-color: null;
 font-style: inherit;">vertex.label =</span> <span class="fu" style="color: #4758AB;
 background-color: null;
 font-style: inherit;">V</span>(gmls)<span class="sc" style="color: #5E5E5E;
 background-color: null;
 font-style: inherit;">$</span>label, </span>
-<span id="cb18-6">     <span class="at" style="color: #657422;
+<span id="cb15-6">     <span class="at" style="color: #657422;
 background-color: null;
 font-style: inherit;">vertex.label.color =</span> col[<span class="fu" style="color: #4758AB;
 background-color: null;
 font-style: inherit;">V</span>(gmls)<span class="sc" style="color: #5E5E5E;
 background-color: null;
 font-style: inherit;">$</span>s_class],</span>
-<span id="cb18-7">     <span class="at" style="color: #657422;
+<span id="cb15-7">     <span class="at" style="color: #657422;
 background-color: null;
 font-style: inherit;">vertex.label.cex=</span><span class="fl" style="color: #AD0000;
 background-color: null;
 font-style: inherit;">0.8</span>,</span>
-<span id="cb18-8">     <span class="at" style="color: #657422;
+<span id="cb15-8">     <span class="at" style="color: #657422;
 background-color: null;
 font-style: inherit;">vertex.label.dist =</span> <span class="sc" style="color: #5E5E5E;
 background-color: null;
 font-style: inherit;">-</span><span class="fl" style="color: #AD0000;
 background-color: null;
 font-style: inherit;">1.6</span>,</span>
-<span id="cb18-9">     <span class="at" style="color: #657422;
+<span id="cb15-9">     <span class="at" style="color: #657422;
 background-color: null;
 font-style: inherit;">vertex.label.degree =</span> <span class="sc" style="color: #5E5E5E;
 background-color: null;
@@ -2704,7 +2688,7 @@ background-color: null;
 font-style: inherit;">/</span><span class="dv" style="color: #AD0000;
 background-color: null;
 font-style: inherit;">2</span>,</span>
-<span id="cb18-10">     <span class="at" style="color: #657422;
+<span id="cb15-10">     <span class="at" style="color: #657422;
 background-color: null;
 font-style: inherit;">vertex.size =</span> <span class="fu" style="color: #4758AB;
 background-color: null;
@@ -2717,29 +2701,29 @@ background-color: null;
 font-style: inherit;">*</span><span class="fl" style="color: #AD0000;
 background-color: null;
 font-style: inherit;">2.4</span>,</span>
-<span id="cb18-11">     <span class="at" style="color: #657422;
+<span id="cb15-11">     <span class="at" style="color: #657422;
 background-color: null;
 font-style: inherit;">vertex.color =</span> col[<span class="fu" style="color: #4758AB;
 background-color: null;
 font-style: inherit;">V</span>(gmls)<span class="sc" style="color: #5E5E5E;
 background-color: null;
 font-style: inherit;">$</span>s_class],</span>
-<span id="cb18-12">     <span class="at" style="color: #657422;
+<span id="cb15-12">     <span class="at" style="color: #657422;
 background-color: null;
 font-style: inherit;">vertex.frame.color =</span> col[<span class="dv" style="color: #AD0000;
 background-color: null;
 font-style: inherit;">1</span>],</span>
-<span id="cb18-13">     <span class="at" style="color: #657422;
+<span id="cb15-13">     <span class="at" style="color: #657422;
 background-color: null;
 font-style: inherit;">edge.curved =</span> <span class="fl" style="color: #AD0000;
 background-color: null;
 font-style: inherit;">0.3</span>,</span>
-<span id="cb18-14">     <span class="at" style="color: #657422;
+<span id="cb15-14">     <span class="at" style="color: #657422;
 background-color: null;
 font-style: inherit;">edge.arrow.size =</span> <span class="fl" style="color: #AD0000;
 background-color: null;
 font-style: inherit;">0.25</span>,</span>
-<span id="cb18-15">     <span class="at" style="color: #657422;
+<span id="cb15-15">     <span class="at" style="color: #657422;
 background-color: null;
 font-style: inherit;">edge.color =</span> col[<span class="dv" style="color: #AD0000;
 background-color: null;
@@ -2753,7 +2737,7 @@ font-style: inherit;">2</span>])</span></code></pre></div>
 <h3 class="anchored" data-anchor-id="visualising-cliques-and-communities">4. Visualising cliques and communities</h3>
 <p>So how can you increase your chances of being noticed? You could follow all of the accounts, sure. But Twitter penalises tweets from accounts with a high following:follower ratio, so you need to be selective. Which accounts will get you the biggest return on investment then?</p>
 <p>Let’s look at the communities.</p>
-<p>Users in the same cluster, or clique, are more connected with one another that users outside of the cluster. This will tell me if there are divisions due to different types of account. Put another way in our fungi example, there may be accounts that prefer scientific data and accounts that prefer photographic content. This info show up in separate clusters.</p>
+<p>Users in the same cluster, or clique, are more connected with one another that users outside of the cluster. This will tell me if there are divisions due to different types of account. Put another way in our fungi example, there may be accounts that prefer scientific data and accounts that prefer photographic content. This info shows up in separate clusters.</p>
 <p>A small tweak to my graph and I notice that there is a split between the interesting accounts.</p>
 <p>Take a look for yourself below. The nodes are now coloured according to the clusters they belong to. Green, orange and blue nodes are in different clusters. Our strong accounts are now split three ways. I would go on to check the content of these communities and determine which accounts are more suited for my client.</p>
 <p><img src="markvanderstay.com/posts/twitter-analysis-of-retweets-with-r/main.jpeg" class="img-fluid"></p>
@@ -2762,7 +2746,7 @@ font-style: inherit;">2</span>])</span></code></pre></div>
 <h3 class="anchored" data-anchor-id="conclusion">5. Conclusion</h3>
 <section id="a.-what-improvements-would-i-make-to-the-code" class="level4">
 <h4 class="anchored" data-anchor-id="a.-what-improvements-would-i-make-to-the-code">a. What improvements would I make to the code?</h4>
-<p>This is such a simple example I probably won’t make any adjustments of note. Graphs that are more cluttered often benefit from an interactive visualisation or application. This isn’t one of them.</p>
+<p>Graphs that are more cluttered often benefit from an interactive visualisation or application. This isn’t one of them. This is such a simple example I probably won’t make any adjustments of note.</p>
 <p>In order to demonstrate the most basic concepts of network graphs I’ve steered clear of using <code>coreness</code> and plotting <code>k-core</code>. I’d normally use those myself instead of summing vertex strength but either approach works.</p>
 <p>YMMV.</p>
 </section>
@@ -2790,7 +2774,7 @@ font-style: inherit;">2</span>])</span></code></pre></div>
 </ol>
 </section></div> ]]></description>
   <guid>markvanderstay.com/posts/twitter-analysis-of-retweets-with-r/index.html</guid>
-  <pubDate>Sat, 08 Apr 2023 12:25:07 GMT</pubDate>
+  <pubDate>Mon, 10 Apr 2023 12:51:46 GMT</pubDate>
 </item>
 </channel>
 </rss>

@@ -25,4 +25,6 @@ Klaviyo Partner and MailChimp Certified.
 
 On this blog I record what I learn so I can share it.
 
-You can find me on [Twitter](https://twitter.com/m_vanders) or [LinkedIn](https://linkedin.com/in/mark-vanderstay).
+You can find me on [Twitter](https://twitter.com/m_vanders) and [LinkedIn](https://linkedin.com/in/mark-vanderstay).
+
+[Send me an email](mailto:hello@markvanderstay.com).
