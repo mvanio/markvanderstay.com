@@ -6,3 +6,7 @@ img{
 h1.title{
   color: #FFFFFF;
 }
+
+#list-none >ul{
+  list-style-type:none;
+}
