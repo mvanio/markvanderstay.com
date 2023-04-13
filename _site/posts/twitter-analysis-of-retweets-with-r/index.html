@@ -197,10 +197,7 @@ gtag('config', 'G-CELTXHBN60', { 'anonymize_ip': true});
     <h2 id="toc-title">On this page</h2>
    
   <ul>
-  <li><a href="#what-is-a-network-graph" id="toc-what-is-a-network-graph">What is a Network Graph?</a>
-  <ul>
-  <li><a href="#key-terminology" id="toc-key-terminology">Key terminology</a></li>
-  </ul></li>
+  <li><a href="#what-is-a-network-graph" id="toc-what-is-a-network-graph">What is a Network Graph?</a></li>
   <li><a href="#twitter-retweet-network-example" id="toc-twitter-retweet-network-example">Twitter retweet network example</a>
   <ul>
   <li><a href="#the-setup" id="toc-the-setup">1. The setup</a></li>
@@ -218,12 +215,20 @@ gtag('config', 'G-CELTXHBN60', { 'anonymize_ip': true});
 </div>
 <section id="what-is-a-network-graph" class="level2">
 <h2 class="anchored" data-anchor-id="what-is-a-network-graph">What is a Network Graph?</h2>
-<p>Have you wondered how information spreads on Twitter?</p>
-<p>Network analysis and visualisation are powerful tools that allow us to understand the structure of social relationships and quantify internet communities.</p>
-<p>In network analysis of internet communities such as Twitter we gain a better understanding of social relationships and information flow between users. Retweets, for example, can be used to identify key influencers and measure the spread of information within a community.</p>
-<p>A network graph is a visual representation of the flow of information between network users.</p>
-<section id="key-terminology" class="level3">
-<h3 class="anchored" data-anchor-id="key-terminology">Key terminology</h3>
+<p>Are you curious about how information spreads on Twitter? Network analysis and visualisation tools can help us understand how social relationships work online and how communities interact. By analysing internet communities such as Twitter, we can gain insight into how information is shared between users and who the key influencers are. A network graph is a visual representation of this information flow between users.</p>
+<p><strong>Visualising the flow of information between users can help you identify key influencers in your industry and understand how your target audience interacts with your brand. By using network analysis and visualisation, you can gain valuable insights into your social media strategy and make data-driven decisions to increase engagement and drive traffic to your website.</strong></p>
+<p>In network analysis, two important terms to know are ‘Vertices’ (or nodes) and ‘Edges’. Vertices represent Twitter users in this example, while edges show the relationship between users who are retweeting and being retweeted. Understanding these terms can help you better understand your online presence and identify opportunities to grow your business.</p>
+<p>For example, if you are a small business owner looking to increase your online presence, network analysis can help you identify other users in your industry who are highly engaged and have a large following. By connecting with these key influencers and building relationships, you can expand your reach and attract new customers to your business.</p>
+<div class="callout callout-style-default callout-note callout-titled">
+<div class="callout-header d-flex align-content-center">
+<div class="callout-icon-container">
+<i class="callout-icon"></i>
+</div>
+<div class="callout-title-container flex-fill">
+Key terminology
+</div>
+</div>
+<div class="callout-body-container callout-body">
 <p>Two key terms to understand are ‘Vertices’ and ‘Edges’.</p>
 <dl>
 <dt>Vertices</dt>
@@ -235,13 +240,14 @@ gtag('config', 'G-CELTXHBN60', { 'anonymize_ip': true});
 <p>A pair relationship between two vertices. In this example our edges show who is being retweeted and by whom.</p>
 </dd>
 </dl>
-</section>
+</div>
+</div>
 </section>
 <section id="twitter-retweet-network-example" class="level2">
 <h2 class="anchored" data-anchor-id="twitter-retweet-network-example">Twitter retweet network example</h2>
 <p>Before I visualise a network I consider the context and requirements. For example, do I want to:</p>
 <ul>
-<li><p>Assign colors to vertices based on some node attributes?</p></li>
+<li><p>Assign colours to vertices based on some node attributes?</p></li>
 <li><p>Set the vertex size as a function of some attributes?</p></li>
 <li><p>Show all vertices?</p></li>
 </ul>
@@ -257,7 +263,7 @@ gtag('config', 'G-CELTXHBN60', { 'anonymize_ip': true});
 <span id="cb1-2"><a href="#cb1-2" aria-hidden="true" tabindex="-1"></a><span class="fu">library</span>(igraph)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 </div>
 <p>The very first thing to do is authorise <code>rtweet</code> to fetch tweets for you. The Twitter API is now available at a cost even if you only wish to read tweets. I know, I know, but what can we do?</p>
-<p>Luckily for me I saved the data for this particular graph earlier<a href="#fn1" class="footnote-ref" id="fnref1" role="doc-noteref"><sup>1</sup></a>. I load it here.</p>
+<p>Luckily for me I saved the data for this particular graph earlier<a href="#fn1" class="footnote-ref" id="fnref1" role="doc-noteref"><sup>1</sup></a>, so I bypass the need for <code>rtweet</code> and paying for API usage. I load it here.</p>
 <div class="cell">
 <div class="sourceCode cell-code" id="cb2"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb2-1"><a href="#cb2-1" aria-hidden="true" tabindex="-1"></a><span class="co"># The Twitter API is no longer allowing free access to read tweets. </span></span>
 <span id="cb2-2"><a href="#cb2-2" aria-hidden="true" tabindex="-1"></a><span class="co"># If you've a paid up developer account you can use the search_tweets function like so...</span></span>
@@ -269,7 +275,7 @@ gtag('config', 'G-CELTXHBN60', { 'anonymize_ip': true});
 <span id="cb2-8"><a href="#cb2-8" aria-hidden="true" tabindex="-1"></a></span>
 <span id="cb2-9"><a href="#cb2-9" aria-hidden="true" tabindex="-1"></a>gml <span class="ot">&lt;-</span> <span class="fu">read_graph</span>(<span class="st">"./mushroommonday.graphml"</span>, <span class="at">format =</span> <span class="st">"graphml"</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 </div>
-<p>Let’s check the output.</p>
+<p>Let’s check the output then I’ll explain.</p>
 <p>A quick look at the edges…</p>
 <div class="sourceCode" id="cb3"><pre class="sourceCode r R code-with-copy"><code class="sourceCode r"><span id="cb3-1"><a href="#cb3-1" aria-hidden="true" tabindex="-1"></a><span class="sc">&gt;</span> <span class="fu">edge_attr</span>(gml)</span>
 <span id="cb3-2"><a href="#cb3-2" aria-hidden="true" tabindex="-1"></a><span class="sc">$</span>type</span>
@@ -287,7 +293,9 @@ gtag('config', 'G-CELTXHBN60', { 'anonymize_ip': true});
 <span id="cb4-9"><a href="#cb4-9" aria-hidden="true" tabindex="-1"></a> [<span class="dv">13</span>] <span class="st">"LX8111"</span>  <span class="st">"MacroMarie"</span>  <span class="st">"GreatLakesFungi"</span> <span class="st">"TanukisRevenge"</span>  <span class="st">"muscariamadge"</span>   <span class="st">"ray_rambling"</span>   </span>
 <span id="cb4-10"><a href="#cb4-10" aria-hidden="true" tabindex="-1"></a> [<span class="dv">19</span>] <span class="st">"TheSuffolkMan"</span>  <span class="st">"keeper_of_books"</span> <span class="st">"BobJoostens"</span>  <span class="st">"TheWitchersOne"</span>  <span class="st">"</span></span>
 <span id="cb4-11"><a href="#cb4-11" aria-hidden="true" tabindex="-1"></a><span class="st"> </span></span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
-<p>Not a lot to see so I’ll try a quick plot.</p>
+<p>Above is a list of edges and vertices. The edges represent the connections between Twitter users and the vertices represent the users themselves. The ‘mention’ type indicates that the connection is, you guessed it, a mention.</p>
+<p>We can use this data to create a graph or visual representation of the connections. However, at the moment, the output does not provide much useful information.</p>
+<p>I’ll try a quick plot.</p>
 </section>
 <section id="first-plot-is-the-messiest.-always." class="level3">
 <h3 class="anchored" data-anchor-id="first-plot-is-the-messiest.-always.">2. First plot is the messiest. Always.</h3>
@@ -300,10 +308,9 @@ gtag('config', 'G-CELTXHBN60', { 'anonymize_ip': true});
 <p></p><figcaption class="figure-caption">Poor effort. Needs work.</figcaption><p></p>
 </figure>
 </div>
-<p>The plot is crowded and I can’t read the labels. The vertices have a <code>name</code> attribute which is the user’s Twitter handle. Every vertex is the same size and colour.</p>
-<p>It doesn’t convey any information at all.</p>
+<p>The plot is crowded and I can’t read the labels. The vertices (circles) have a <code>name</code> attribute which is the user’s Twitter handle. Every vertex is the same size and colour. The edges (connections between circles) are hidden in the general melee.</p>
+<p>This plot doesn’t convey any information at all.</p>
 <p>It’s useless.</p>
-<p>The connections between the vertices are barely visible. These faint lines are the edges. They have only one attribute, <code>type</code>, which shows if the tweet was a mention, reply or retweet.</p>
 <p>I’ll change all that now.</p>
 <p>I’ll start by filtering out the replies and mentions. Retweets only beyond this point.</p>
 <div class="sourceCode" id="cb6"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb6-1"><a href="#cb6-1" aria-hidden="true" tabindex="-1"></a><span class="co"># Keep only retweets</span></span>
@@ -394,15 +401,15 @@ gtag('config', 'G-CELTXHBN60', { 'anonymize_ip': true});
 <span id="cb15-14"><a href="#cb15-14" aria-hidden="true" tabindex="-1"></a>     <span class="at">edge.arrow.size =</span> <span class="fl">0.25</span>,</span>
 <span id="cb15-15"><a href="#cb15-15" aria-hidden="true" tabindex="-1"></a>     <span class="at">edge.color =</span> col[<span class="dv">2</span>])</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 <p><img src="Rplot04.jpeg" class="img-fluid"></p>
-<p>OK, so it more ‘fairy princess’ than Turkey Tail but it tells a story. The users who are retweeted more than most are are the darkest purple, while the weakest nodes - those with lower values of `strength` are smaller, pinker and unlabelled.</p>
+<p>OK, so it’s more ‘fairy princess’ than Turkey Tail but it tells a story. The users who are retweeted more than most are are the darkest purple, while the weakest nodes - those with lower values of `strength` are smaller, pinker and unlabelled.</p>
 <p>If I wanted my tweets to be noticed by others I’d hope that they were retweeted by one of the stronger accounts.</p>
 <p>Trouble is that hope really doesn’t get you anywhere.</p>
 </section>
 <section id="visualising-cliques-and-communities" class="level3">
 <h3 class="anchored" data-anchor-id="visualising-cliques-and-communities">4. Visualising cliques and communities</h3>
-<p>So how can you increase your chances of being noticed? You could follow all of the accounts, sure. But Twitter penalises tweets from accounts with a high following:follower ratio, so you need to be selective. Which accounts will get you the biggest return on investment then?</p>
+<p>So how can you increase your chances of being noticed? You might be wondering which accounts to follow and engage with. You could follow all of the accounts, sure. But Twitter penalises tweets from accounts with a high following:follower ratio, so you need to be selective. Which accounts will get you the biggest return on investment then?</p>
 <p>Let’s look at the communities.</p>
-<p>Users in the same cluster, or clique, are more connected with one another that users outside of the cluster. This will tell me if there are divisions due to different types of account. Put another way in our fungi example, there may be accounts that prefer scientific data and accounts that prefer photographic content. This info shows up in separate clusters.</p>
+<p>Users in the same cluster, or clique, are more connected with one another that users outside of the cluster. This will tell me if there are divisions due to different types of account. Users in the same cluster, or clique, tend to be more connected to each other than to users outside the cluster. This can help to identify accounts that are interested in similar topics or have similar needs. Put another way in our fungi example, there may be accounts that prefer scientific data and accounts that prefer photographic content. This info shows up in separate clusters.</p>
 <p>A small tweak to my graph and I notice that there is a split between the interesting accounts.</p>
 <p>Take a look for yourself below. The nodes are now coloured according to the clusters they belong to. Green, orange and blue nodes are in different clusters. Our strong accounts are now split three ways. I would go on to check the content of these communities and determine which accounts are more suited for my client.</p>
 <p><img src="main.jpeg" class="img-fluid"></p>
