@@ -39,7 +39,7 @@ As ever, the best way to start is to install the necessary packages. `CLVTools`[
 library(CLVTools)
 ```
 
-The next step is to load the transaction data which has been formatted to show a purchase date and customer ID in every row. At this point a transaction cost isn't necessary but I have yet to find a store owner who provided transaction data without values. The price column then is optional. However, when available this variable will allow prediction of future spending. I'll cover that here in this post.
+The next step is to load the transaction data which has been formatted to show a purchase date and customer ID in every row. At this point a transaction cost isn't necessary but I have yet to find a store owner who provided transaction data without price values. Price is optional here. However, when provided, this variable will allow prediction of future spending. I'll cover that here in this post when I delve into the predictive side of CLV.
 
 ```{r}
 #| echo: true
@@ -99,7 +99,7 @@ I've been provided with data for 263 customers and 2269 transactions. Just over 
 Now I have my `clvdata()` object, I can estimate a model using the standard Pareto/NBD model. For this I will use the the `pnbd()` command and pass it the object created in the previous step as the first argument. Starting values for model parameters are provided using the arguments start.params.model with a vector of values. I find that this can be useful if prior knowledge on distribution parameters is available but I don't worry too much if I can't be accurate. While these initial values impact the convergence of the model fitting process, they are simply best guesses. in practice,
 
 ::: callout-tip
-I find it is often challenging to obtain accurate starting values. The defaults often work well enough in many scenarios.
+I find it can be challenging to obtain accurate starting values. The defaults often work well enough in many scenarios.
 :::
 
 ```{r}
@@ -108,8 +108,6 @@ I find it is often challenging to obtain accurate starting values. The defaults 
 pnbd.trans <- pnbd(clv.trans,
                    start.params.model = c(r=0.5, alpha=8, s=0.5, beta=10))
 ```
-
-𝜇
 
 ::: callout-note
 The `start.params.model` parameters are as follows:

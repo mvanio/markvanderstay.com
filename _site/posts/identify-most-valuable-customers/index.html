@@ -237,7 +237,7 @@ gtag('config', 'G-CELTXHBN60', { 'anonymize_ip': true});
 <div class="cell">
 <div class="sourceCode cell-code" id="cb1"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb1-1"><a href="#cb1-1" aria-hidden="true" tabindex="-1"></a><span class="fu">library</span>(CLVTools)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 </div>
-<p>The next step is to load the transaction data which has been formatted to show a purchase date and customer ID in every row. At this point a transaction cost isn’t necessary but I have yet to find a store owner who provided transaction data without values. The price column then is optional. However, when available this variable will allow prediction of future spending. I’ll cover that here in this post.</p>
+<p>The next step is to load the transaction data which has been formatted to show a purchase date and customer ID in every row. At this point a transaction cost isn’t necessary but I have yet to find a store owner who provided transaction data without price values. Price is optional here. However, when provided, this variable will allow prediction of future spending. I’ll cover that here in this post when I delve into the predictive side of CLV.</p>
 <div class="cell">
 <div class="sourceCode cell-code" id="cb2"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb2-1"><a href="#cb2-1" aria-hidden="true" tabindex="-1"></a>transactions <span class="ot">&lt;-</span> <span class="fu">read.csv</span>(<span class="st">"./data/transactions.csv"</span>)</span>
 <span id="cb2-2"><a href="#cb2-2" aria-hidden="true" tabindex="-1"></a></span>
@@ -331,7 +331,7 @@ Tip
 </div>
 </div>
 <div class="callout-body-container callout-body">
-<p>I find it is often challenging to obtain accurate starting values. The defaults often work well enough in many scenarios.</p>
+<p>I find it can be challenging to obtain accurate starting values. The defaults often work well enough in many scenarios.</p>
 </div>
 </div>
 <div class="cell">
@@ -345,7 +345,6 @@ Tip
 <pre><code>Estimation finished!</code></pre>
 </div>
 </div>
-<p>𝜇</p>
 <div class="callout callout-style-default callout-note callout-titled">
 <div class="callout-header d-flex align-content-center">
 <div class="callout-icon-container">

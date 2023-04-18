@@ -38,7 +38,7 @@
 background-color: null;
 font-style: inherit;">library</span>(CLVTools)</span></code></pre></div>
 </div>
-<p>The next step is to load the transaction data which has been formatted to show a purchase date and customer ID in every row. At this point a transaction cost isn’t necessary but I have yet to find a store owner who provided transaction data without values. The price column then is optional. However, when available this variable will allow prediction of future spending. I’ll cover that here in this post.</p>
+<p>The next step is to load the transaction data which has been formatted to show a purchase date and customer ID in every row. At this point a transaction cost isn’t necessary but I have yet to find a store owner who provided transaction data without price values. Price is optional here. However, when provided, this variable will allow prediction of future spending. I’ll cover that here in this post when I delve into the predictive side of CLV.</p>
 <div class="cell">
 <div class="sourceCode cell-code" id="cb2" style="background: #f1f3f5;"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb2-1">transactions <span class="ot" style="color: #003B4F;
 background-color: null;
@@ -168,7 +168,7 @@ Tip
 </div>
 </div>
 <div class="callout-body-container callout-body">
-<p>I find it is often challenging to obtain accurate starting values. The defaults often work well enough in many scenarios.</p>
+<p>I find it can be challenging to obtain accurate starting values. The defaults often work well enough in many scenarios.</p>
 </div>
 </div>
 <div class="cell">
@@ -208,7 +208,6 @@ font-style: inherit;">10</span>))</span></code></pre></div>
 <pre><code>Estimation finished!</code></pre>
 </div>
 </div>
-<p>𝜇</p>
 <div class="callout callout-style-default callout-note callout-titled">
 <div class="callout-header d-flex align-content-center">
 <div class="callout-icon-container">
