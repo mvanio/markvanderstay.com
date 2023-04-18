@@ -2,6 +2,7 @@
   {
     "listing": "/index.html",
     "items": [
+      "/posts/identify-most-valuable-customers/index.html",
       "/posts/twitter-analysis-of-retweets-with-r/index.html",
       "/posts/mastering-sentiment-analysis-of-twitter-data-with-r/index.html",
       "/posts/using-r-for-twitter-analysis-lda/index.html",

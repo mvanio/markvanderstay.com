@@ -1,5 +1,7 @@
 ---
 title: "Viewing Twitter Influence With Network Graphs"
+date: "2023-04-03"
+categories: [CLV, R]
 format: 
   html:
     fig-width: 8
