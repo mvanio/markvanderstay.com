@@ -17,7 +17,7 @@ slug: "identify-most-valuable-customers-with-clv"
 library(CLVTools)
 ```
 
-![](predict-future-spending.png)
+![](./predict-future-spending.png)
 
 \## Introduction
 
