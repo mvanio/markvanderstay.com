@@ -10,7 +10,339 @@
 <atom:link href="markvanderstay.com/index.xml" rel="self" type="application/rss+xml"/>
 <description>Mark Vanderstay&#39;s Personal Blog</description>
 <generator>quarto-1.3.302</generator>
-<lastBuildDate>Sun, 16 Apr 2023 23:00:00 GMT</lastBuildDate>
+<lastBuildDate>Tue, 18 Apr 2023 23:00:00 GMT</lastBuildDate>
+<item>
+  <title>Customer Lifetime Value Analysis with CLVTools</title>
+  <dc:creator>Your Name</dc:creator>
+  <link>markvanderstay.com/posts/identify-most-valuable-customers/Untitled.html</link>
+  <description><![CDATA[ 
+
+
+
+
+<section id="introduction" class="level1">
+<h1><strong>Introduction</strong></h1>
+<p>In this document, we will demonstrate how to analyze customer transaction data using the CLVTools package in R. The CLVTools package provides tools for Customer Lifetime Value (CLV) analysis, which can help businesses make better decisions about customer acquisition, retention, and marketing.</p>
+<p>Our analysis will focus on two statistical models commonly used for CLV estimation in non-contractual settings: the Pareto/NBD model, which models customer churn and purchase frequency, and the Gamma-Gamma model, which models customer spending. We will also explore how to incorporate static and dynamic covariates, regularization, and constraints into these models.</p>
+<p>This document is aimed at data scientists who have a basic understanding of R and are interested in learning more about CLV analysis.</p>
+<pre><code>{r}
+
+library(CLVTools)</code></pre>
+</section>
+<section id="data-preparation" class="level1">
+<h1><strong>Data Preparation</strong></h1>
+<p>We will use the example dataset of transactions for an apparel company provided by the CLVTools package.</p>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb2" style="background: #f1f3f5;"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb2-1"><span class="fu" style="color: #4758AB;
+background-color: null;
+font-style: inherit;">data</span>(<span class="st" style="color: #20794D;
+background-color: null;
+font-style: inherit;">"apparelTrans"</span>)</span></code></pre></div>
+</div>
+<p>First, we create a CLV data object, specifying the format of the date, time unit, estimation split, and ID column. We set the estimation split at 39 weeks to divide the data into calibration and holdout periods, which allows us to evaluate the predictive performance of our models.</p>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb3" style="background: #f1f3f5;"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb3-1">clv.apparel <span class="ot" style="color: #003B4F;
+background-color: null;
+font-style: inherit;">&lt;-</span> <span class="fu" style="color: #4758AB;
+background-color: null;
+font-style: inherit;">clvdata</span>(<span class="at" style="color: #657422;
+background-color: null;
+font-style: inherit;">data.transactions =</span> apparelTrans, <span class="at" style="color: #657422;
+background-color: null;
+font-style: inherit;">date.format =</span> <span class="st" style="color: #20794D;
+background-color: null;
+font-style: inherit;">"ymd"</span>,</span>
+<span id="cb3-2">                          <span class="at" style="color: #657422;
+background-color: null;
+font-style: inherit;">time.unit =</span> <span class="st" style="color: #20794D;
+background-color: null;
+font-style: inherit;">"week"</span>, <span class="at" style="color: #657422;
+background-color: null;
+font-style: inherit;">estimation.split =</span> <span class="dv" style="color: #AD0000;
+background-color: null;
+font-style: inherit;">39</span>, <span class="at" style="color: #657422;
+background-color: null;
+font-style: inherit;">name.id =</span> <span class="st" style="color: #20794D;
+background-color: null;
+font-style: inherit;">"Id"</span>)</span></code></pre></div>
+</div>
+</section>
+<section id="paretonbd-model" class="level1">
+<h1><strong>Pareto/NBD Model</strong></h1>
+<p>The Pareto/NBD model is a widely-used model for non-contractual settings because it accounts for customer heterogeneity in both purchase frequency and churn behavior. The starting parameter values (r=0.5, alpha=8, s=0.5, beta=10) are arbitrary and should be adjusted based on the specific dataset and domain knowledge.</p>
+<pre><code>{r}
+
+pnbd.apparel &lt;- pnbd(clv.apparel,
+                   start.params.model = c(r=0.5, alpha=8, s=0.5, beta=10))</code></pre>
+</section>
+<section id="gamma-gamma-model" class="level1">
+<h1><strong>Gamma-Gamma Model</strong></h1>
+<p>The Gamma-Gamma model is designed to model monetary value in the presence of customer heterogeneity and is well-suited for non-contractual settings. The model is typically used in conjunction with the Pareto/NBD model to estimate CLV.</p>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb5" style="background: #f1f3f5;"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb5-1">est.gg <span class="ot" style="color: #003B4F;
+background-color: null;
+font-style: inherit;">&lt;-</span> <span class="fu" style="color: #4758AB;
+background-color: null;
+font-style: inherit;">gg</span>(<span class="at" style="color: #657422;
+background-color: null;
+font-style: inherit;">clv.data =</span> clv.apparel)</span></code></pre></div>
+<div class="cell-output cell-output-stderr">
+<pre><code>Starting estimation...</code></pre>
+</div>
+<div class="cell-output cell-output-stderr">
+<pre><code>Estimation finished!</code></pre>
+</div>
+</div>
+</section>
+<section id="incorporating-covariates" class="level1">
+<h1><strong>Incorporating Covariates</strong></h1>
+<p>We can improve the predictive performance of our models by incorporating additional information about customers, such as demographics or acquisition channels. Here, we demonstrate how to add static and dynamic covariates to the CLV data object.</p>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb8" style="background: #f1f3f5;"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb8-1"><span class="fu" style="color: #4758AB;
+background-color: null;
+font-style: inherit;">data</span>(<span class="st" style="color: #20794D;
+background-color: null;
+font-style: inherit;">"apparelStaticCov"</span>)</span>
+<span id="cb8-2"><span class="fu" style="color: #4758AB;
+background-color: null;
+font-style: inherit;">data</span>(<span class="st" style="color: #20794D;
+background-color: null;
+font-style: inherit;">"apparelDynCov"</span>)</span>
+<span id="cb8-3"></span>
+<span id="cb8-4">clv.static <span class="ot" style="color: #003B4F;
+background-color: null;
+font-style: inherit;">&lt;-</span> <span class="fu" style="color: #4758AB;
+background-color: null;
+font-style: inherit;">SetStaticCovariates</span>(<span class="at" style="color: #657422;
+background-color: null;
+font-style: inherit;">clv.data =</span> clv.apparel,</span>
+<span id="cb8-5">                                 <span class="at" style="color: #657422;
+background-color: null;
+font-style: inherit;">data.cov.life =</span> apparelStaticCov,</span>
+<span id="cb8-6">                                 <span class="at" style="color: #657422;
+background-color: null;
+font-style: inherit;">data.cov.trans =</span> apparelStaticCov,</span>
+<span id="cb8-7">                                 <span class="at" style="color: #657422;
+background-color: null;
+font-style: inherit;">names.cov.life =</span> <span class="fu" style="color: #4758AB;
+background-color: null;
+font-style: inherit;">c</span>(<span class="st" style="color: #20794D;
+background-color: null;
+font-style: inherit;">"Gender"</span>, <span class="st" style="color: #20794D;
+background-color: null;
+font-style: inherit;">"Channel"</span>),</span>
+<span id="cb8-8">                                 <span class="at" style="color: #657422;
+background-color: null;
+font-style: inherit;">names.cov.trans =</span><span class="fu" style="color: #4758AB;
+background-color: null;
+font-style: inherit;">c</span>(<span class="st" style="color: #20794D;
+background-color: null;
+font-style: inherit;">"Gender"</span>, <span class="st" style="color: #20794D;
+background-color: null;
+font-style: inherit;">"Channel"</span>),</span>
+<span id="cb8-9">                                 <span class="at" style="color: #657422;
+background-color: null;
+font-style: inherit;">name.id =</span> <span class="st" style="color: #20794D;
+background-color: null;
+font-style: inherit;">"Id"</span>)</span>
+<span id="cb8-10"></span>
+<span id="cb8-11">clv.dyn <span class="ot" style="color: #003B4F;
+background-color: null;
+font-style: inherit;">&lt;-</span> <span class="fu" style="color: #4758AB;
+background-color: null;
+font-style: inherit;">SetDynamicCovariates</span>(<span class="at" style="color: #657422;
+background-color: null;
+font-style: inherit;">clv.data =</span> clv.apparel,</span>
+<span id="cb8-12">                                <span class="at" style="color: #657422;
+background-color: null;
+font-style: inherit;">data.cov.life =</span> apparelDynCov,</span>
+<span id="cb8-13">                                <span class="at" style="color: #657422;
+background-color: null;
+font-style: inherit;">data.cov.trans =</span> apparelDynCov,</span>
+<span id="cb8-14">                                <span class="at" style="color: #657422;
+background-color: null;
+font-style: inherit;">names.cov.life =</span> <span class="fu" style="color: #4758AB;
+background-color: null;
+font-style: inherit;">c</span>(<span class="st" style="color: #20794D;
+background-color: null;
+font-style: inherit;">"Marketing"</span>, <span class="st" style="color: #20794D;
+background-color: null;
+font-style: inherit;">"Gender"</span>, <span class="st" style="color: #20794D;
+background-color: null;
+font-style: inherit;">"Channel"</span>),</span>
+<span id="cb8-15">                                <span class="at" style="color: #657422;
+background-color: null;
+font-style: inherit;">names.cov.trans =</span> <span class="fu" style="color: #4758AB;
+background-color: null;
+font-style: inherit;">c</span>(<span class="st" style="color: #20794D;
+background-color: null;
+font-style: inherit;">"Marketing"</span>, <span class="st" style="color: #20794D;
+background-color: null;
+font-style: inherit;">"Gender"</span>, <span class="st" style="color: #20794D;
+background-color: null;
+font-style: inherit;">"Channel"</span>),</span>
+<span id="cb8-16"><span class="at" style="color: #657422;
+background-color: null;
+font-style: inherit;">name.id =</span> <span class="st" style="color: #20794D;
+background-color: null;
+font-style: inherit;">"Id"</span>,</span>
+<span id="cb8-17"><span class="at" style="color: #657422;
+background-color: null;
+font-style: inherit;">name.date =</span> <span class="st" style="color: #20794D;
+background-color: null;
+font-style: inherit;">"Cov.Date"</span>)</span></code></pre></div>
+<div class="cell-output cell-output-stderr">
+<pre><code>The Lifetime covariate data before 2005-01-02 (period of estimation start) is cut off.</code></pre>
+</div>
+<div class="cell-output cell-output-stderr">
+<pre><code>The Transaction covariate data before 2005-01-02 (period of estimation start) is cut off.</code></pre>
+</div>
+</div>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb11" style="background: #f1f3f5;"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb11-1"><span class="co" style="color: #5E5E5E;
+background-color: null;
+font-style: inherit;"># Model with Static Covariates</span></span>
+<span id="cb11-2"></span>
+<span id="cb11-3"><span class="co" style="color: #5E5E5E;
+background-color: null;
+font-style: inherit;"># We estimate the Pareto/NBD model with static covariates to incorporate the additional information about customers. The starting parameter values for the life and transaction components (Gender=0.6, Channel=0.4) are arbitrary and should be adjusted based on the specific dataset and domain knowledge.</span></span>
+<span id="cb11-4"></span>
+<span id="cb11-5"></span>
+<span id="cb11-6">est.pnbd.static <span class="ot" style="color: #003B4F;
+background-color: null;
+font-style: inherit;">&lt;-</span> <span class="fu" style="color: #4758AB;
+background-color: null;
+font-style: inherit;">pnbd</span>(clv.static,</span>
+<span id="cb11-7">                        <span class="at" style="color: #657422;
+background-color: null;
+font-style: inherit;">start.params.model =</span> <span class="fu" style="color: #4758AB;
+background-color: null;
+font-style: inherit;">c</span>(<span class="at" style="color: #657422;
+background-color: null;
+font-style: inherit;">r=</span><span class="dv" style="color: #AD0000;
+background-color: null;
+font-style: inherit;">1</span>, <span class="at" style="color: #657422;
+background-color: null;
+font-style: inherit;">alpha =</span> <span class="dv" style="color: #AD0000;
+background-color: null;
+font-style: inherit;">2</span>, <span class="at" style="color: #657422;
+background-color: null;
+font-style: inherit;">s =</span> <span class="dv" style="color: #AD0000;
+background-color: null;
+font-style: inherit;">1</span>, <span class="at" style="color: #657422;
+background-color: null;
+font-style: inherit;">beta =</span> <span class="dv" style="color: #AD0000;
+background-color: null;
+font-style: inherit;">2</span>),</span>
+<span id="cb11-8">                        <span class="at" style="color: #657422;
+background-color: null;
+font-style: inherit;">start.params.life =</span> <span class="fu" style="color: #4758AB;
+background-color: null;
+font-style: inherit;">c</span>(<span class="at" style="color: #657422;
+background-color: null;
+font-style: inherit;">Gender=</span><span class="fl" style="color: #AD0000;
+background-color: null;
+font-style: inherit;">0.6</span>, <span class="at" style="color: #657422;
+background-color: null;
+font-style: inherit;">Channel=</span><span class="fl" style="color: #AD0000;
+background-color: null;
+font-style: inherit;">0.4</span>),</span>
+<span id="cb11-9">                        <span class="at" style="color: #657422;
+background-color: null;
+font-style: inherit;">start.params.trans =</span> <span class="fu" style="color: #4758AB;
+background-color: null;
+font-style: inherit;">c</span>(<span class="at" style="color: #657422;
+background-color: null;
+font-style: inherit;">Gender=</span><span class="fl" style="color: #AD0000;
+background-color: null;
+font-style: inherit;">0.6</span>, <span class="at" style="color: #657422;
+background-color: null;
+font-style: inherit;">Channel=</span><span class="fl" style="color: #AD0000;
+background-color: null;
+font-style: inherit;">0.4</span>))</span></code></pre></div>
+<div class="cell-output cell-output-stderr">
+<pre><code>Starting estimation...</code></pre>
+</div>
+<div class="cell-output cell-output-stderr">
+<pre><code>Estimation finished!</code></pre>
+</div>
+</div>
+</section>
+<section id="model-with-regularization" class="level1">
+<h1><strong>Model with Regularization</strong></h1>
+<p>We estimate the Pareto/NBD model with regularization to prevent overfitting and improve model stability, particularly when the number of covariates is large or the sample size is small. The regularization parameters (trans=100, life=100) control the strength of the regularization penalty and should be chosen through a process like cross-validation.</p>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb14" style="background: #f1f3f5;"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb14-1">est.pnbd.reg <span class="ot" style="color: #003B4F;
+background-color: null;
+font-style: inherit;">&lt;-</span> <span class="fu" style="color: #4758AB;
+background-color: null;
+font-style: inherit;">pnbd</span>(clv.static,</span>
+<span id="cb14-2">                     <span class="at" style="color: #657422;
+background-color: null;
+font-style: inherit;">start.params.model =</span> <span class="fu" style="color: #4758AB;
+background-color: null;
+font-style: inherit;">c</span>(<span class="at" style="color: #657422;
+background-color: null;
+font-style: inherit;">r=</span><span class="dv" style="color: #AD0000;
+background-color: null;
+font-style: inherit;">1</span>, <span class="at" style="color: #657422;
+background-color: null;
+font-style: inherit;">alpha =</span> <span class="dv" style="color: #AD0000;
+background-color: null;
+font-style: inherit;">2</span>, <span class="at" style="color: #657422;
+background-color: null;
+font-style: inherit;">s =</span> <span class="dv" style="color: #AD0000;
+background-color: null;
+font-style: inherit;">1</span>, <span class="at" style="color: #657422;
+background-color: null;
+font-style: inherit;">beta =</span> <span class="dv" style="color: #AD0000;
+background-color: null;
+font-style: inherit;">2</span>),</span>
+<span id="cb14-3">                     <span class="at" style="color: #657422;
+background-color: null;
+font-style: inherit;">reg.lambdas =</span> <span class="fu" style="color: #4758AB;
+background-color: null;
+font-style: inherit;">c</span>(<span class="at" style="color: #657422;
+background-color: null;
+font-style: inherit;">trans=</span><span class="dv" style="color: #AD0000;
+background-color: null;
+font-style: inherit;">100</span>, <span class="at" style="color: #657422;
+background-color: null;
+font-style: inherit;">life=</span><span class="dv" style="color: #AD0000;
+background-color: null;
+font-style: inherit;">100</span>))</span></code></pre></div>
+<div class="cell-output cell-output-stderr">
+<pre><code>Starting estimation...</code></pre>
+</div>
+<div class="cell-output cell-output-stderr">
+<pre><code>Estimation finished!</code></pre>
+</div>
+</div>
+</section>
+<section id="model-with-constraints" class="level1">
+<h1><strong>Model with Constraints</strong></h1>
+<p>We estimate the Pareto/NBD model with constraints to impose certain relationships between covariates and outcomes, which can be based on domain knowledge or to improve model interpretability. The constraint parameter (Gender=0.6) is chosen to impose a specific relationship between gender and outcomes.</p>
+<pre><code>{rCopy code</code></pre>
+<p><code>est.pnbd.constr &lt;- pnbd(clv.static,                         start.params.model = c(r=1, alpha = 2, s = 1, beta = 2),                         start.params.constr = c(Gender=0.6),                         names.cov.constr=c("Gender"))</code></p>
+</section>
+<section id="predictions" class="level1">
+<h1><strong>Predictions</strong></h1>
+<p>We can use our fitted models to generate predictions for future transactions and spending. Here, we demonstrate how to predict future spending using the Gamma-Gamma model.</p>
+<pre><code>{rCopy code</code></pre>
+<p><code>results.spending &lt;- predict(est.gg) print(results.spending)</code></p>
+</section>
+<section id="conclusion" class="level1">
+<h1><strong>Conclusion</strong></h1>
+<p>This document has demonstrated how to analyze customer transaction data with the CLVTools package in R, focusing on the Pareto/NBD and Gamma-Gamma models for non-contractual settings. We have also explored incorporating static and dynamic covariates, regularization, and constraints into these models.</p>
+<p>Customer Lifetime Value analysis is an important tool for businesses to make informed decisions about customer acquisition, retention, and marketing. With a solid understanding of CLV analysis techniques, data scientists can help businesses optimize their strategies and maximize profits.</p>
+
+
+</section>
+
+ ]]></description>
+  <guid>markvanderstay.com/posts/identify-most-valuable-customers/Untitled.html</guid>
+  <pubDate>Tue, 18 Apr 2023 23:00:00 GMT</pubDate>
+</item>
 <item>
   <title>Making the most of customer relationships with CLV</title>
   <dc:creator>Mark Vanderstay</dc:creator>
@@ -20,15 +352,14 @@
 
 
 
-<section id="introduction" class="level2">
-<h2 class="anchored" data-anchor-id="introduction">Introduction</h2>
+<p><img src="markvanderstay.com/posts/identify-most-valuable-customers/predict-future-spending.png" class="img-fluid"></p>
+<p>## Introduction</p>
 <section id="making-the-most-of-customer-relationships-with-clv" class="level4">
 <h4 class="anchored" data-anchor-id="making-the-most-of-customer-relationships-with-clv">Making the most of customer relationships with CLV</h4>
 <p>As a data scientist working in the e-commerce industry, you possess the unique ability to turn raw data into meaningful insights that can drive business growth. One area where your expertise can have a significant impact is in understanding and predicting Customer Lifetime Value (CLV).</p>
 <p><strong>In today’s fast-paced and competitive e-commerce landscape, developing strategies that make the most of customer relationships is crucial to long-term success. By harnessing the power of CLV, you can help businesses better target their marketing efforts, retain loyal customers, and ultimately increase overall revenue.</strong></p>
 <p>In this blog post, I will guide you step-by-step through the process of measuring and predicting CLV, ensuring you have the tools and knowledge needed to become a valuable asset in the e-commerce industry. Our approach will be informative, practical, and designed to cater to your analytical mindset, providing you with a comprehensive understanding of the techniques and methodologies involved in CLV analysis.</p>
 <p>Join me on this journey into the realm of customer loyalty, as I equip you with the skills needed to master CLV and contribute to the sustainable growth and success of any e-commerce business.</p>
-</section>
 </section>
 <section id="in-the-beginning" class="level2">
 <h2 class="anchored" data-anchor-id="in-the-beginning">1. In the beginning…</h2>

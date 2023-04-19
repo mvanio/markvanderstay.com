@@ -9,7 +9,7 @@ date: "2023-04-17"
 categories: [CLV, R]
 website:
   open-graph: true
-  image: "https://markvanderstay.com/posts/identify-most-valuable-customers/predicting-customer-lifetime-value.jpg"
+  image: "https://markvanderstay.com/posts/identify-most-valuable-customers/predicting-future-spending.jpg"
 slug: "identify-most-valuable-customers-with-clv"
 ---
 
@@ -17,7 +17,9 @@ slug: "identify-most-valuable-customers-with-clv"
 library(CLVTools)
 ```
 
-## Introduction
+![](predict-future-spending.png)
+
+\## Introduction
 
 #### Making the most of customer relationships with CLV
 
@@ -32,6 +34,8 @@ Join me on this journey into the realm of customer loyalty, as I equip you with 
 ## 1. In the beginning...
 
 As ever, the best way to start is to install the necessary packages. `CLVTools`[^1] is where it's at. You know the drill.
+
+[^1]: https://cran.r-project.org/web/packages/CLVTools/index.html
 
 ```{r}
 #| echo: true
@@ -204,7 +208,3 @@ And there we have it. A predicted value for the amount of money a customer is ex
 By measuring CLV, the the analyst is able to help the business owner to identify their most valuable customers and implement targeted marketing campaigns to retain customer loyalty and increase overall revenue. Owners may also discover that it is more cost-effective to retain existing customers than to acquire new ones, which leads to a shift in their marketing strategy. By measuring CLV, the business owner is able to make more informed decisions that positively impact their bottom line
 
 Measuring CLV should be a critical component of any e-commerce business' marketing strategy. However, many small businesses neglect this simple step and fail to segment their marketing accordingly. By understanding the value of their customers over time, businesses can better target their marketing efforts, retain loyal customers, and increase overall revenue. CLV analysis is a powerful tool that can help businesses make more informed decisions and stay competitive in a crowded marketplace.
-
-
-
-[^1]: https://cran.r-project.org/web/packages/CLVTools/index.html

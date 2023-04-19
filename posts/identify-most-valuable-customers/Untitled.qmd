@@ -1,0 +1,134 @@
+---
+title: "Customer Lifetime Value Analysis with CLVTools"
+author: "Your Name"
+date: "2023-04-19"
+output: quarto::html_document
+---
+```{r setup, include=FALSE}
+library(CLVTools)
+```
+# **Introduction**
+
+In this document, we will demonstrate how to analyze customer transaction data using the CLVTools package in R. The CLVTools package provides tools for Customer Lifetime Value (CLV) analysis, which can help businesses make better decisions about customer acquisition, retention, and marketing.
+
+Our analysis will focus on two statistical models commonly used for CLV estimation in non-contractual settings: the Pareto/NBD model, which models customer churn and purchase frequency, and the Gamma-Gamma model, which models customer spending. We will also explore how to incorporate static and dynamic covariates, regularization, and constraints into these models.
+
+This document is aimed at data scientists who have a basic understanding of R and are interested in learning more about CLV analysis.
+
+```         
+{r}
+
+library(CLVTools)
+```
+
+# **Data Preparation**
+
+We will use the example dataset of transactions for an apparel company provided by the CLVTools package.
+
+```{r}
+data("apparelTrans")
+```
+First, we create a CLV data object, specifying the format of the date, time unit, estimation split, and ID column. We set the estimation split at 39 weeks to divide the data into calibration and holdout periods, which allows us to evaluate the predictive performance of our models.
+
+
+```{r}
+clv.apparel <- clvdata(data.transactions = apparelTrans, date.format = "ymd",
+                          time.unit = "week", estimation.split = 39, name.id = "Id")
+```
+
+# **Pareto/NBD Model**
+
+The Pareto/NBD model is a widely-used model for non-contractual settings because it accounts for customer heterogeneity in both purchase frequency and churn behavior. The starting parameter values (r=0.5, alpha=8, s=0.5, beta=10) are arbitrary and should be adjusted based on the specific dataset and domain knowledge.
+
+```         
+{r}
+
+pnbd.apparel <- pnbd(clv.apparel,
+                   start.params.model = c(r=0.5, alpha=8, s=0.5, beta=10))
+``` 
+
+# **Gamma-Gamma Model**
+
+The Gamma-Gamma model is designed to model monetary value in the presence of customer heterogeneity and is well-suited for non-contractual settings. The model is typically used in conjunction with the Pareto/NBD model to estimate CLV.
+
+```{r}
+est.gg <- gg(clv.data = clv.apparel)
+```
+# **Incorporating Covariates**
+
+We can improve the predictive performance of our models by incorporating additional information about customers, such as demographics or acquisition channels. Here, we demonstrate how to add static and dynamic covariates to the CLV data object.
+
+```{r}
+
+data("apparelStaticCov")
+data("apparelDynCov")
+
+clv.static <- SetStaticCovariates(clv.data = clv.apparel,
+                                 data.cov.life = apparelStaticCov,
+                                 data.cov.trans = apparelStaticCov,
+                                 names.cov.life = c("Gender", "Channel"),
+                                 names.cov.trans =c("Gender", "Channel"),
+                                 name.id = "Id")
+
+clv.dyn <- SetDynamicCovariates(clv.data = clv.apparel,
+                                data.cov.life = apparelDynCov,
+                                data.cov.trans = apparelDynCov,
+                                names.cov.life = c("Marketing", "Gender", "Channel"),
+                                names.cov.trans = c("Marketing", "Gender", "Channel"),
+name.id = "Id",
+name.date = "Cov.Date")
+```
+
+```{r pnbd-static}
+
+# Model with Static Covariates
+
+# We estimate the Pareto/NBD model with static covariates to incorporate the additional information about customers. The starting parameter values for the life and transaction components (Gender=0.6, Channel=0.4) are arbitrary and should be adjusted based on the specific dataset and domain knowledge.
+
+
+est.pnbd.static <- pnbd(clv.static,
+                        start.params.model = c(r=1, alpha = 2, s = 1, beta = 2),
+                        start.params.life = c(Gender=0.6, Channel=0.4),
+                        start.params.trans = c(Gender=0.6, Channel=0.4))
+
+```
+
+# **Model with Regularization**
+
+We estimate the Pareto/NBD model with regularization to prevent overfitting and improve model stability, particularly when the number of covariates is large or the sample size is small. The regularization parameters (trans=100, life=100) control the strength of the regularization penalty and should be chosen through a process like cross-validation.
+
+```{r}
+est.pnbd.reg <- pnbd(clv.static,
+                     start.params.model = c(r=1, alpha = 2, s = 1, beta = 2),
+                     reg.lambdas = c(trans=100, life=100))
+```
+
+# **Model with Constraints**
+
+We estimate the Pareto/NBD model with constraints to impose certain relationships between covariates and outcomes, which can be based on domain knowledge or to improve model interpretability. The constraint parameter (Gender=0.6) is chosen to impose a specific relationship between gender and outcomes.
+
+```         
+{rCopy code
+```
+
+`est.pnbd.constr <- pnbd(clv.static,
+                        start.params.model = c(r=1, alpha = 2, s = 1, beta = 2),
+                        start.params.constr = c(Gender=0.6),
+                        names.cov.constr=c("Gender"))`
+
+# **Predictions**
+
+We can use our fitted models to generate predictions for future transactions and spending. Here, we demonstrate how to predict future spending using the Gamma-Gamma model.
+
+```         
+{rCopy code
+```
+
+`results.spending <- predict(est.gg)
+print(results.spending)`
+
+# **Conclusion**
+
+This document has demonstrated how to analyze customer transaction data with the CLVTools package in R, focusing on the Pareto/NBD and Gamma-Gamma models for non-contractual settings. We have also explored incorporating static and dynamic covariates, regularization, and constraints into these models.
+
+Customer Lifetime Value analysis is an important tool for businesses to make informed decisions about customer acquisition, retention, and marketing. With a solid understanding of CLV analysis techniques, data scientists can help businesses optimize their strategies and maximize profits.
