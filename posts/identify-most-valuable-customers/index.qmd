@@ -9,10 +9,13 @@ date: "2023-04-17"
 categories: [CLV, R]
 website:
   open-graph: true
-  image: "https://markvanderstay.com/posts/identify-most-valuable-customers/predicting-future-spending.jpg"
+  image: "https://markvanderstay.com/posts/identify-most-valuable-customers/predicting-future-spending.jpg"  
+  twitter-card: 
+    description: "Just as a crystal ball can reveal glimpses of the future, CLV can predict a customer's future spending habits. By using predictive analytics, businesses can estimate the value of a customer's future purchases based on their past behaviour. Armed with this knowledge, businesses can create targeted marketing campaigns to keep these valuable customers coming back for more."
+    image: "https://markvanderstay.com/posts/identify-most-valuable-customers/predicting-future-spending.jpg"  
 slug: "identify-most-valuable-customers-with-clv"
 ---
-![](./predict-future-spending.png)
+![CLV leads businesses to the most valuable customers, those who will continue to spend money with them for years to come. By understanding how much these customers are worth over time, businesses can create strategies to keep them happy and engaged, and prevent them from jumping ship to the competition.](./predict-future-spending.png)
 ```{r setup, include=FALSE}
 library(CLVTools)
 ```
