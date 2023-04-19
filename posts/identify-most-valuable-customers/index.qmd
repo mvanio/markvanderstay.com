@@ -12,14 +12,13 @@ website:
   image: "https://markvanderstay.com/posts/identify-most-valuable-customers/predicting-future-spending.jpg"
 slug: "identify-most-valuable-customers-with-clv"
 ---
-
+![](./predict-future-spending.png)
 ```{r setup, include=FALSE}
 library(CLVTools)
 ```
 
-![](./predict-future-spending.png)
 
-\## Introduction
+## Introduction
 
 #### Making the most of customer relationships with CLV
 
