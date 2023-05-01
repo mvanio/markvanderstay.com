@@ -35,3 +35,5 @@ SAS, R, Python, C#, Ruby
 You can find me on [Twitter](https://twitter.com/m_vanders) and [LinkedIn](https://linkedin.com/in/mark-vanderstay).
 
 [Send me an email](mailto:hello@markvanderstay.com).
+
+Check out more R posts on [R-Bloggers.com](https://www.r-bloggers.com/)

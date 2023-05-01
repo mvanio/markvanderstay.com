@@ -10,7 +10,10 @@ listing:
     sort-ui: true
     filter-ui: true
     fields: [date, title, reading-time, description, categories]
-    feed: true
+    feed: 
+      categories: 
+        - R
+        - ML, CLV, twitter, GA4
     image-align: left
     image-placeholder: ""
   - id: ml-for-business
