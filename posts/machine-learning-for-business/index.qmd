@@ -1,0 +1,25 @@
+---
+title: "Series: Machine Learning for Business Owners"
+listing:
+  contents: 
+    - "intro-to-ml/*.qmd"
+  sort: "date desc"
+  type: grid
+  feed: true
+  image-align: left
+  image-placeholder: ""
+page-layout: full
+title-block-banner: true
+---
+
+Reveal the transformative power of machine learning for your online store.
+
+Small e-commerce businesses need agility and innovation. That's where machine learning shines. This remarkable AI branch allows computers to learn from data without our intervention and redefine business by
+
+-   Uncovering hidden patterns
+
+-   Anticipating customer desires
+
+-   Fine-tuning operations.
+
+In this article series, I'll share my own machine learning adventures and demonstrate how unlocking its potential can help you create tailored shopping experiences, turbocharge your marketing, and optimise your financial strategies.

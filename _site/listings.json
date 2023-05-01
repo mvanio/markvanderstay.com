@@ -7,7 +7,22 @@
       "/posts/mastering-sentiment-analysis-of-twitter-data-with-r/index.html",
       "/posts/using-r-for-twitter-analysis-lda/index.html",
       "/posts/using-r-for-twitter-analysis/index.html",
-      "/posts/using-google-analytics-ga4-data-in-r/index.html"
+      "/posts/using-google-analytics-ga4-data-in-r/index.html",
+      "/posts/machine-learning-for-business/intro-to-ml/index.html"
+    ]
+  },
+  {
+    "listing": "/ml-business-series.html",
+    "items": []
+  },
+  {
+    "listing": "/posts/machine-learning-for-business/ml-business-series.html",
+    "items": []
+  },
+  {
+    "listing": "/posts/machine-learning-for-business/index.html",
+    "items": [
+      "/posts/machine-learning-for-business/intro-to-ml/index.html"
     ]
   }
 ]

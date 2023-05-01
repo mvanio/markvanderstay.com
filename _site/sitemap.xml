@@ -2,31 +2,31 @@
 <urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9">
   <url>
     <loc>markvanderstay.com/posts/using-r-for-twitter-analysis-lda/index.html</loc>
-    <lastmod>2023-04-03T12:45:23.795Z</lastmod>
+    <lastmod>2023-04-25T18:27:18.401Z</lastmod>
   </url>
   <url>
     <loc>markvanderstay.com/index.html</loc>
-    <lastmod>2023-04-19T16:48:32.818Z</lastmod>
+    <lastmod>2023-05-01T15:29:49.877Z</lastmod>
   </url>
   <url>
     <loc>markvanderstay.com/posts/mastering-sentiment-analysis-of-twitter-data-with-r/index.html</loc>
-    <lastmod>2023-04-18T13:40:28.577Z</lastmod>
+    <lastmod>2023-05-01T14:59:53.125Z</lastmod>
   </url>
   <url>
     <loc>markvanderstay.com/posts/using-google-analytics-ga4-data-in-r/index.html</loc>
-    <lastmod>2023-04-03T12:32:31.021Z</lastmod>
+    <lastmod>2023-04-25T18:27:17.800Z</lastmod>
   </url>
   <url>
     <loc>markvanderstay.com/posts/using-r-for-twitter-analysis/index.html</loc>
-    <lastmod>2023-04-03T12:34:00.691Z</lastmod>
+    <lastmod>2023-04-25T18:27:20.088Z</lastmod>
   </url>
   <url>
     <loc>markvanderstay.com/about.html</loc>
-    <lastmod>2023-04-13T15:08:26.169Z</lastmod>
+    <lastmod>2023-05-01T15:16:25.274Z</lastmod>
   </url>
   <url>
     <loc>markvanderstay.com/posts/twitter-analysis-of-retweets-with-r/index.html</loc>
-    <lastmod>2023-04-18T14:12:08.233Z</lastmod>
+    <lastmod>2023-04-25T18:27:19.048Z</lastmod>
   </url>
   <url>
     <loc>markvanderstay.com/posts/clv-for-beginners/clv-for-beginners.html</loc>
@@ -38,7 +38,7 @@
   </url>
   <url>
     <loc>markvanderstay.com/posts/identify-most-valuable-customers/index.html</loc>
-    <lastmod>2023-04-19T16:48:31.879Z</lastmod>
+    <lastmod>2023-05-01T14:55:09.464Z</lastmod>
   </url>
   <url>
     <loc>markvanderstay.com/posts/identify-most-valuable-customers/Untitled.html</loc>
@@ -46,6 +46,42 @@
   </url>
   <url>
     <loc>markvanderstay.com/generated_quarto_doc.html</loc>
-    <lastmod>2023-04-19T16:39:38.032Z</lastmod>
+    <lastmod>2023-04-25T18:27:22.798Z</lastmod>
+  </url>
+  <url>
+    <loc>markvanderstay.com/next-level-agency.html</loc>
+    <lastmod>2023-05-01T12:54:45.798Z</lastmod>
+  </url>
+  <url>
+    <loc>markvanderstay.com/me.html</loc>
+    <lastmod>2023-04-29T16:16:41.083Z</lastmod>
+  </url>
+  <url>
+    <loc>markvanderstay.com/m2.html</loc>
+    <lastmod>2023-04-29T16:10:10.375Z</lastmod>
+  </url>
+  <url>
+    <loc>markvanderstay.com/test.html</loc>
+    <lastmod>2023-05-01T12:54:50.040Z</lastmod>
+  </url>
+  <url>
+    <loc>markvanderstay.com/ml-business-series.html</loc>
+    <lastmod>2023-05-01T13:08:10.885Z</lastmod>
+  </url>
+  <url>
+    <loc>markvanderstay.com/posts/machine-learning-for-business/ml-business-series.html</loc>
+    <lastmod>2023-05-01T13:29:53.351Z</lastmod>
+  </url>
+  <url>
+    <loc>markvanderstay.com/intro-to-ml.html</loc>
+    <lastmod>2023-05-01T13:22:27.473Z</lastmod>
+  </url>
+  <url>
+    <loc>markvanderstay.com/posts/machine-learning-for-business/intro-to-ml/index.html</loc>
+    <lastmod>2023-05-01T15:29:49.364Z</lastmod>
+  </url>
+  <url>
+    <loc>markvanderstay.com/posts/machine-learning-for-business/index.html</loc>
+    <lastmod>2023-05-01T15:29:50.239Z</lastmod>
   </url>
 </urlset>

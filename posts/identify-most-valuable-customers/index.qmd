@@ -15,11 +15,12 @@ website:
     image: "https://markvanderstay.com/posts/identify-most-valuable-customers/predicting-future-spending.jpg"  
 slug: "identify-most-valuable-customers-with-clv"
 ---
+
 ![CLV leads businesses to the most valuable customers, those who will continue to spend money with them for years to come. By understanding how much these customers are worth over time, businesses can create strategies to keep them happy and engaged, and prevent them from jumping ship to the competition.](./predict-future-spending.png)
+
 ```{r setup, include=FALSE}
 library(CLVTools)
 ```
-
 
 ## Introduction
 

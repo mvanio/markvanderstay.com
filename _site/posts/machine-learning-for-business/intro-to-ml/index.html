@@ -1,0 +1,499 @@
+<!DOCTYPE html>
+<html xmlns="http://www.w3.org/1999/xhtml" lang="en" xml:lang="en"><head>
+
+<meta charset="utf-8">
+<meta name="generator" content="quarto-1.2.335">
+
+<meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=yes">
+
+<meta name="author" content="Mark Vanderstay">
+<meta name="dcterms.date" content="2023-05-01">
+
+<title>Mark Vanderstay - Marketing and Finance With Machine Learning</title>
+<style>
+code{white-space: pre-wrap;}
+span.smallcaps{font-variant: small-caps;}
+div.columns{display: flex; gap: min(4vw, 1.5em);}
+div.column{flex: auto; overflow-x: auto;}
+div.hanging-indent{margin-left: 1.5em; text-indent: -1.5em;}
+ul.task-list{list-style: none;}
+ul.task-list li input[type="checkbox"] {
+  width: 0.8em;
+  margin: 0 0.8em 0.2em -1.6em;
+  vertical-align: middle;
+}
+</style>
+
+
+<script src="../../../site_libs/quarto-nav/quarto-nav.js"></script>
+<script src="../../../site_libs/quarto-nav/headroom.min.js"></script>
+<script src="../../../site_libs/clipboard/clipboard.min.js"></script>
+<script src="../../../site_libs/quarto-search/autocomplete.umd.js"></script>
+<script src="../../../site_libs/quarto-search/fuse.min.js"></script>
+<script src="../../../site_libs/quarto-search/quarto-search.js"></script>
+<meta name="quarto:offset" content="../../../">
+<script src="../../../site_libs/quarto-html/quarto.js"></script>
+<script src="../../../site_libs/quarto-html/popper.min.js"></script>
+<script src="../../../site_libs/quarto-html/tippy.umd.min.js"></script>
+<script src="../../../site_libs/quarto-html/anchor.min.js"></script>
+<link href="../../../site_libs/quarto-html/tippy.css" rel="stylesheet">
+<link href="../../../site_libs/quarto-html/quarto-syntax-highlighting.css" rel="stylesheet" id="quarto-text-highlighting-styles">
+<script src="../../../site_libs/bootstrap/bootstrap.min.js"></script>
+<link href="../../../site_libs/bootstrap/bootstrap-icons.css" rel="stylesheet">
+<link href="../../../site_libs/bootstrap/bootstrap.min.css" rel="stylesheet" id="quarto-bootstrap" data-mode="light">
+<script id="quarto-search-options" type="application/json">{
+  "location": "navbar",
+  "copy-button": false,
+  "collapse-after": 3,
+  "panel-placement": "end",
+  "type": "overlay",
+  "limit": 20,
+  "language": {
+    "search-no-results-text": "No results",
+    "search-matching-documents-text": "matching documents",
+    "search-copy-link-title": "Copy link to search",
+    "search-hide-matches-text": "Hide additional matches",
+    "search-more-match-text": "more match in this document",
+    "search-more-matches-text": "more matches in this document",
+    "search-clear-button-title": "Clear",
+    "search-detached-cancel-button-title": "Cancel",
+    "search-submit-button-title": "Submit"
+  }
+}</script>
+<script async="" src="https://www.googletagmanager.com/gtag/js?id=G-CELTXHBN60"></script>
+
+<script type="text/javascript">
+
+window.dataLayer = window.dataLayer || [];
+function gtag(){dataLayer.push(arguments);}
+gtag('js', new Date());
+gtag('config', 'G-CELTXHBN60', { 'anonymize_ip': true});
+</script>
+
+
+<link rel="stylesheet" href="../../../styles.css">
+<meta property="og:title" content="Mark Vanderstay - Marketing and Finance With Machine Learning">
+<meta property="og:description" content="Ever wondered what all the “Machine Learning” fuss is about?">
+<meta property="og:site-name" content="Mark Vanderstay">
+<meta name="twitter:title" content="Mark Vanderstay - Marketing and Finance With Machine Learning">
+<meta name="twitter:description" content="This remarkable AI branch allows computers to learn from data without our intervention, redefining your business by uncovering hidden patterns, anticipating customer desires, and fine-tuning…">
+<meta name="twitter:image" content="https://markvanderstay.com/posts/machine-learning-for-business/intro-to-ml/machine-learning-small-business.jpg">
+<meta name="twitter:creator" content="@m_vanders">
+<meta name="twitter:site" content="@m_vanders">
+<meta name="twitter:card" content="summary_large_image">
+</head>
+
+<body class="nav-fixed">
+
+<div id="quarto-search-results"></div>
+  <header id="quarto-header" class="headroom fixed-top">
+    <nav class="navbar navbar-expand-lg navbar-dark ">
+      <div class="navbar-container container-fluid">
+      <div class="navbar-brand-container">
+    <a class="navbar-brand" href="../../../index.html">
+    <span class="navbar-title">Mark Vanderstay</span>
+    </a>
+  </div>
+          <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarCollapse" aria-controls="navbarCollapse" aria-expanded="false" aria-label="Toggle navigation" onclick="if (window.quartoToggleHeadroom) { window.quartoToggleHeadroom(); }">
+  <span class="navbar-toggler-icon"></span>
+</button>
+          <div class="collapse navbar-collapse" id="navbarCollapse">
+            <ul class="navbar-nav navbar-nav-scroll ms-auto">
+  <li class="nav-item">
+    <a class="nav-link" href="../../../about.html">
+ <span class="menu-text">About Me</span></a>
+  </li>  
+  <li class="nav-item compact">
+    <a class="nav-link" href="https://linkedin.com/in/mark-vanderstay"><i class="bi bi-linkedin" role="img">
+</i> 
+ <span class="menu-text"></span></a>
+  </li>  
+  <li class="nav-item compact">
+    <a class="nav-link" href="https://twitter.com/m_vanders"><i class="bi bi-twitter" role="img">
+</i> 
+ <span class="menu-text"></span></a>
+  </li>  
+  <li class="nav-item compact">
+    <a class="nav-link" href="../../../index.xml"><i class="bi bi-rss" role="img">
+</i> 
+ <span class="menu-text"></span></a>
+  </li>  
+</ul>
+              <div id="quarto-search" class="" title="Search"></div>
+          </div> <!-- /navcollapse -->
+      </div> <!-- /container-fluid -->
+    </nav>
+</header>
+<!-- content -->
+<header id="title-block-header" class="quarto-title-block default page-columns page-full">
+  <div class="quarto-title-banner page-columns page-full">
+    <div class="quarto-title column-body">
+      <h1 class="title">Marketing and Finance With Machine Learning</h1>
+                                <div class="quarto-categories">
+                <div class="quarto-category">ML</div>
+              </div>
+                  </div>
+  </div>
+    
+  
+  <div class="quarto-title-meta">
+
+      <div>
+      <div class="quarto-title-meta-heading">Author</div>
+      <div class="quarto-title-meta-contents">
+               <p>Mark Vanderstay </p>
+            </div>
+    </div>
+      
+      <div>
+      <div class="quarto-title-meta-heading">Published</div>
+      <div class="quarto-title-meta-contents">
+        <p class="date">May 1, 2023</p>
+      </div>
+    </div>
+    
+      
+    </div>
+    
+  
+  </header><div id="quarto-content" class="quarto-container page-columns page-rows-contents page-layout-article page-navbar">
+<!-- sidebar -->
+<!-- margin-sidebar -->
+    <div id="quarto-margin-sidebar" class="sidebar margin-sidebar">
+    </div>
+<!-- main -->
+<main class="content quarto-banner-title-block" id="quarto-document-content">
+
+
+
+<nav id="TOC" role="doc-toc">
+    <h2 id="toc-title">On this page</h2>
+   
+  <ul>
+  <li><a href="#i.-introduction" id="toc-i.-introduction"><strong>I. Introduction</strong></a></li>
+  <li><a href="#ii.-machine-learning-in-marketing" id="toc-ii.-machine-learning-in-marketing"><strong>II. Machine Learning in Marketing</strong></a></li>
+  <li><a href="#a.-personalised-marketing-campaigns" id="toc-a.-personalised-marketing-campaigns"><strong>A. Personalised Marketing Campaigns</strong></a>
+  <ul>
+  <li><a href="#product-recommendations" id="toc-product-recommendations"><strong>1. Product Recommendations</strong></a></li>
+  <li><a href="#tailored-email-marketing" id="toc-tailored-email-marketing"><strong>2. Tailored Email Marketing</strong></a></li>
+  </ul></li>
+  <li><a href="#b.-customer-segmentation" id="toc-b.-customer-segmentation"><strong>B. Customer Segmentation</strong></a>
+  <ul>
+  <li><a href="#identifying-high-value-customers" id="toc-identifying-high-value-customers"><strong>1. Identifying High-Value Customers</strong></a></li>
+  <li><a href="#customising-marketing-strategies-for-different-segments" id="toc-customising-marketing-strategies-for-different-segments"><strong>2. Customising Marketing Strategies for Different Segments</strong></a></li>
+  <li><a href="#sentiment-analysis" id="toc-sentiment-analysis"><strong>3. Sentiment Analysis</strong></a></li>
+  </ul></li>
+  <li><a href="#iii.-machine-learning-in-business-finance" id="toc-iii.-machine-learning-in-business-finance"><strong>III. Machine Learning in Business Finance</strong></a>
+  <ul>
+  <li><a href="#a.-fraud-detection-and-prevention" id="toc-a.-fraud-detection-and-prevention"><strong>A. Fraud Detection and Prevention</strong></a></li>
+  <li><a href="#b.-forecasting-and-inventory-management" id="toc-b.-forecasting-and-inventory-management"><strong>B. Forecasting and Inventory Management</strong></a></li>
+  <li><a href="#c.-optimising-pricing-strategies" id="toc-c.-optimising-pricing-strategies"><strong>C. Optimising Pricing Strategies</strong></a></li>
+  </ul></li>
+  <li><a href="#iv.-implementing-machine-learning-in-your-e-commerce-business" id="toc-iv.-implementing-machine-learning-in-your-e-commerce-business">IV. Implementing Machine Learning in Your E-commerce Business</a>
+  <ul>
+  <li><a href="#a.-identify-your-needs" id="toc-a.-identify-your-needs">A. Identify Your Needs</a></li>
+  <li><a href="#b.-gather-and-clean-data" id="toc-b.-gather-and-clean-data">B. Gather and Clean Data</a></li>
+  <li><a href="#c.-choose-the-right-tools-and-platforms" id="toc-c.-choose-the-right-tools-and-platforms">C. Choose the Right Tools and Platforms</a></li>
+  <li><a href="#d.-build-or-outsource" id="toc-d.-build-or-outsource">D. Build or Outsource</a></li>
+  <li><a href="#e.-monitor-and-update" id="toc-e.-monitor-and-update">E. Monitor and Update</a></li>
+  </ul></li>
+  </ul>
+</nav>
+<section id="i.-introduction" class="level2">
+<h2 class="anchored" data-anchor-id="i.-introduction"><strong>I. Introduction</strong></h2>
+<p>Ever wondered what all the “Machine Learning” fuss is about?</p>
+<p>This powerful technology can have a significant impact on small e-commerce businesses. In this article, we’ll explore how machine learning can boost your marketing and financial efforts without too much technical jargon.<br>
+</p>
+</section>
+<section id="ii.-machine-learning-in-marketing" class="level2">
+<h2 class="anchored" data-anchor-id="ii.-machine-learning-in-marketing"><strong>II. Machine Learning in Marketing</strong></h2>
+<p>Connecting with your target audience is key when it comes to marketing. This is one area where machine learning can be your secret weapon.</p>
+<p>In this section, we will uncover how machine learning supercharges personalised marketing campaigns. We will discuss spot-on product recommendations and tailored email strategies. We will also examine customer segmentation to help you identify high-value customers and create custom marketing approaches for diverse groups. To wrap up, we will touch on sentiment analysis and show you how to tap into customer feedback to polish your products and services. Fasten your seatbelts and let’s unlock the marketing prowess of machine learning!</p>
+</section>
+<section id="a.-personalised-marketing-campaigns" class="level2">
+<h2 class="anchored" data-anchor-id="a.-personalised-marketing-campaigns"><strong>A. Personalised Marketing Campaigns</strong></h2>
+<p>As an e-commerce entrepreneur, I’ve witnessed the impact of personalised marketing campaigns. Believe me, machine learning can elevate your campaigns like never before! Let’s explore two crucial areas where machine learning can work wonders.</p>
+<section id="product-recommendations" class="level3">
+<h3 class="anchored" data-anchor-id="product-recommendations"><strong>1. Product Recommendations</strong></h3>
+<p>Ever been amazed by how online stores know just what you want? Machine learning (ML) makes it happen! It analyses customer behaviour, purchase history and browsing patterns to predict which products will interest each shopper. With machine learning, you can craft targeted product recommendations that make your customers feel valued and understood.</p>
+<p>You’ve probably used a tool that recommends products from categories that you specify on your website backend. Notice how those recommendations aren’t actually smart? They’re usually just a random selection.</p>
+<p>When using ML you can change all that. Make the recommendations meaningful and relevant and you may actually create more revenue.</p>
+</section>
+<section id="tailored-email-marketing" class="level3">
+<h3 class="anchored" data-anchor-id="tailored-email-marketing"><strong>2. Tailored Email Marketing</strong></h3>
+<p>No-one enjoys generic spammy emails. No-one. Absolutely no-one. I’m sitting here on a public holiday and every marketer seems to have decided that today is the day they need to sell everything. Seriously, there’s nothing special about this public holiday. And yet I’m being informed of offers on washing machines, photocopiers, microscopes and a million other things I will not buy.</p>
+<p>Machine learning is here to save the day!</p>
+<p>By grasping each customer’s preferences and interests, it assists in creating personalised email campaigns that truly resonate. Be it special offers, product launches or curated content, machine learning guarantees you hit the mark and keep customers engaged.<br>
+</p>
+</section>
+</section>
+<section id="b.-customer-segmentation" class="level2">
+<h2 class="anchored" data-anchor-id="b.-customer-segmentation"><strong>B. Customer Segmentation</strong></h2>
+<p>Speaking of keeping things relevant…</p>
+<p>E-commerce success relies on understanding customers. Machine learning helps you segment your customer base in unparalleled ways. Let’s see how it identifies high-value customers and crafts custom marketing approaches for diverse groups.</p>
+<section id="identifying-high-value-customers" class="level3">
+<h3 class="anchored" data-anchor-id="identifying-high-value-customers"><strong>1. Identifying High-Value Customers</strong></h3>
+<p>High-value customers fuel any business. Machine learning sorts through vast data to pinpoint these precious shoppers. It analyses factors such as:</p>
+<ul>
+<li><p>Purchase frequency</p></li>
+<li><p>Order value</p></li>
+<li><p>Engagement</p></li>
+</ul>
+<p>Identifying customers who generate the most revenue lets you concentrate marketing efforts effectively.</p>
+<p><a href="../../identify-most-valuable-customers/">Visit this article if you wish to try calculating CLV for yourself.</a></p>
+</section>
+<section id="customising-marketing-strategies-for-different-segments" class="level3">
+<h3 class="anchored" data-anchor-id="customising-marketing-strategies-for-different-segments"><strong>2. Customising Marketing Strategies for Different Segments</strong></h3>
+<p>One size doesn’t fit all in marketing. Machine learning segments your customer base based on factors like:</p>
+<ul>
+<li><p>Demographics</p></li>
+<li><p>Shopping habits</p></li>
+<li><p>Preferences</p></li>
+</ul>
+<p>With these insights at hand, you can develop tailored marketing strategies. Each group will resonate with the strategy. This leads to better engagement and conversions.</p>
+<p>Interested in segmentation? Explore over 20 different methods of segmenting your audience with a free MindMap. Don’t be limited to whatever segments your email platform gives you. If you want to stand out from the crowd then you need to try different strategies.</p>
+</section>
+<section id="sentiment-analysis" class="level3">
+<h3 class="anchored" data-anchor-id="sentiment-analysis"><strong>3. Sentiment Analysis</strong></h3>
+<p>Understanding customer feedback is essential. Machine learning can assist in analysing sentiments and emotions in customer reviews, comments, and social media posts. Let’s explore how sentiment analysis can improve your products and services.</p>
+<section id="understanding-customer-feedback" class="level4">
+<h4 class="anchored" data-anchor-id="understanding-customer-feedback">1. Understanding Customer Feedback</h4>
+<p><a href="../../mastering-sentiment-analysis-of-twitter-data-with-r/" title="Explore how to conduct a sentiment analysis of Twitter data.">Customers express their opinions online</a> every day. Machine learning can make sense of this vast pool of data by analysing text and extracting meaningful insights. It identifies positive, negative, and neutral sentiments. This allows you to spot trends, gauge customer satisfaction, and address concerns promptly.</p>
+</section>
+<section id="improving-products-and-services" class="level4">
+<h4 class="anchored" data-anchor-id="improving-products-and-services">2. Improving Products and Services</h4>
+<p>Armed with insights from sentiment analysis, you can make informed decisions about your products and services. By identifying areas that need improvement or enhancement, you can take action to meet customer needs better. This leads to happier customers, increased loyalty, and ultimately more sales for your e-commerce business.<br>
+</p>
+</section>
+</section>
+</section>
+<section id="iii.-machine-learning-in-business-finance" class="level2">
+<h2 class="anchored" data-anchor-id="iii.-machine-learning-in-business-finance"><strong>III. Machine Learning in Business Finance</strong></h2>
+<p>Machine learning doesn’t just shine in marketing. It also offers significant advantages for managing your e-commerce business finances. Let’s delve into three areas where machine learning can improve financial performance.</p>
+<section id="a.-fraud-detection-and-prevention" class="level3">
+<h3 class="anchored" data-anchor-id="a.-fraud-detection-and-prevention"><strong>A. Fraud Detection and Prevention</strong></h3>
+<p>Honestly, financial tracking and fraud prevention is a huge effort for small businesses. The learning curve for a project of this type may be more than the average company owner can deal with.</p>
+<p>While chargebacks can be extremely time-consuming to deal with and prohibitively expensive if left unchecked, I’d recommend leaving this to the experts. Many banks and payment processors will offer some form of fraud detection if fraud is a problem for your business. Stripe Radar, for instance.</p>
+<p>How do they do that? They use machine learning, of course!</p>
+<p>It can help tackle this issue head-on by:</p>
+<ul>
+<li><p>Analysing transaction data</p></li>
+<li><p>Identifying suspicious patterns</p></li>
+<li><p>Alerting you to potential fraud risks</p></li>
+</ul>
+<p>With real-time detection, you can take preventive measures to protect your business and your customers from financial loss.</p>
+</section>
+<section id="b.-forecasting-and-inventory-management" class="level3">
+<h3 class="anchored" data-anchor-id="b.-forecasting-and-inventory-management"><strong>B. Forecasting and Inventory Management</strong></h3>
+<p>Accurate sales forecasting and inventory management are crucial to e-commerce success. Machine learning can predict future sales by:</p>
+<ul>
+<li><p>Analysing historical data</p></li>
+<li><p>Considering seasonal trends</p></li>
+<li><p>Factoring in market conditions</p></li>
+</ul>
+<p>These predictions enable owners to optimise inventory levels, preventing stockouts and reducing storage costs.</p>
+</section>
+<section id="c.-optimising-pricing-strategies" class="level3">
+<h3 class="anchored" data-anchor-id="c.-optimising-pricing-strategies"><strong>C. Optimising Pricing Strategies</strong></h3>
+<p>Finding the right price for your products can be challenging. Machine learning can assist in setting optimal prices by:</p>
+<ul>
+<li><p>Analysing competitor pricing</p></li>
+<li><p>Assessing supply and demand dynamics</p></li>
+<li><p>Evaluating customer price sensitivity</p></li>
+</ul>
+<p>By implementing dynamic pricing, you can maximise profit margins while remaining competitive in the market.</p>
+</section>
+</section>
+<section id="iv.-implementing-machine-learning-in-your-e-commerce-business" class="level2">
+<h2 class="anchored" data-anchor-id="iv.-implementing-machine-learning-in-your-e-commerce-business">IV. Implementing Machine Learning in Your E-commerce Business</h2>
+<p>Now that we’ve covered the benefits of machine learning for marketing and finance, let’s discuss how to implement it in your e-commerce business. Here are some steps to help you get started:</p>
+<section id="a.-identify-your-needs" class="level3">
+<h3 class="anchored" data-anchor-id="a.-identify-your-needs">A. Identify Your Needs</h3>
+<p>Before diving into machine learning, determine the specific areas where it can have the most significant impact on your business. This could be personalising marketing campaigns, improving customer segmentation, detecting fraud, or optimising pricing.</p>
+</section>
+<section id="b.-gather-and-clean-data" class="level3">
+<h3 class="anchored" data-anchor-id="b.-gather-and-clean-data">B. Gather and Clean Data</h3>
+<p>Machine learning relies on data. Ensure you have access to relevant data sources and that the data is clean and well-structured. This may involve data cleaning, removing duplicates, and filling in missing values.</p>
+</section>
+<section id="c.-choose-the-right-tools-and-platforms" class="level3">
+<h3 class="anchored" data-anchor-id="c.-choose-the-right-tools-and-platforms">C. Choose the Right Tools and Platforms</h3>
+<p>There are numerous machine learning tools and platforms available, catering to different skill levels and requirements. Some popular options include:</p>
+<ul>
+<li><p>TensorFlow</p></li>
+<li><p>scikit-learn</p></li>
+<li><p>Microsoft Azure Machine Learning</p></li>
+<li><p>Google Cloud ML Engine<br>
+</p></li>
+</ul>
+<p>Evaluate the pros and cons of each tool, and select the one that aligns with your needs and technical expertise.</p>
+</section>
+<section id="d.-build-or-outsource" class="level3">
+<h3 class="anchored" data-anchor-id="d.-build-or-outsource">D. Build or Outsource</h3>
+<p>Decide whether to build your machine learning models in-house or outsource to experts. Building in-house requires a skilled team and can be time-consuming. Outsourcing may be a more efficient option, but it’s essential to find a reliable partner who understands your business needs.</p>
+</section>
+<section id="e.-monitor-and-update" class="level3">
+<h3 class="anchored" data-anchor-id="e.-monitor-and-update">E. Monitor and Update</h3>
+<p>Once your machine learning models are in place, keep an eye on their performance. Regularly update and fine-tune the models to ensure they remain accurate and effective in meeting your business goals.</p>
+<p>By following these steps, you can successfully harness the power of machine learning to grow your e-commerce business and stay ahead of the competition.</p>
+<p>Machine learning offers immense potential for e-commerce businesses, revolutionising marketing and finance management. By leveraging machine learning, you can deliver personalised customer experiences, optimise pricing strategies, detect fraud, and make better-informed business decisions.</p>
+<p>To implement machine learning successfully in your e-commerce business, it’s crucial to:</p>
+<ol type="1">
+<li><p>Identify your specific needs</p></li>
+<li><p>Gather and clean relevant data</p></li>
+<li><p>Choose the right tools and platforms</p></li>
+<li><p>Decide whether to build in-house or outsource</p></li>
+<li><p>Continuously monitor and update your models</p></li>
+</ol>
+<p>By embracing machine learning and its benefits, you can gain a competitive edge and drive your e-commerce business towards long-term success. Why wait? Start exploring the world of machine learning today and unlock the untapped potential of your business.</p>
+
+
+</section>
+</section>
+
+</main> <!-- /main -->
+<div>
+<hr>
+<h3> Share </h3>
+<a href="https://twitter.com/share?ref_src=twsrc%5Etfw" class="twitter-share-button" data-size="large" data-hashtags="rstats" data-show-count="false">Tweet</a><script async="" src="https://platform.twitter.com/widgets.js" charset="utf-8"></script>
+<hr>
+</div>
+<script id="quarto-html-after-body" type="application/javascript">
+window.document.addEventListener("DOMContentLoaded", function (event) {
+  const toggleBodyColorMode = (bsSheetEl) => {
+    const mode = bsSheetEl.getAttribute("data-mode");
+    const bodyEl = window.document.querySelector("body");
+    if (mode === "dark") {
+      bodyEl.classList.add("quarto-dark");
+      bodyEl.classList.remove("quarto-light");
+    } else {
+      bodyEl.classList.add("quarto-light");
+      bodyEl.classList.remove("quarto-dark");
+    }
+  }
+  const toggleBodyColorPrimary = () => {
+    const bsSheetEl = window.document.querySelector("link#quarto-bootstrap");
+    if (bsSheetEl) {
+      toggleBodyColorMode(bsSheetEl);
+    }
+  }
+  toggleBodyColorPrimary();  
+  const icon = "";
+  const anchorJS = new window.AnchorJS();
+  anchorJS.options = {
+    placement: 'right',
+    icon: icon
+  };
+  anchorJS.add('.anchored');
+  const clipboard = new window.ClipboardJS('.code-copy-button', {
+    target: function(trigger) {
+      return trigger.previousElementSibling;
+    }
+  });
+  clipboard.on('success', function(e) {
+    // button target
+    const button = e.trigger;
+    // don't keep focus
+    button.blur();
+    // flash "checked"
+    button.classList.add('code-copy-button-checked');
+    var currentTitle = button.getAttribute("title");
+    button.setAttribute("title", "Copied!");
+    let tooltip;
+    if (window.bootstrap) {
+      button.setAttribute("data-bs-toggle", "tooltip");
+      button.setAttribute("data-bs-placement", "left");
+      button.setAttribute("data-bs-title", "Copied!");
+      tooltip = new bootstrap.Tooltip(button, 
+        { trigger: "manual", 
+          customClass: "code-copy-button-tooltip",
+          offset: [0, -8]});
+      tooltip.show();    
+    }
+    setTimeout(function() {
+      if (tooltip) {
+        tooltip.hide();
+        button.removeAttribute("data-bs-title");
+        button.removeAttribute("data-bs-toggle");
+        button.removeAttribute("data-bs-placement");
+      }
+      button.setAttribute("title", currentTitle);
+      button.classList.remove('code-copy-button-checked');
+    }, 1000);
+    // clear code selection
+    e.clearSelection();
+  });
+  function tippyHover(el, contentFn) {
+    const config = {
+      allowHTML: true,
+      content: contentFn,
+      maxWidth: 500,
+      delay: 100,
+      arrow: false,
+      appendTo: function(el) {
+          return el.parentElement;
+      },
+      interactive: true,
+      interactiveBorder: 10,
+      theme: 'quarto',
+      placement: 'bottom-start'
+    };
+    window.tippy(el, config); 
+  }
+  const noterefs = window.document.querySelectorAll('a[role="doc-noteref"]');
+  for (var i=0; i<noterefs.length; i++) {
+    const ref = noterefs[i];
+    tippyHover(ref, function() {
+      // use id or data attribute instead here
+      let href = ref.getAttribute('data-footnote-href') || ref.getAttribute('href');
+      try { href = new URL(href).hash; } catch {}
+      const id = href.replace(/^#\/?/, "");
+      const note = window.document.getElementById(id);
+      return note.innerHTML;
+    });
+  }
+  const findCites = (el) => {
+    const parentEl = el.parentElement;
+    if (parentEl) {
+      const cites = parentEl.dataset.cites;
+      if (cites) {
+        return {
+          el,
+          cites: cites.split(' ')
+        };
+      } else {
+        return findCites(el.parentElement)
+      }
+    } else {
+      return undefined;
+    }
+  };
+  var bibliorefs = window.document.querySelectorAll('a[role="doc-biblioref"]');
+  for (var i=0; i<bibliorefs.length; i++) {
+    const ref = bibliorefs[i];
+    const citeInfo = findCites(ref);
+    if (citeInfo) {
+      tippyHover(citeInfo.el, function() {
+        var popup = window.document.createElement('div');
+        citeInfo.cites.forEach(function(cite) {
+          var citeDiv = window.document.createElement('div');
+          citeDiv.classList.add('hanging-indent');
+          citeDiv.classList.add('csl-entry');
+          var biblioDiv = window.document.getElementById('ref-' + cite);
+          if (biblioDiv) {
+            citeDiv.innerHTML = biblioDiv.innerHTML;
+          }
+          popup.appendChild(citeDiv);
+        });
+        return popup.innerHTML;
+      });
+    }
+  }
+});
+</script>
+<script src="https://utteranc.es/client.js" repo="mvanio/fantastic-enigma" issue-term="pathname" theme="github-light" crossorigin="anonymous" async="">
+</script>
+</div> <!-- /content -->
+
+
+
+</body></html>

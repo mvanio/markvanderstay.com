@@ -1,16 +1,37 @@
 ---
 title: "markvanderstay.com"
 listing:
-  contents: posts/**/*.qmd
-  sort: "date desc"
-  type: grid
-  categories: true
-  sort-ui: true
-  filter-ui: true
-  fields: [date, title, reading-time, description, categories]
-  feed: true
-  image-align: left
-  image-placeholder: ""
+  - id: main
+    contents: 
+      - posts/**/*.qmd
+      - "!machine-learning-for-business/"
+    sort: "date desc"
+    type: grid
+    sort-ui: true
+    filter-ui: true
+    fields: [date, title, reading-time, description, categories]
+    feed: true
+    image-align: left
+    image-placeholder: ""
+  - id: ml-for-business
+    contents: 
+    - "intro-to-ml/*.qmd"
+    sort: "date desc"
+    type: grid
+    feed: true
+    image-align: left
+    image-placeholder: ""
 page-layout: full
 title-block-banner: false
 ---
+
+### New Series:
+
+## [Machine Learning for Business](./posts/machine-learning-for-business/index.html)
+
+Valuable insights and guidance for business owners keen to take advantage of machine learning.
+
+::: {#ml-for-business}
+:::
+
+### All Posts
