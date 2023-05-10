@@ -6,10 +6,10 @@
       version="2.0">
 <channel>
 <title>Mark Vanderstay</title>
-<link>markvanderstay.com/index.html#category=ML,%20CLV,%20twitter,%20GA4</link>
-<atom:link href="markvanderstay.com/index-ml, clv, twitter, ga4.xml" rel="self" type="application/rss+xml"/>
+<link>https://markvanderstay.com/index.html#category=ML,%20CLV,%20twitter,%20GA4</link>
+<atom:link href="https://markvanderstay.com/index-ml, clv, twitter, ga4.xml" rel="self" type="application/rss+xml"/>
 <description>Mark Vanderstay&#39;s Personal Blog</description>
 <generator>quarto-1.3.302</generator>
-<lastBuildDate>Mon, 01 May 2023 20:48:38 GMT</lastBuildDate>
+<lastBuildDate>Wed, 10 May 2023 14:51:20 GMT</lastBuildDate>
 </channel>
 </rss>

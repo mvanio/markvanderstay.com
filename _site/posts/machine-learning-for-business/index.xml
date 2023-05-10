@@ -6,21 +6,21 @@
       version="2.0">
 <channel>
 <title>Mark Vanderstay</title>
-<link>markvanderstay.com/posts/machine-learning-for-business/index.html</link>
-<atom:link href="markvanderstay.com/posts/machine-learning-for-business/index.xml" rel="self" type="application/rss+xml"/>
+<link>https://markvanderstay.com/posts/machine-learning-for-business/index.html</link>
+<atom:link href="https://markvanderstay.com/posts/machine-learning-for-business/index.xml" rel="self" type="application/rss+xml"/>
 <description>Mark Vanderstay&#39;s Personal Blog</description>
 <generator>quarto-1.3.302</generator>
 <lastBuildDate>Sun, 30 Apr 2023 23:00:00 GMT</lastBuildDate>
 <item>
   <title>Small Business Intro to Machine Learning</title>
   <dc:creator>Mark Vanderstay</dc:creator>
-  <link>markvanderstay.com/posts/machine-learning-for-business/intro-to-ml/index.html</link>
+  <link>https://markvanderstay.com/posts/machine-learning-for-business/intro-to-ml/index.html</link>
   <description><![CDATA[ 
 
 
 
 
-<p><img src="markvanderstay.com/posts/machine-learning-for-business/intro-to-ml/machine-learning-small-business.jpg" class="img-fluid"></p>
+<p><img src="https://markvanderstay.com/posts/machine-learning-for-business/intro-to-ml/machine-learning-small-business.jpg" class="img-fluid"></p>
 <section id="i.-introduction" class="level2">
 <h2 class="anchored" data-anchor-id="i.-introduction"><strong>I. Introduction</strong></h2>
 <p>Ever wondered what all the “Machine Learning” fuss is about?</p>
@@ -174,7 +174,7 @@
 
  ]]></description>
   <category>ML</category>
-  <guid>markvanderstay.com/posts/machine-learning-for-business/intro-to-ml/index.html</guid>
+  <guid>https://markvanderstay.com/posts/machine-learning-for-business/intro-to-ml/index.html</guid>
   <pubDate>Sun, 30 Apr 2023 23:00:00 GMT</pubDate>
 </item>
 </channel>

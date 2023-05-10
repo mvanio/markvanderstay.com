@@ -6,15 +6,15 @@
       version="2.0">
 <channel>
 <title>Mark Vanderstay</title>
-<link>markvanderstay.com/index.html#category=R</link>
-<atom:link href="markvanderstay.com/index-r.xml" rel="self" type="application/rss+xml"/>
+<link>https://markvanderstay.com/index.html#category=R</link>
+<atom:link href="https://markvanderstay.com/index-r.xml" rel="self" type="application/rss+xml"/>
 <description>Mark Vanderstay&#39;s Personal Blog</description>
 <generator>quarto-1.3.302</generator>
 <lastBuildDate>Sun, 16 Apr 2023 23:00:00 GMT</lastBuildDate>
 <item>
   <title>Making the most of customer relationships with CLV</title>
   <dc:creator>Mark Vanderstay</dc:creator>
-  <link>markvanderstay.com/posts/identify-most-valuable-customers/index.html</link>
+  <link>https://markvanderstay.com/posts/identify-most-valuable-customers/index.html</link>
   <description><![CDATA[ 
 
 
@@ -22,7 +22,7 @@
 
 <div class="quarto-figure quarto-figure-center">
 <figure class="figure">
-<p><img src="markvanderstay.com/posts/identify-most-valuable-customers/predict-future-spending.png" class="img-fluid figure-img"></p>
+<p><img src="https://markvanderstay.com/posts/identify-most-valuable-customers/predict-future-spending.png" class="img-fluid figure-img"></p>
 <p></p><figcaption class="figure-caption">CLV leads businesses to the most valuable customers, those who will continue to spend money with them for years to come. By understanding how much these customers are worth over time, businesses can create strategies to keep them happy and engaged, and prevent them from jumping ship to the competition.</figcaption><p></p>
 </figure>
 </div>
@@ -257,7 +257,7 @@ font-style: inherit;">plot</span>(pnbd.trans)</span></code></pre></div>
 <pre><code>Plotting from 2016-12-31 until 2018-07-15.</code></pre>
 </div>
 <div class="cell-output-display">
-<p><img src="markvanderstay.com/posts/identify-most-valuable-customers/index_files/figure-html/unnamed-chunk-6-1.png" class="img-fluid" width="768"></p>
+<p><img src="https://markvanderstay.com/posts/identify-most-valuable-customers/index_files/figure-html/unnamed-chunk-6-1.png" class="img-fluid" width="768"></p>
 </div>
 </div>
 <p>The tracking plot is the default option when plotting the fitted model. It shows the repeated transactions by real customers against the models’ predicted transactions.</p>
@@ -415,13 +415,13 @@ Note
 </section></div> ]]></description>
   <category>CLV</category>
   <category>R</category>
-  <guid>markvanderstay.com/posts/identify-most-valuable-customers/index.html</guid>
+  <guid>https://markvanderstay.com/posts/identify-most-valuable-customers/index.html</guid>
   <pubDate>Sun, 16 Apr 2023 23:00:00 GMT</pubDate>
 </item>
 <item>
   <title>Viewing Twitter Influence With Network Graphs</title>
   <dc:creator>Mark Vanderstay</dc:creator>
-  <link>markvanderstay.com/posts/twitter-analysis-of-retweets-with-r/index.html</link>
+  <link>https://markvanderstay.com/posts/twitter-analysis-of-retweets-with-r/index.html</link>
   <description><![CDATA[ 
 
 
@@ -429,7 +429,7 @@ Note
 
 <div class="quarto-figure quarto-figure-center">
 <figure class="figure">
-<p><img src="markvanderstay.com/posts/twitter-analysis-of-retweets-with-r/main.jpeg" class="img-fluid figure-img" alt="Twitter network graph with communities" width="600"></p>
+<p><img src="https://markvanderstay.com/posts/twitter-analysis-of-retweets-with-r/main.jpeg" class="img-fluid figure-img" alt="Twitter network graph with communities" width="600"></p>
 </figure>
 </div>
 <section id="what-is-a-network-graph" class="level2">
@@ -438,12 +438,12 @@ Note
 <p><strong>Visualising the flow of information between users can help you identify key influencers in your industry and understand how your target audience interacts with your brand. By using network analysis and visualisation, you can gain valuable insights into your social media strategy and make data-driven decisions to increase engagement and drive traffic to your website.</strong></p>
 <p>In network analysis, two important terms to know are ‘Vertices’ (or nodes) and ‘Edges’. Vertices represent Twitter users in this example, while edges show the relationship between users who are retweeting and being retweeted. Understanding these terms can help you better understand your online presence and identify opportunities to grow your business.</p>
 <p>For example, if you are a small business owner looking to increase your online presence, network analysis can help you identify other users in your industry who are highly engaged and have a large following. By connecting with these key influencers and building relationships, you can expand your reach and attract new customers to your business.</p>
-<div class="callout-note callout callout-style-default callout-captioned">
+<div class="callout callout-style-default callout-note callout-titled">
 <div class="callout-header d-flex align-content-center">
 <div class="callout-icon-container">
 <i class="callout-icon"></i>
 </div>
-<div class="callout-caption-container flex-fill">
+<div class="callout-title-container flex-fill">
 Key terminology
 </div>
 </div>
@@ -699,7 +699,7 @@ font-style: inherit;">layout =</span> layout.fruchterman.reingold)</span></code>
 <p>Hmmm. Not pretty.</p>
 <div class="quarto-figure quarto-figure-left">
 <figure class="figure">
-<p><img src="markvanderstay.com/posts/twitter-analysis-of-retweets-with-r/Rplot.jpeg" class="img-fluid figure-img" width="600"></p>
+<p><img src="https://markvanderstay.com/posts/twitter-analysis-of-retweets-with-r/Rplot.jpeg" class="img-fluid figure-img" width="600"></p>
 <p></p><figcaption class="figure-caption">Poor effort. Needs work.</figcaption><p></p>
 </figure>
 </div>
@@ -795,7 +795,7 @@ background-color: null;
 font-style: inherit;">$</span>strength)</span></code></pre></div>
 <div class="quarto-figure quarto-figure-left">
 <figure class="figure">
-<p><img src="markvanderstay.com/posts/twitter-analysis-of-retweets-with-r/Rplot01.jpeg" class="img-fluid figure-img"></p>
+<p><img src="https://markvanderstay.com/posts/twitter-analysis-of-retweets-with-r/Rplot01.jpeg" class="img-fluid figure-img"></p>
 </figure>
 </div>
 <p>There’s quite a mixture of strength values here and I’m only interested in the strongest nodes.</p>
@@ -921,7 +921,7 @@ background-color: null;
 font-style: inherit;">0.25</span>)</span></code></pre></div>
 <div class="quarto-figure quarto-figure-left">
 <figure class="figure">
-<p><img src="markvanderstay.com/posts/twitter-analysis-of-retweets-with-r/rPlot03.png" class="img-fluid figure-img"></p>
+<p><img src="https://markvanderstay.com/posts/twitter-analysis-of-retweets-with-r/rPlot03.png" class="img-fluid figure-img"></p>
 <p></p><figcaption class="figure-caption">Getting there.</figcaption><p></p>
 </figure>
 </div>
@@ -1103,7 +1103,7 @@ background-color: null;
 font-style: inherit;">edge.color =</span> col[<span class="dv" style="color: #AD0000;
 background-color: null;
 font-style: inherit;">2</span>])</span></code></pre></div>
-<p><img src="markvanderstay.com/posts/twitter-analysis-of-retweets-with-r/Rplot04.jpeg" class="img-fluid"></p>
+<p><img src="https://markvanderstay.com/posts/twitter-analysis-of-retweets-with-r/Rplot04.jpeg" class="img-fluid"></p>
 <p>OK, so it’s more ‘fairy princess’ than Turkey Tail but it tells a story. The users who are retweeted more than most are are the darkest purple, while the weakest nodes - those with lower values of `strength` are smaller, pinker and unlabelled.</p>
 <p>If I wanted my tweets to be noticed by others I’d hope that they were retweeted by one of the stronger accounts.</p>
 <p>Trouble is that hope really doesn’t get you anywhere.</p>
@@ -1115,7 +1115,7 @@ font-style: inherit;">2</span>])</span></code></pre></div>
 <p>Users in the same cluster, or clique, are more connected with one another that users outside of the cluster. This will tell me if there are divisions due to different types of account. Users in the same cluster, or clique, tend to be more connected to each other than to users outside the cluster. This can help to identify accounts that are interested in similar topics or have similar needs. Put another way in our fungi example, there may be accounts that prefer scientific data and accounts that prefer photographic content. This info shows up in separate clusters.</p>
 <p>A small tweak to my graph and I notice that there is a split between the interesting accounts.</p>
 <p>Take a look for yourself below. The nodes are now coloured according to the clusters they belong to. Green, orange and blue nodes are in different clusters. Our strong accounts are now split three ways. I would go on to check the content of these communities and determine which accounts are more suited for my client.</p>
-<p><img src="markvanderstay.com/posts/twitter-analysis-of-retweets-with-r/main.jpeg" class="img-fluid"></p>
+<p><img src="https://markvanderstay.com/posts/twitter-analysis-of-retweets-with-r/main.jpeg" class="img-fluid"></p>
 </section>
 <section id="conclusion" class="level3">
 <h3 class="anchored" data-anchor-id="conclusion">5. Conclusion</h3>
@@ -1150,13 +1150,13 @@ font-style: inherit;">2</span>])</span></code></pre></div>
 </section></div> ]]></description>
   <category>CLV</category>
   <category>R</category>
-  <guid>markvanderstay.com/posts/twitter-analysis-of-retweets-with-r/index.html</guid>
+  <guid>https://markvanderstay.com/posts/twitter-analysis-of-retweets-with-r/index.html</guid>
   <pubDate>Sun, 02 Apr 2023 23:00:00 GMT</pubDate>
 </item>
 <item>
   <title>Sentiment Analysis Of Twitter Data With R</title>
   <dc:creator>Mark Vanderstay</dc:creator>
-  <link>markvanderstay.com/posts/mastering-sentiment-analysis-of-twitter-data-with-r/index.html</link>
+  <link>https://markvanderstay.com/posts/mastering-sentiment-analysis-of-twitter-data-with-r/index.html</link>
   <description><![CDATA[ 
 
 
@@ -1563,7 +1563,7 @@ font-style: inherit;">"Frequency"</span></span>
 <span id="cb6-10">  )</span></code></pre></div>
 <div class="quarto-figure quarto-figure-center">
 <figure class="figure">
-<p><img src="markvanderstay.com/posts/mastering-sentiment-analysis-of-twitter-data-with-r/sentiment_analysis_parliament-768x445.png" class="img-fluid figure-img"></p>
+<p><img src="https://markvanderstay.com/posts/mastering-sentiment-analysis-of-twitter-data-with-r/sentiment_analysis_parliament-768x445.png" class="img-fluid figure-img"></p>
 <p></p><figcaption class="figure-caption">Unsurprisingly, overwhelmingly negative.</figcaption><p></p>
 </figure>
 </div>
@@ -1572,12 +1572,12 @@ font-style: inherit;">"Frequency"</span></span>
 <section id="conclusion" class="level2">
 <h2 class="anchored" data-anchor-id="conclusion"><strong>3. Conclusion</strong></h2>
 <p>Sentiment analysis of Twitter data using R is so simple and yet so few brands use this as a technique for measuring their customer’s attitude. Perhaps brands don’t care or don’t have a big enough Twitter following to think this is worthwhile. However, it is a useful tool to help with growing Twitter influence and seeing the results can inspire change in attitude. For these two points alone it is one tool I always recommend clients use on a regular basis where appropriate.</p>
-<div class="callout-tip callout callout-style-default callout-captioned">
+<div class="callout callout-style-default callout-tip callout-titled">
 <div class="callout-header d-flex align-content-center">
 <div class="callout-icon-container">
 <i class="callout-icon"></i>
 </div>
-<div class="callout-caption-container flex-fill">
+<div class="callout-title-container flex-fill">
 Tip
 </div>
 </div>
@@ -1593,14 +1593,14 @@ Tip
   <category>Twitter</category>
   <category>R</category>
   <category>RStudio</category>
-  <guid>markvanderstay.com/posts/mastering-sentiment-analysis-of-twitter-data-with-r/index.html</guid>
+  <guid>https://markvanderstay.com/posts/mastering-sentiment-analysis-of-twitter-data-with-r/index.html</guid>
   <pubDate>Mon, 27 Mar 2023 23:00:00 GMT</pubDate>
-  <media:content url="markvanderstay.com/posts/mastering-sentiment-analysis-of-twitter-data-with-r/sentiment_analysis_parliament-768x445.png" medium="image" type="image/png" height="83" width="144"/>
+  <media:content url="https://markvanderstay.com/posts/mastering-sentiment-analysis-of-twitter-data-with-r/sentiment_analysis_parliament-768x445.png" medium="image" type="image/png" height="83" width="144"/>
 </item>
 <item>
   <title>LDA With R Makes Twitter Data Insights Easy</title>
   <dc:creator>Mark Vanderstay</dc:creator>
-  <link>markvanderstay.com/posts/using-r-for-twitter-analysis-lda/index.html</link>
+  <link>https://markvanderstay.com/posts/using-r-for-twitter-analysis-lda/index.html</link>
   <description><![CDATA[ 
 
 
@@ -2435,7 +2435,7 @@ font-style: inherit;">scales =</span> <span class="st" style="color: #20794D;
 background-color: null;
 font-style: inherit;">"free"</span>)</span></code></pre></div>
 <p>The resulting image shows much more clearly that the topics involve not just the UK parliament and BoJo’s (alleged) breach of the rules but also the Ugandan parliament. Topics 3 and 5 are possibly the same topic as they concern Kasha Jacqueline Nabagesera and the Ugandan government’s criminalisation of LGBT rights. Creating a visualisation of word probabilities has helped to determine the quantity of topics. It’d be a good idea now to go back and refine the model.</p>
-<p><img src="markvanderstay.com/posts/using-r-for-twitter-analysis-lda/parliament-1-1024x561.png" class="img-fluid"></p>
+<p><img src="https://markvanderstay.com/posts/using-r-for-twitter-analysis-lda/parliament-1-1024x561.png" class="img-fluid"></p>
 </section>
 <section id="conclusion" class="level2">
 <h2 class="anchored" data-anchor-id="conclusion"><strong>5. Conclusion</strong></h2>
@@ -2459,14 +2459,14 @@ font-style: inherit;">"free"</span>)</span></code></pre></div>
   <category>Twitter</category>
   <category>R</category>
   <category>RStudio</category>
-  <guid>markvanderstay.com/posts/using-r-for-twitter-analysis-lda/index.html</guid>
+  <guid>https://markvanderstay.com/posts/using-r-for-twitter-analysis-lda/index.html</guid>
   <pubDate>Sat, 25 Mar 2023 00:00:00 GMT</pubDate>
-  <media:content url="markvanderstay.com/posts/using-r-for-twitter-analysis-lda/parliament-1-1024x561.png" medium="image" type="image/png" height="79" width="144"/>
+  <media:content url="https://markvanderstay.com/posts/using-r-for-twitter-analysis-lda/parliament-1-1024x561.png" medium="image" type="image/png" height="79" width="144"/>
 </item>
 <item>
   <title>Using R for Twitter Analysis</title>
   <dc:creator>Mark Vanderstay</dc:creator>
-  <link>markvanderstay.com/posts/using-r-for-twitter-analysis/index.html</link>
+  <link>https://markvanderstay.com/posts/using-r-for-twitter-analysis/index.html</link>
   <description><![CDATA[ 
 
 
@@ -2848,7 +2848,7 @@ font-style: inherit;">1</span>)</span>
 <span id="cb10-12">       )</span></code></pre></div>
 <div class="quarto-figure quarto-figure-center">
 <figure class="figure">
-<p><img src="markvanderstay.com/posts/using-r-for-twitter-analysis/twitter-analysis-mental-health.png" class="img-fluid figure-img"></p>
+<p><img src="https://markvanderstay.com/posts/using-r-for-twitter-analysis/twitter-analysis-mental-health.png" class="img-fluid figure-img"></p>
 <p></p><figcaption class="figure-caption">After cleaning Twitter data: Terms with frequency &gt; 100 visualised.</figcaption><p></p>
 </figure>
 </div>
@@ -2865,14 +2865,14 @@ font-style: inherit;">1</span>)</span>
   <category>Twitter</category>
   <category>R</category>
   <category>RStudio</category>
-  <guid>markvanderstay.com/posts/using-r-for-twitter-analysis/index.html</guid>
+  <guid>https://markvanderstay.com/posts/using-r-for-twitter-analysis/index.html</guid>
   <pubDate>Tue, 21 Mar 2023 00:00:00 GMT</pubDate>
-  <media:content url="markvanderstay.com/posts/using-r-for-twitter-analysis/filter.png" medium="image" type="image/png"/>
+  <media:content url="https://markvanderstay.com/posts/using-r-for-twitter-analysis/filter.png" medium="image" type="image/png"/>
 </item>
 <item>
   <title>Analysing GA4 Data With R</title>
   <dc:creator>Mark Vanderstay</dc:creator>
-  <link>markvanderstay.com/posts/using-google-analytics-ga4-data-in-r/index.html</link>
+  <link>https://markvanderstay.com/posts/using-google-analytics-ga4-data-in-r/index.html</link>
   <description><![CDATA[ 
 
 
@@ -2946,12 +2946,7 @@ It’s a simple one and it demonstrates this issue nicely.</p>
 <ul>
 <li><p>Click the credentials you just created</p></li>
 <li><p>Click ‘Download JSON’</p>
-<div class="quarto-figure quarto-figure-center" style="border: #000000 2px solid;">
-<figure class="figure">
-<p><img src="markvanderstay.com/posts/using-google-analytics-ga4-data-in-r/credentials.png" class="img-fluid figure-img" alt="Once you’ve setup your credentials, download them as JSON"></p>
-<p></p><figcaption class="figure-caption">Once you’ve setup your credentials, download them as JSON</figcaption><p></p>
-</figure>
-</div></li>
+<img src="https://markvanderstay.com/posts/using-google-analytics-ga4-data-in-r/credentials.png" class="img-fluid" style="border: #000000 2px solid;" alt="Once you’ve setup your credentials, download them as JSON"></li>
 </ul>
 <p>Once that’s all setup we’re done with Google. Fire up RStudio if you haven’t already.</p>
 </section>
@@ -3158,8 +3153,8 @@ font-style: inherit;">"2023-01-31"</span>)</span>
 <p>The results of this query are basic because this filter isn’t particularly useful, it’s just a demo.</p>
 <div class="quarto-figure quarto-figure-center">
 <figure class="figure">
-<p><img src="markvanderstay.com/posts/using-google-analytics-ga4-data-in-r/filter.png" class="img-fluid figure-img" alt="GA4 data with filtering for custom event named 'klaviyo_form_submission'."></p>
-<p></p><figcaption class="figure-caption">GA4 data with filtering for custom event named ‘klaviyo_form_submission’.</figcaption><p></p>
+<p><img src="https://markvanderstay.com/posts/using-google-analytics-ga4-data-in-r/filter.png" class="img-fluid figure-img"></p>
+<p></p><figcaption class="figure-caption">GA4 data with filtering for custom event named 'klaviyo_form_submission'.</figcaption><p></p>
 </figure>
 </div>
 <p>Lastly, let’s check out the realtime data. Handy for taking snapshots of running campaigns…</p>
@@ -3191,9 +3186,9 @@ font-style: inherit;">TRUE</span>)</span></code></pre></div>
   <category>GA4</category>
   <category>R</category>
   <category>RStudio</category>
-  <guid>markvanderstay.com/posts/using-google-analytics-ga4-data-in-r/index.html</guid>
+  <guid>https://markvanderstay.com/posts/using-google-analytics-ga4-data-in-r/index.html</guid>
   <pubDate>Tue, 14 Mar 2023 00:00:00 GMT</pubDate>
-  <media:content url="markvanderstay.com/posts/using-google-analytics-ga4-data-in-r/filter.png" medium="image" type="image/png" height="42" width="144"/>
+  <media:content url="https://markvanderstay.com/posts/using-google-analytics-ga4-data-in-r/filter.png" medium="image" type="image/png" height="42" width="144"/>
 </item>
 </channel>
 </rss>
