@@ -3,7 +3,7 @@ project:
 website:
   title: "Mark Vanderstay"
   description: "Mark Vanderstay's Personal Blog"
-  site-url: markvanderstay.com
+  site-url: https://markvanderstay.com
   navbar:
     right:
       - about.qmd
