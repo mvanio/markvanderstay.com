@@ -1,5 +1,6 @@
 ---
 title: "markvanderstay.com"
+canonical: https://markvanderstay.com
 listing:
   - id: main
     contents: 

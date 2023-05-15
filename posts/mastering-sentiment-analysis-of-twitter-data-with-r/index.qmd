@@ -3,6 +3,7 @@ title: "Sentiment Analysis Of Twitter Data With R"
 date: "2023-03-28"
 categories: [Twitter, R, RStudio]
 image: "sentiment_analysis_parliament-768x445.png"
+canonical: "https://markvanderstay.com/posts/mastering-sentiment-analysis-of-twitter-data-with-r/index.html"
 ---
 
 ## **Introduction**

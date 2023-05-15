@@ -16,6 +16,7 @@ website:
     description: "Have you wondered how information spreads on Twitter?"
     image: "https://markvanderstay.com/posts/twitter-analysis-of-retweets-with-r/main.jpeg"
     site: "@m_vanders"
+canonical: "https://markvanderstay.com/posts/twitter-analysis-of-retweets-with-r/index.html"
 ---
 
 ![](main.jpeg){fig-alt="Twitter network graph with communities" fig-align="center" width="600"}
