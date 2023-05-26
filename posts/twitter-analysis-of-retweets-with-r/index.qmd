@@ -1,5 +1,6 @@
 ---
 title: "Viewing Twitter Influence With Network Graphs"
+image: twitter-network-graphs.jpg
 date: "2023-04-03"
 categories: [CLV, R]
 format: 
@@ -11,10 +12,9 @@ execute:
   eval: false
 website:
   open-graph: true
-  image: "https://markvanderstay.com/posts/twitter-analysis-of-retweets-with-r/main.jpeg"
   twitter-card: 
     description: "Have you wondered how information spreads on Twitter?"
-    image: "https://markvanderstay.com/posts/twitter-analysis-of-retweets-with-r/main.jpeg"
+    image: "https://markvanderstay.com/posts/twitter-analysis-of-retweets-with-r/twitter-network-graphs.jpg"
     site: "@m_vanders"
 canonical: "https://markvanderstay.com/posts/twitter-analysis-of-retweets-with-r/index.html"
 ---

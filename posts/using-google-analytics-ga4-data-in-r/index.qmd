@@ -2,7 +2,7 @@
 title: "Analysing GA4 Data With R"
 date: "2023-03-14"
 categories: [GA4, R, RStudio]
-image: "filter.png"
+image: ga4-r.jpg
 ---
 
 # The Analysis Gap
@@ -118,7 +118,7 @@ Now, back at the credentials page, download your credentials as a .json file.
 
 -   Click 'Download JSON'
 
-    ![Once you've setup your credentials, download them as JSON](credentials.png){alt="Once you’ve setup your credentials, download them as JSON" style="border: #000000 2px solid;"}
+    ![Once you\'ve setup your credentials, download them as JSON](credentials.png){alt="Once you’ve setup your credentials, download them as JSON" style="border: #000000 2px solid;"}
 
 Once that's all setup we're done with Google. Fire up RStudio if you haven't already.
 
@@ -128,7 +128,7 @@ Now there's obviously many ways to set up a project but I'm fastidious when it c
 
 Create a new folder for this project and set it the working directory and create a .Renviron file with the following contents...
 
-``` R
+``` r
 GAR_CLIENT_JSON=./client.json
 ```
 
@@ -136,26 +136,26 @@ GAR_CLIENT_JSON=./client.json
 
 Obligatory package install. We'll be using the excellent **\`*googleAnalyticsR*\`**.
 
-``` R
+``` r
 install.packages("googleAnalyticsR")
 ```
 
 Create a new R script file and load the library we just installed.
 
-``` R
+``` r
 library(googleAnalyticsR)
 ```
 
 You'll notice a message in the console similar to the following...
 
-``` R
+``` r
  Setting client.id from ./client.jso
  No consent file found
 ```
 
 No bother, we'll then authorise with...
 
-``` R
+``` r
 ga_auth()
 ```
 
@@ -163,7 +163,7 @@ You'll be prompted to choose with identity to login with and you simply select a
 
 If you wish to see the list of accounts you have access to you'll have to use the following to return a character array fo account names;
 
-``` R
+``` r
 account_list <- ga_account_list()
 ```
 
@@ -173,7 +173,7 @@ Remember, GA4 doesn't use views like Universal Analytics does. Just stick with u
 
 Let's see some data, shall we? With the property ID you're interested in you simply use;
 
-``` R
+``` r
 metadata <- ga_meta("data", propertyId = XXXXXXXXX)
 ```
 
@@ -181,7 +181,7 @@ metadata <- ga_meta("data", propertyId = XXXXXXXXX)
 
 Let's check out a few GA4 dimensions and see what happens.
 
-``` R
+``` r
  dimensions <- ga_data(
     XXXXXXXXX,
     metrics = c("activeUsers","sessions"),
@@ -192,7 +192,7 @@ Let's check out a few GA4 dimensions and see what happens.
 
 You'll notice that GA4 is returning a maximum of 100 rows. Should you wish to see all rows you can use the \`limit\` parameter as follows;
 
-``` R
+``` r
  dimensions <- ga_data(
     XXXXXXXXX,
     metrics = c("activeUsers","sessions"),
@@ -204,7 +204,7 @@ You'll notice that GA4 is returning a maximum of 100 rows. Should you wish to se
 
 eventNames are used as they appear when using the GA4 web interface. But if you're in any doubt you can always check...
 
-``` R
+``` r
  events <- ga_data(
     XXXXXXXXX,
     metrics = NULL,
@@ -215,13 +215,13 @@ eventNames are used as they appear when using the GA4 web interface. But if you'
 
 Taking this further, we can filter events to just see those of interest. For example, I've setup a custom event that is fired when a Klaviyo form is submitted. We'll use the \`ga_data_filter\` function like so;
 
-``` R
+``` r
 klaviyo <- ga_data_filter(eventName=="klaviyo_form_submission")
 ```
 
 And then use the filter it creates in a query;
 
-``` R
+``` r
  filteredKlaviyo <- ga_data(
     XXXXXXXXX,
     metrics = "eventCount",
@@ -237,7 +237,7 @@ The results of this query are basic because this filter isn't particularly usefu
 
 Lastly, let's check out the realtime data. Handy for taking snapshots of running campaigns...
 
-``` R
+``` r
  ga_data(
     propertyId = XXXXXXXXX, 
     raw_json = '{"metrics":[{"name":"activeUsers"}],"limit":100,"returnPropertyQuota":true}',

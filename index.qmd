@@ -10,7 +10,7 @@ listing:
     type: grid
     sort-ui: true
     filter-ui: true
-    fields: [date, title, reading-time, description, categories]
+    fields: [image, date, title, reading-time, description, categories]
     feed: 
       categories: 
         - R

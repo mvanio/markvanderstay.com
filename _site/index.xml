@@ -1318,6 +1318,7 @@ font-style: inherit;">2</span>])</span></code></pre></div>
   <category>R</category>
   <guid>https://markvanderstay.com/posts/twitter-analysis-of-retweets-with-r/index.html</guid>
   <pubDate>Sun, 02 Apr 2023 23:00:00 GMT</pubDate>
+  <media:content url="https://markvanderstay.com/posts/twitter-analysis-of-retweets-with-r/twitter-network-graphs.jpg" medium="image" type="image/jpeg"/>
 </item>
 <item>
   <title>Sentiment Analysis Of Twitter Data With R</title>
@@ -1328,6 +1329,7 @@ font-style: inherit;">2</span>])</span></code></pre></div>
 
 
 
+<p><img src="https://markvanderstay.com/posts/mastering-sentiment-analysis-of-twitter-data-with-r/master-sentiment-analysis.jpg" class="img-fluid"></p>
 <section id="introduction" class="level2">
 <h2 class="anchored" data-anchor-id="introduction"><strong>Introduction</strong></h2>
 <p>Following on from my <a href="../using-r-for-twitter-analysis-lda/">last post</a> outlining LDA, I’ll go further to analyse the sentiment of the tweet text. The most straightforward way to approach sentiment analysis is to use one of the many sentiment dictionaries available.</p>
@@ -1758,10 +1760,9 @@ Tip
  ]]></description>
   <category>Twitter</category>
   <category>R</category>
-  <category>RStudio</category>
   <guid>https://markvanderstay.com/posts/mastering-sentiment-analysis-of-twitter-data-with-r/index.html</guid>
   <pubDate>Mon, 27 Mar 2023 23:00:00 GMT</pubDate>
-  <media:content url="https://markvanderstay.com/posts/mastering-sentiment-analysis-of-twitter-data-with-r/sentiment_analysis_parliament-768x445.png" medium="image" type="image/png" height="83" width="144"/>
+  <media:content url="https://markvanderstay.com/posts/mastering-sentiment-analysis-of-twitter-data-with-r/master-sentiment-analysis.jpg" medium="image" type="image/jpeg"/>
 </item>
 <item>
   <title>LDA With R Makes Twitter Data Insights Easy</title>
@@ -2627,7 +2628,7 @@ font-style: inherit;">"free"</span>)</span></code></pre></div>
   <category>RStudio</category>
   <guid>https://markvanderstay.com/posts/using-r-for-twitter-analysis-lda/index.html</guid>
   <pubDate>Sat, 25 Mar 2023 00:00:00 GMT</pubDate>
-  <media:content url="https://markvanderstay.com/posts/using-r-for-twitter-analysis-lda/parliament-1-1024x561.png" medium="image" type="image/png" height="79" width="144"/>
+  <media:content url="https://markvanderstay.com/posts/using-r-for-twitter-analysis-lda/r-twitter-lda.jpg" medium="image" type="image/jpeg"/>
 </item>
 <item>
   <title>Using R for Twitter Analysis</title>
@@ -3030,10 +3031,9 @@ font-style: inherit;">1</span>)</span>
  ]]></description>
   <category>Twitter</category>
   <category>R</category>
-  <category>RStudio</category>
   <guid>https://markvanderstay.com/posts/using-r-for-twitter-analysis/index.html</guid>
   <pubDate>Tue, 21 Mar 2023 00:00:00 GMT</pubDate>
-  <media:content url="https://markvanderstay.com/posts/using-r-for-twitter-analysis/filter.png" medium="image" type="image/png"/>
+  <media:content url="https://markvanderstay.com/posts/using-r-for-twitter-analysis/use-r-twitter.jpg" medium="image" type="image/jpeg"/>
 </item>
 <item>
   <title>Analysing GA4 Data With R</title>
@@ -3354,7 +3354,7 @@ font-style: inherit;">TRUE</span>)</span></code></pre></div>
   <category>RStudio</category>
   <guid>https://markvanderstay.com/posts/using-google-analytics-ga4-data-in-r/index.html</guid>
   <pubDate>Tue, 14 Mar 2023 00:00:00 GMT</pubDate>
-  <media:content url="https://markvanderstay.com/posts/using-google-analytics-ga4-data-in-r/filter.png" medium="image" type="image/png" height="42" width="144"/>
+  <media:content url="https://markvanderstay.com/posts/using-google-analytics-ga4-data-in-r/ga4-r.jpg" medium="image" type="image/jpeg"/>
 </item>
 </channel>
 </rss>

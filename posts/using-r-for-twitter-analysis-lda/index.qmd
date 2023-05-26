@@ -2,7 +2,7 @@
 title: "LDA With R Makes Twitter Data Insights Easy"
 date: "2023-03-25"
 categories: [Twitter, R, RStudio]
-image: "parliament-1-1024x561.png"
+image: r-twitter-lda.jpg
 ---
 
 # **Topic modelling with Twitter text**

@@ -1,8 +1,8 @@
 ---
 title: "Using R for Twitter Analysis"
 date: "2023-03-21"
-categories: [Twitter, R, RStudio]
-image: "filter.png"
+categories: [Twitter, R]
+image: use-r-twitter.jpg
 ---
 
 ## **Extracting tweets with R**
@@ -19,7 +19,7 @@ The R programming language is a powerful tool for data analysis and visualizatio
 
 Let's begin with the usual library statements. We'll need a few for this post so may as well get them all at once.
 
-``` R
+``` r
 library(rtweet)
 library(httr)
 library(dplyr)
@@ -31,7 +31,7 @@ library(ggplot2)
 
 Next up, authorise the `rtwee`t package to use your Twitter account. It gets your details from the browser and you should only need to do this once. The authors provide a useful vignette. Check it out by running `vignette("auth", "rtweet")` in the console.
 
-``` R
+``` r
 #authorise
 auth_setup_default()
 ```
@@ -42,7 +42,7 @@ First off, I'll use `search_tweets` to extract a sample of Twitter data. In this
 
 I'll exclude retweets and filter for those in English only.
 
-``` R
+``` r
 #get 2000 tweets with the #mentalhealth hashtag
 twtr <- search_tweets("#mentalhealth",
                        n = 1000,
@@ -54,7 +54,7 @@ twtr <- search_tweets("#mentalhealth",
 
 Checking the text of the tweets inside our shiny, new data frame reveals that we need to do some tidying of the data.
 
-``` R
+``` r
 #check tweet text
 tweet_text <- twtr$text
 head(tweet_text)
@@ -62,7 +62,7 @@ head(tweet_text)
 
 There's a lot of emojis, URLs, punctuation and other stuff going on here.
 
-``` R
+``` r
 [1] "Start your day right with a quote from SUGA of BTS \n\n#MindsetApp #Quotes #Motivation #Wellness #Positivity #SelfCare #MentalHealth #Kpop #BTS #SUGA https://t.co/GXglBR7rrk"
 [2] "Remember: There is no health without mental health! #MentalHealth is just as important as physical health, and asking for help is a normal part of life. You should never feel like you have to take on the world  alone. #NationalFlowerDay #FlowerDay https://t.co/4SEVDf4c4J"
 [3] "Everyone either knows someone struggling with their #MentalHealth or they do themselves. \n\nSome things should transcend politics, that’s what @TedLasso is trying to tell us.\n\nI admire anyone who can ask for help. \n https://t.co/Iz32fcP3xa"
@@ -72,7 +72,7 @@ There's a lot of emojis, URLs, punctuation and other stuff going on here.
 
 I'll use the `tm` package to help with this but first I can use a simple regular expression. I'll remove URLs and special characters such as emojis by simply keeping only letters.
 
-``` R
+``` r
 # Remove special characters
 tweet_text_az <- gsub("[^A-Za-z]", " ", tweet_text)
 ```
@@ -81,7 +81,7 @@ Before I proceed I'll convert the text I extracted into a corpus so that I can u
 
 And look how easy it is...
 
-``` R
+``` r
 # Create a corpus (transform tweets into documents)
 tweet_corpus <- tweet_text_az %>%
                 VectorSource() %>%
@@ -92,7 +92,7 @@ tweet_corpus <- tweet_text_az %>%
 
 Now that's done I'll use a few `tm` package functions to do a bit more cleaning.
 
-``` R
+``` r
 # Remove stop words, extra whitespace and transform to lower case
 tweet_corpus_no_stop <- tm_map(tweet_corpus, removeWords, stopwords("english"))
 tweet_corpus_lower <- tm_map(tweet_corpus_no_stop, tolower)
@@ -101,7 +101,7 @@ tweet_corpus_docs <- tm_map(tweet_corpus_lower, stripWhitespace)
 
 After a quick check of word frequency I'll remove words that don't serve a purpose.
 
-``` R
+``` r
 # remove custom stops and check frequency again
 # 1. remove custom stops
 custom_stop <- c('mentalhealth', 'health', 'mental', 's', 'i', 'can', 'amp',
@@ -121,7 +121,7 @@ What I'm left with is a list of words I can use to help promote mental health aw
 
 I'll quickly put together a bar chart showing word vs freq in `ggplot`.
 
-``` R
+``` r
 
 # visualise the most popular terms (those with a frequency>100)
 word_freq_100 <- subset(word_freq_cust, FREQ >= 100)
