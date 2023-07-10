@@ -130,13 +130,13 @@ Within our \`MessageHistory\` class, we have a private member \`.history\`. This
 
 ### Public Methods
 
--   `initialize()\`: This is the constructor for the \`MessageHistory\` class which is automatically called when a new instance of the class is created. It initializes the `.history\` list to an empty list.
+- \`initialize()\`: This is the constructor for the \`MessageHistory\` class which is automatically called when a new instance of the class is created. It initializes the `.history\` list to an empty list.
 
--   `add_message(role, content)\`: This method accepts two parameters - 'role' and 'content' - and appends them as a new list to the \`.history\` list. Each time a message is sent or received in the conversation, this method is used to add it to the history.
+- \`add_message(role, content)\`: This method accepts two parameters - 'role' and 'content' - and appends them as a new list to the \`.history\` list. Each time a message is sent or received in the conversation, this method is used to add it to the history.
 
--   `get_history()\`: This method returns the entire \`.history\` list, providing a full record of the conversation when called.
+- \`get_history()\`: This method returns the entire \`.history\` list, providing a full record of the conversation when called.
 
--   `get_last_message(role)\`: This method retrieves the most recent message from a specified role. It iterates through the \`.history\` list backwards and returns the content of the first message it encounters from the specified role. If no such message exists, it returns NULL.
+- \`get_last_message(role)\`: This method retrieves the most recent message from a specified role. It iterates through the \`.history\` list backwards and returns the content of the first message it encounters from the specified role. If no such message exists, it returns NULL.
 
 In the next section, we'll explore the \`ChatGPT\` class and see how it utilises \`MessageHistory\` to communicate effectively with the OpenAI ChatGPT API.
 

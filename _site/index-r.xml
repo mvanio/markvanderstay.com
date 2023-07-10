@@ -371,10 +371,10 @@ font-style: inherit;">NULL</span>)</span>
 <section id="public-methods" class="level3">
 <h3 class="anchored" data-anchor-id="public-methods">Public Methods</h3>
 <ul>
-<li><p><code>initialize()\</code>: This is the constructor for the `MessageHistory` class which is automatically called when a new instance of the class is created. It initializes the <code>.history\</code> list to an empty list.</p></li>
-<li><p><code>add_message(role, content)\</code>: This method accepts two parameters - ‘role’ and ‘content’ - and appends them as a new list to the `.history` list. Each time a message is sent or received in the conversation, this method is used to add it to the history.</p></li>
-<li><p><code>get_history()\</code>: This method returns the entire `.history` list, providing a full record of the conversation when called.</p></li>
-<li><p><code>get_last_message(role)\</code>: This method retrieves the most recent message from a specified role. It iterates through the `.history` list backwards and returns the content of the first message it encounters from the specified role. If no such message exists, it returns NULL.</p></li>
+<li><p>`initialize()`: This is the constructor for the `MessageHistory` class which is automatically called when a new instance of the class is created. It initializes the <code>.history\</code> list to an empty list.</p></li>
+<li><p>`add_message(role, content)`: This method accepts two parameters - ‘role’ and ‘content’ - and appends them as a new list to the `.history` list. Each time a message is sent or received in the conversation, this method is used to add it to the history.</p></li>
+<li><p>`get_history()`: This method returns the entire `.history` list, providing a full record of the conversation when called.</p></li>
+<li><p>`get_last_message(role)`: This method retrieves the most recent message from a specified role. It iterates through the `.history` list backwards and returns the content of the first message it encounters from the specified role. If no such message exists, it returns NULL.</p></li>
 </ul>
 <p>In the next section, we’ll explore the `ChatGPT` class and see how it utilises `MessageHistory` to communicate effectively with the OpenAI ChatGPT API.</p>
 </section>
