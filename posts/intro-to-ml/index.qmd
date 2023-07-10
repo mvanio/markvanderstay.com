@@ -9,10 +9,10 @@ date: "2023-05-01"
 categories: [ML]
 website:
   open-graph: true
-  image: "https://markvanderstay.com/posts/machine-learning-for-business/intro-to-ml/machine-learning-small-business.jpg"  
+  image: "https://markvanderstay.com/posts/intro-to-ml/machine-learning-small-business.jpg"  
   twitter-card: 
     description: "This remarkable AI branch allows computers to learn from data without our intervention, redefining your business by uncovering hidden patterns, anticipating customer desires, and fine-tuning operations."
-    image: "https://markvanderstay.com/posts/machine-learning-for-business/intro-to-ml/machine-learning-small-business.jpg"  
+    image: "https://markvanderstay.com/posts/intro-to-ml/machine-learning-small-business.jpg"  
 slug: "intro-to-machine-learning"
 ---
 
@@ -68,7 +68,7 @@ High-value customers fuel any business. Machine learning sorts through vast data
 
 Identifying customers who generate the most revenue lets you concentrate marketing efforts effectively.
 
-[Visit this article if you wish to try calculating CLV for yourself.](../../identify-most-valuable-customers/)
+[Visit this article if you wish to try calculating CLV for yourself.](../identify-most-valuable-customers/)
 
 ### **2. Customising Marketing Strategies for Different Segments**
 
@@ -90,7 +90,7 @@ Understanding customer feedback is essential. Machine learning can assist in ana
 
 #### 1. Understanding Customer Feedback
 
-[Customers express their opinions online](../../mastering-sentiment-analysis-of-twitter-data-with-r/ "Explore how to conduct a sentiment analysis of Twitter data.") every day. Machine learning can make sense of this vast pool of data by analysing text and extracting meaningful insights. It identifies positive, negative, and neutral sentiments. This allows you to spot trends, gauge customer satisfaction, and address concerns promptly.
+[Customers express their opinions online](../mastering-sentiment-analysis-of-twitter-data-with-r/ "Explore how to conduct a sentiment analysis of Twitter data.") every day. Machine learning can make sense of this vast pool of data by analysing text and extracting meaningful insights. It identifies positive, negative, and neutral sentiments. This allows you to spot trends, gauge customer satisfaction, and address concerns promptly.
 
 #### 2. Improving Products and Services
 

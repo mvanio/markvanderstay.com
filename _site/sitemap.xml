@@ -1,47 +1,27 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9">
   <url>
-    <loc>https://markvanderstay.com/posts/using-google-analytics-ga4-data-in-r/index.html</loc>
-    <lastmod>2023-05-26T15:26:41.343Z</lastmod>
+    <loc>https://markvanderstay.com/posts/chatgpt-in-r-using-r6-classes/index.html</loc>
+    <lastmod>2023-07-10T14:06:27.329Z</lastmod>
   </url>
   <url>
-    <loc>https://markvanderstay.com/posts/using-r-for-twitter-analysis-lda/index.html</loc>
-    <lastmod>2023-05-26T15:07:50.681Z</lastmod>
-  </url>
-  <url>
-    <loc>https://markvanderstay.com/posts/twitter-analysis-of-retweets-with-r/index.html</loc>
-    <lastmod>2023-05-26T14:59:45.262Z</lastmod>
-  </url>
-  <url>
-    <loc>https://markvanderstay.com/posts/mastering-sentiment-analysis-of-twitter-data-with-r/index.html</loc>
-    <lastmod>2023-05-26T14:52:35.513Z</lastmod>
-  </url>
-  <url>
-    <loc>https://markvanderstay.com/posts/using-r-for-twitter-analysis/index.html</loc>
-    <lastmod>2023-05-26T15:07:18.321Z</lastmod>
+    <loc>https://markvanderstay.com/posts/intro-to-ml/index.html</loc>
+    <lastmod>2023-07-10T12:21:15.898Z</lastmod>
   </url>
   <url>
     <loc>https://markvanderstay.com/posts/identify-most-valuable-customers/index.html</loc>
-    <lastmod>2023-05-26T14:39:07.457Z</lastmod>
-  </url>
-  <url>
-    <loc>https://markvanderstay.com/posts/machine-learning-for-business/index.html</loc>
-    <lastmod>2023-05-26T14:39:07.941Z</lastmod>
-  </url>
-  <url>
-    <loc>https://markvanderstay.com/posts/machine-learning-for-business/intro-to-ml/index.html</loc>
-    <lastmod>2023-05-26T14:39:08.467Z</lastmod>
-  </url>
-  <url>
-    <loc>https://markvanderstay.com/index.html</loc>
-    <lastmod>2023-05-26T15:26:21.730Z</lastmod>
+    <lastmod>2023-07-10T12:21:16.910Z</lastmod>
   </url>
   <url>
     <loc>https://markvanderstay.com/about.html</loc>
-    <lastmod>2023-05-26T14:39:09.863Z</lastmod>
+    <lastmod>2023-07-10T12:21:17.267Z</lastmod>
   </url>
   <url>
     <loc>https://markvanderstay.com/intro-to-ml.html</loc>
-    <lastmod>2023-05-26T14:39:10.382Z</lastmod>
+    <lastmod>2023-07-10T12:21:17.837Z</lastmod>
+  </url>
+  <url>
+    <loc>https://markvanderstay.com/index.html</loc>
+    <lastmod>2023-07-10T14:06:28.657Z</lastmod>
   </url>
 </urlset>

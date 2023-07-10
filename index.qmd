@@ -29,13 +29,4 @@ page-layout: full
 title-block-banner: false
 ---
 
-### New Series:
-
-## [Machine Learning for Business](./posts/machine-learning-for-business/index.html)
-
-Valuable insights and guidance for business owners keen to take advantage of machine learning.
-
-::: {#ml-for-business}
-:::
-
 ### All Posts
